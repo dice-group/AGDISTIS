@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.unister.semweb</groupId>
+	<artifactId>LODEntityIdentification</artifactId>
+	<version>0.0.1-SNAPSHOT</version><!-- BUILD -->
+	<build>
+		<plugins>
+			<!-- MAVEN Compiler Plugin -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<!-- PROPERTIES -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+	</properties>
+
+	<repositories>
+	<!--<repository> <id>karussell_snapshots</id> <url>https://github.com/karussell/mvnrepo/raw/master/snapshots/</url>
+			</repository> <repository> <id>gerb_snapshots</id> <url>https://raw.github.com/gerbsen/maven-repo/tree/master/snapshots</url>
+			</repository> <repository> <id>maven.aksw.internal</id> <url>http://maven.aksw.org/archiva/repository/internal</url>
+			</repository>	 <repository> <id>aduna</id> <name>Aduna Software</name> <url>http://repo.aduna-software.org/maven2/releases/</url>
+			</repository> -->
+		<repository>
+			<id>Apache Repo Central</id>
+			<name>Apache Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>eclipse</id>
+			<name>Eclipse Maven Repository</name>
+			<url>http://maven.eclipse.org/nexus/content/groups/maven-central</url>
+		</repository>
+		<repository>
+			<id>unister Nexus</id>
+			<url>http://nexus.aws.semweb.unister.de/content/groups/public/</url>
+		</repository>
+
+	</repositories>
+	<dependencies>
+
+
+		<!-- semantic lab utils -->
+		<dependency>
+			<groupId>de.bluekiwi.labs</groupId>
+			<artifactId>commons.semanticLab</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.unister.semweb</groupId>
+			<artifactId>topicmodeling</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.unister.semweb</groupId>
+			<artifactId>QRToolNED.datatypes</artifactId>
+			<version>0.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- ~~~~~~~~~~~~~~~~~~~ Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- slf4j: Logging API -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId>
+			<version>1.7.2</version> </dependency> -->
+		<!-- slf4j: Logging Binding -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.2</version> </dependency> -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--	<dependency>
+			<groupId>org.aksw</groupId>
+			<artifactId>rdflivenews</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gerbsen</groupId>
+			<artifactId>utk</artifactId>
+			<version>1.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw</groupId>
+			<artifactId>rdflivenews-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>-->
+	</dependencies>
+</project>
