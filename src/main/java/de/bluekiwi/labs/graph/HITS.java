@@ -20,6 +20,7 @@ public class HITS {
      * @return
      * @throws InterruptedException
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void runHits(Graph g, int k) throws InterruptedException {
         // restrict Graph
         // System.out.println("before: " + g.getEdgeCount());

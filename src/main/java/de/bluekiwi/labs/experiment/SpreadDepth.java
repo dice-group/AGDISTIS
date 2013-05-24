@@ -13,15 +13,12 @@ import org.openrdf.repository.RepositoryException;
 import de.bluekiwi.labs.graph.Connectiveness;
 import de.bluekiwi.labs.graph.SpreadActivation;
 import de.bluekiwi.labs.vis.MyNode;
-import de.bluekiwi.labs.vis.SimpleGraphViewWithJung;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class SpreadDepth {
     private static String fileToGraphs = "example.graph";
-    private static boolean isGraphical = true;
     private static boolean writeFile = false;
     private static BufferedWriter bw = null;
-    private static SimpleGraphViewWithJung sgv;
 
     public static void main(String[] args) throws UnsupportedEncodingException, IOException, RepositoryException,
             InterruptedException {
@@ -68,12 +65,6 @@ public class SpreadDepth {
                         bw.flush();
                     }
 
-                    if (isGraphical) {
-                        sgv = new SimpleGraphViewWithJung();
-                        sgv.showGraph(graphs.get(i));
-                        Thread.sleep(100000);
-                        sgv.close();
-                    }
                 }
             }
         }

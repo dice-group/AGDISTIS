@@ -3,7 +3,6 @@ package de.bluekiwi.labs.algorithm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,27 +11,20 @@ import com.unister.semweb.topicmodeling.utils.doc.Document;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
 
-import de.bluekiwi.labs.util.SubjectPredicateObjectIndex;
 import de.bluekiwi.labs.vis.MyNode;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class NEDAlgo_wihtoutGraphTechniques {
     private Logger log = LoggerFactory.getLogger(NEDAlgo_wihtoutGraphTechniques.class);
     private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
-    private String edgeType = "http://dbpedia.org/ontology/";
-    private String nodeType = "http://dbpedia.org/resource/";
     private CandidateUtil cu;
 
     public CandidateUtil getCu() {
         return cu;
     }
 
-    private SubjectPredicateObjectIndex index;
-    private HashSet<String> restrictedEdges;
-
     public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments) {
         cu = new CandidateUtil();
-        index = cu.getIndex();
     }
 
     public void run(Document document, double threshholdTrigram) {
@@ -75,10 +67,6 @@ public class NEDAlgo_wihtoutGraphTechniques {
 
     public void close() {
         cu.close();
-    }
-
-    public void restrictEdgesTo(HashSet<String> restrictedEdges) {
-        this.restrictedEdges = restrictedEdges;
     }
 
     public DirectedSparseGraph<MyNode, String>[] getAllGraphs() {

@@ -6,6 +6,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 
 public class HitsTest {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testSimpleHITS() throws InterruptedException {
         Graph g = new DirectedSparseMultigraph<MyNode, String>();

@@ -37,6 +37,7 @@ public class NEDAlgo_HITS {
     private DirectedSparseGraph<MyNode, String>[] graph = null;
     private HashSet<String> restrictedEdges;
 
+    @SuppressWarnings("unchecked")
     public NEDAlgo_HITS(int numberOfDocuments) {
         cu = new CandidateUtil();
         index = cu.getIndex();
