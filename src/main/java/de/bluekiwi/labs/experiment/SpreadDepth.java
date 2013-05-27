@@ -15,6 +15,12 @@ import de.bluekiwi.labs.graph.SpreadActivation;
 import de.bluekiwi.labs.vis.MyNode;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
+/**
+ * not used in final version of the paper
+ * 
+ * @author r.usbeck
+ * 
+ */
 public class SpreadDepth {
     private static String fileToGraphs = "example.graph";
     private static boolean writeFile = false;

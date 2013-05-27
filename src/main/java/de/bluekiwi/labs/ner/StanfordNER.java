@@ -9,7 +9,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 public class StanfordNER {
 
     public static void main(String[] args) throws IOException {
-
         // String serializedClassifier = "classifiers/english.all.3class.distsim.crf.ser.gz";
         String serializedClassifier = "classifiers/dewac_175m_600.crf.ser.gz";
         // String text = " Chancelor Angela Merkel will go meet Barack Obama President of the U.S. at Berlin";

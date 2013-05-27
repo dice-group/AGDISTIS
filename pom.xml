@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.unister.semweb</groupId>
-	<artifactId>LODEntityIdentification</artifactId>
+	<groupId>org.aksw</groupId>
+	<artifactId>AGDISTIS</artifactId>
 	<version>0.0.1-SNAPSHOT</version><!-- BUILD -->
 	<build>
 		<plugins>
@@ -41,16 +41,22 @@
 	</build>
 	<!-- PROPERTIES -->
 	<properties>
+		<java.version>1.6</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
+		<mavenVersion>4.0</mavenVersion>
+		<slf4j.version>1.6.6</slf4j.version>
 	</properties>
-
+	<prerequisites>
+		<maven>${maven.version}</maven>
+	</prerequisites>
 	<repositories>
-	<!--<repository> <id>karussell_snapshots</id> <url>https://github.com/karussell/mvnrepo/raw/master/snapshots/</url>
-			</repository> <repository> <id>gerb_snapshots</id> <url>https://raw.github.com/gerbsen/maven-repo/tree/master/snapshots</url>
-			</repository> <repository> <id>maven.aksw.internal</id> <url>http://maven.aksw.org/archiva/repository/internal</url>
-			</repository>	 <repository> <id>aduna</id> <name>Aduna Software</name> <url>http://repo.aduna-software.org/maven2/releases/</url>
-			</repository> -->
+		<repository>
+			<id>aduna</id>
+			<name>Aduna Software</name>
+			<url>http://repo.aduna-software.org/maven2/releases/</url>
+		</repository>
 		<repository>
 			<id>Apache Repo Central</id>
 			<name>Apache Repository</name>
@@ -61,73 +67,76 @@
 			<name>Eclipse Maven Repository</name>
 			<url>http://maven.eclipse.org/nexus/content/groups/maven-central</url>
 		</repository>
-		<repository>
-			<id>unister Nexus</id>
-			<url>http://nexus.aws.semweb.unister.de/content/groups/public/</url>
-		</repository>
-
 	</repositories>
 	<dependencies>
-
-
-		<!-- semantic lab utils -->
+		<!-- Junit -->
 		<dependency>
-			<groupId>de.bluekiwi.labs</groupId>
-			<artifactId>commons.semanticLab</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
 		</dependency>
-		<dependency>
-			<groupId>com.unister.semweb</groupId>
-			<artifactId>topicmodeling</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.unister.semweb</groupId>
-			<artifactId>QRToolNED.datatypes</artifactId>
-			<version>0.0.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 		<!-- ~~~~~~~~~~~~~~~~~~~ Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- slf4j: Logging API -->
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId>
-			<version>1.7.2</version> </dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 		<!-- slf4j: Logging Binding -->
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.2</version> </dependency> -->
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!--	<dependency>
-			<groupId>org.aksw</groupId>
-			<artifactId>rdflivenews</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<type>pom</type>
+		<!-- Sesame -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-runtime</artifactId>
+			<version>2.7.0-beta1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.gerbsen</groupId>
-			<artifactId>utk</artifactId>
-			<version>1.0.5</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r09</version>
 		</dependency>
 		<dependency>
-			<groupId>org.aksw</groupId>
-			<artifactId>rdflivenews-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>-->
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-turtle</artifactId>
+			<version>2.7.0-beta1</version>
+		</dependency>
+		<!-- for parsing SGML annotated Reuters dataset -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.collections</groupId>
+			<artifactId>collections-generic</artifactId>
+			<version>4.01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<!-- validating URI -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 </project>

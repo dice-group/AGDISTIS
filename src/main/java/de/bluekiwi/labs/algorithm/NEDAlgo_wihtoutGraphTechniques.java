@@ -19,12 +19,8 @@ public class NEDAlgo_wihtoutGraphTechniques {
     private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private CandidateUtil cu;
 
-    public CandidateUtil getCu() {
-        return cu;
-    }
-
-    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments) {
-        cu = new CandidateUtil();
+    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, String dataDirectory) {
+        cu = new CandidateUtil(languageTag, dataDirectory);
     }
 
     public void run(Document document, double threshholdTrigram) {
@@ -34,8 +30,7 @@ public class NEDAlgo_wihtoutGraphTechniques {
         // 0) insert candidates into Text
         cu.insertCandidatesIntoText(graph, document, threshholdTrigram);
 
-        // 3) store the candidate with the highest hub, highest authority
-        // ratio
+        // 3) store the candidate with the highest hub, highest authority ratio
         ArrayList<MyNode> orderedList = new ArrayList<MyNode>();
         orderedList.addAll(graph.getVertices());
         Collections.sort(orderedList);
@@ -44,10 +39,8 @@ public class NEDAlgo_wihtoutGraphTechniques {
                 MyNode m = orderedList.get(i);
                 // there can be one node (candidate) for two labels
                 if (m.containsId(entity.getStartPos())) {
-                    if (!algorithmicResult
-                            .containsKey(entity.getStartPos())) {
-                        algorithmicResult.put(entity.getStartPos(),
-                                m.getCandidateURI());
+                    if (!algorithmicResult.containsKey(entity.getStartPos())) {
+                        algorithmicResult.put(entity.getStartPos(), m.getCandidateURI());
                         break;
                     }
                 }
@@ -73,4 +66,7 @@ public class NEDAlgo_wihtoutGraphTechniques {
         return null;
     }
 
+    public CandidateUtil getCu() {
+        return cu;
+    }
 }

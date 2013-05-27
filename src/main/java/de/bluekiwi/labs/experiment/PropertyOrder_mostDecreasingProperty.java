@@ -27,22 +27,18 @@ public class PropertyOrder_mostDecreasingProperty {
     private static Logger log = LoggerFactory.getLogger(PropertyOrder_mostDecreasingProperty.class);
 
     public static void main(String[] args) throws IOException {
-        // BufferedWriter bw = new BufferedWriter(new
-        // FileWriter("/data/r.usbeck/Dropbox/Dissertation/ISWC13_LODNED_data/propertyOrder.log"));
-        BufferedWriter bw = new BufferedWriter(new FileWriter("/Users/ricardousbeck/Dropbox/Dissertation/ISWC13_LODNED_data/propertyOrder.log"));
-
         String PROPERTY_FILE = "propertyOrder.txt";
-        // String OUTPUT_FILE = "/data/r.usbeck/Dropbox/Dissertation/ISWC13_LODNED_data/reuters.xml";
-        String OUTPUT_FILE = "/Users/ricardousbeck/Dropbox/Dissertation/ISWC13_LODNED_data/reuters.xml";
+        String INPUT_FILE = "reuters.xml";
+        String languageTag = "en"; // de
+        String dataDirectory = "/data/r.usbeck";
+        double threshholdTrigram = 0.835;
 
-        // String ONTOLOGY_FILE = "/data/r.usbeck/Dropbox/ontology_properties.txt";
-        // String ONTOLOGY_FILE = "/Users/ricardousbeck/Dropbox/ontology_properties.txt";
+        BufferedWriter bw = new BufferedWriter(new FileWriter("propertyOrder.log"));
 
         // INIT PARAMETERS AND ALGORITHM
-        CorpusXmlReader reader = new CorpusXmlReader(new File(OUTPUT_FILE));
+        CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments());
-        double threshholdTrigram = 0.835;
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory);
 
         // CALCULATE MOST OFTEN USED PROPERTIES
         Stack<String> mostOftenProperties = loadPropertyOrder(PROPERTY_FILE);
@@ -75,7 +71,6 @@ public class PropertyOrder_mostDecreasingProperty {
                 double t = 0;
                 double n = 0;
                 for (Document document : corpus) {
-                    // System.out.println("Text: " + document.getDocumentId());
                     algo.runPostStep(document, threshholdTrigram, document.getDocumentId());
 
                     NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
@@ -118,7 +113,7 @@ public class PropertyOrder_mostDecreasingProperty {
             propertiesToTest.remove(bestPerformingPropertyThisIteration);
             bw.write(bestPerformingPropertyThisIteration + "\tacc:\t" + maxAccuracy + "\n");
             bw.flush();
-            System.out.println(bestPerformingPropertyThisIteration + "\tacc:\t" + maxAccuracy);
+            log.info(bestPerformingPropertyThisIteration + "\tacc:\t" + maxAccuracy);
         }
         bw.close();
     }

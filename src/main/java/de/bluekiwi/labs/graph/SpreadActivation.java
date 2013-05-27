@@ -56,7 +56,7 @@ public class SpreadActivation {
                         if (findNode.containsKey(targetNode))
                         {
                             myNode = findNode.get(targetNode);
-                            // check if the new spread activationvalue is bigger than the current
+                            // check if the new spread activation value is bigger than the current
                             if (myNode.getActivation() < activationSpread) {
                                 myNode.setActivation(activationSpread);
                                 q.add(myNode);

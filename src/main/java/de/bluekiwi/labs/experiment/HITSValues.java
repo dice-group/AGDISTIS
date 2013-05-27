@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.openrdf.repository.RepositoryException;
+import org.slf4j.LoggerFactory;
 
 import de.bluekiwi.labs.graph.HITS;
 import de.bluekiwi.labs.graph.SpreadActivation;
@@ -17,6 +18,8 @@ import de.bluekiwi.labs.vis.MyNode;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class HITSValues {
+    private static org.slf4j.Logger log = LoggerFactory.getLogger(HITSValues.class);
+
     private static String fileToGraphs = "example.graph";
     private static boolean writeFile = false;
     private static BufferedWriter bw = null;
@@ -73,16 +76,13 @@ public class HITSValues {
                         sumAuth1Step += suc.getAuthorityWeight();
                         sumHub1Step += suc.getHubWeight();
                     }
-                    System.out.println(m);
-                    System.out.println("\tAuthorityWeight: " + m.getAuthorityWeight() + " HubWeight: "
-                            + m.getHubWeight());
-                    System.out.println("\tSumAuthorityWeightOneStepAway: " + sumAuth1Step
-                            + " \tSumHubWeightsOneStepAway: " + sumHub1Step);
+                    log.info(m.toString());
+                    log.info("\tAuthorityWeight: " + m.getAuthorityWeight() + " HubWeight: " + m.getHubWeight());
+                    log.info("\tSumAuthorityWeightOneStepAway: " + sumAuth1Step + " \tSumHubWeightsOneStepAway: " + sumHub1Step);
                     if (writeFile) {
                         bw.write(m.getCandidateURI() + "\n");
                         bw.write("\tAuthorityWeight: " + m.getAuthorityWeight() + " HubWeight: " + m.getHubWeight());
-                        bw.write("\tSumAuthorityWeightOneStepAway: " + sumAuth1Step + " \tSumHubWeightsOneStepAway: "
-                                + sumHub1Step);
+                        bw.write("\tSumAuthorityWeightOneStepAway: " + sumAuth1Step + " \tSumHubWeightsOneStepAway: " + sumHub1Step);
                         bw.newLine();
                         bw.flush();
                     }

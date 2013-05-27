@@ -9,6 +9,12 @@ import java.util.Queue;
 import de.bluekiwi.labs.vis.MyNode;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
+/**
+ * not used for final version of the paper
+ * 
+ * @author r.usbeck
+ * 
+ */
 public class Connectiveness {
     public double meassureConnectiveness(DirectedSparseGraph<MyNode, Integer> graph) {
         /*
@@ -21,7 +27,7 @@ public class Connectiveness {
                 list.add(tmp);
             }
         }
-        // meassure connectedness on a directed graph
+        // measure connectedness on a directed graph
         double numberOfConnections = 0;
         for (MyNode fromNode : list) {
             for (MyNode toNode : list) {
@@ -60,8 +66,7 @@ public class Connectiveness {
             }
         }
         // multiply by 2 because of the running over list array twice
-        double fractionOfConnectedNodes = numberOfConnections
-                / ((list.size()) * ((double) list.size() - 1));
+        double fractionOfConnectedNodes = numberOfConnections / ((list.size()) * ((double) list.size() - 1));
         return fractionOfConnectedNodes;
     }
 }

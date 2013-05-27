@@ -20,19 +20,16 @@ public class NEDAlgo_Prior {
     public void run(TextWithLabels text) throws RepositoryException {
         String publicEndpoint = "http://localhost:8080/bigdata-dbpedia/sparql";
         DBPedia dbpedia = new DBPedia(publicEndpoint);
-        for (Label l : text.getLabels())
-        { // find all candidates
+        for (Label l : text.getLabels()) { // find all candidates
             int maxOutgoingNodes = -1;
-            for (Candidate c : l.getCandidates())
-            { // store the candidate for each label with the highest apriori count
+            for (Candidate c : l.getCandidates()) { // store the candidate for each label with the highest apriori count
                 int edgeCount = -1;
                 if (c.getUrl() != null) {
                     // FILTERING candidates that are not entities or entities with user input
                     if (c.getUrl().startsWith("http://dbpedia.org/resource")) {
                         edgeCount = dbpedia.getOutgoingNodes(c.getUrl(), edgeType).size();
                     }
-                    if (edgeCount > maxOutgoingNodes)
-                    {
+                    if (edgeCount > maxOutgoingNodes) {
                         maxOutgoingNodes = c.getOutgoingEdgeCount();
                         algorithmicResult.put(l.getLabelId(), c.getUrl());
                     }
@@ -42,14 +39,10 @@ public class NEDAlgo_Prior {
     }
 
     public String findDisambiguationForLabel(Label tmpLabel) {
-        if (algorithmicResult.containsKey(tmpLabel.getLabelId()))
-        {
-
+        if (algorithmicResult.containsKey(tmpLabel.getLabelId())) {
             return algorithmicResult.get(tmpLabel.getLabelId());
-        }
-        else {
+        } else {
             return null;
         }
     }
-
 }

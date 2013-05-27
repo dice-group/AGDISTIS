@@ -17,9 +17,6 @@ import com.unister.semweb.ned.QRToolNED.db.DbAdapter;
 public class JudgeAgreement {
     private static Logger log = LoggerFactory.getLogger(JudgeAgreement.class);
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         DbAdapter dbAdapter = loadDBAdapter();
         int overallJudgedLabels = 0;
@@ -35,11 +32,8 @@ public class JudgeAgreement {
                 int textHasLabelId = label.getTextHasLabelId();
                 List<Voting> votings = dbAdapter.getVotingsForLabel(textHasLabelId);
 
-                if (votings.size() == 1)
-                {
-                    // how to deal with that?
+                if (votings.size() == 1) {
                     log.debug("\tSingle voting on label: " + label.getLabel() + "\tVoting: " + votings.get(0));
-                    // empirically that does not happen
                 } else {
                     HashSet<String> votes = new HashSet<String>();
                     for (Voting v : votings)
@@ -47,8 +41,7 @@ public class JudgeAgreement {
                         log.debug("\t\t" + v.getUrl());
                         if (v.getCandidateId() > 0) {
                             votes.add(v.getUrl());
-                        }
-                        else {
+                        } else {
                             votes.add(String.valueOf(v.getCandidateId()));
                         }
                     }

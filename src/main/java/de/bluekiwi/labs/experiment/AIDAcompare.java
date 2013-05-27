@@ -27,23 +27,17 @@ import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
 
 public class AIDAcompare {
-
     private static org.slf4j.Logger log = LoggerFactory.getLogger(AIDAcompare.class);
 
     public static void main(String[] args) throws Exception {
-        // String OUTPUT_FILE = "/Users/ricardousbeck/Dropbox/reuters.xml";
-        // String OUTPUT_FILE = "/data/r.usbeck/Dropbox/reuters.xml";
-        String OUTPUT_FILE = "/Users/ricardousbeck/Dropbox/500newsgoldstandard.xml";
-        // String OUTPUT_FILE = "/data/r.usbeck/Dropbox/500newsgoldstandard.xml";
-        CorpusXmlReader reader = new CorpusXmlReader(new File(OUTPUT_FILE));
+        String INPUT_FILE = " 500newsgoldstandard.xml";// reuters.xml , german_corpus.xml
+        CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
-        double t = 0;
-        double n = 0;
+        double t = 0, n = 0;
         for (Document document : corpus) {
             System.gc();
             log.info("Text: " + document.getDocumentId());
             String text = markupText(document);
-            System.out.println(text);
             // Prepare the input for disambiguation. The Stanford NER will be run
             // to identify names. Strings marked with [[ ]] will also be treated as names.
             PreparationSettings prepSettings = new StanfordHybridPreparationSettings();
@@ -57,7 +51,6 @@ public class AIDAcompare {
 
             for (NamedEntityInText namedEntity : namedEntities) {
                 if (namedEntity.getLength() > 2) {
-                    // TODO build in redirects and disambiguations
                     String correctVotingURL = namedEntity.getNamedEntityUri();
                     if (correctVotingURL.startsWith("rln:"))
                         correctVotingURL = correctVotingURL.replace("rln:", "http://rdflivenews.aksw.org/resource/");
@@ -68,9 +61,7 @@ public class AIDAcompare {
                         if (correctVotingURL.equals(disambiguatedURL)) {
                             t++;
                             log.info("\t Disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
-                            // TODO hack it language dependend
-                        } else if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")// )
-                                                                                                                                                               // {
+                        } else if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")
                                 || correctVotingURL.startsWith("http://de.dbpedia.org/")) {
                             log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
                         } else {
@@ -96,7 +87,6 @@ public class AIDAcompare {
         // Print the disambiguation results.
         for (ResultMention rm : results.getResultMentions()) {
             ResultEntity re = results.getBestEntity(rm);
-            // System.out.println(rm.getMention() + " -> " + re + " (" + AidaManager.getWikipediaUrl(re) + ")");
             if (rm.getCharacterOffset() == startPos) {
                 String wikiURL = AidaManager.getWikipediaUrl(re);
                 return wikiURL.replace("http://en.wikipedia.org/wiki", "http://dbpedia.org/resource");
@@ -125,7 +115,7 @@ public class AIDAcompare {
                 startFormerLabel = entity.getStartPos();
             }
             else {
-                System.out.println("Label undercuts another label. TextId: " + document.getDocumentId());
+                log.error("Label undercuts another label. TextId: " + document.getDocumentId());
             }
         }
         textParts.add(originalText.substring(0, startFormerLabel));

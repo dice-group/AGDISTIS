@@ -10,7 +10,7 @@ public class HITS {
 
     /**
      * 
-     * this methods runs hits on a graph and returns the most authoritive sources, due to HITS is very simple, it will
+     * this methods runs hits on a graph and returns the most authoritative sources, due to HITS is very simple, it will
      * be implemented by iterating two formulas can be written as matrix multiplication but this would be quite
      * ineffective
      * 
@@ -23,7 +23,6 @@ public class HITS {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void runHits(Graph g, int k) throws InterruptedException {
         // restrict Graph
-        // System.out.println("before: " + g.getEdgeCount());
         if (restrictedEdges != null) {
             HashSet<Object> toBeRemoved = new HashSet<Object>();
             for (Object edge : g.getEdges()) {
@@ -39,7 +38,6 @@ public class HITS {
                 g.removeEdge(edge);
             }
         }
-        // System.out.println("after: " + g.getEdgeCount());
         for (int iter = 0; iter < k; iter++) {
             for (Object o : g.getVertices()) {
                 MyNode m = (MyNode) o;

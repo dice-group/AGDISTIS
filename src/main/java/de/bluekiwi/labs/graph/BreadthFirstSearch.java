@@ -17,13 +17,11 @@ public class BreadthFirstSearch {
     private static HashMap<String, MyNode> findNode = new HashMap<String, MyNode>();
     private SubjectPredicateObjectIndex index;
 
-    public BreadthFirstSearch(SubjectPredicateObjectIndex index) throws RepositoryException
-    {
+    public BreadthFirstSearch(SubjectPredicateObjectIndex index) throws RepositoryException {
         this.index = index;
     }
 
-    public void run(int maxDepth, DirectedSparseGraph<MyNode, String> graph, String edgeType, String nodeType)
-            throws UnsupportedEncodingException {
+    public void run(int maxDepth, DirectedSparseGraph<MyNode, String> graph, String edgeType, String nodeType) throws UnsupportedEncodingException {
         Queue<MyNode> q = new LinkedList<MyNode>();
         for (MyNode node : graph.getVertices()) {
             findNode.put(node.getCandidateURI(), node);

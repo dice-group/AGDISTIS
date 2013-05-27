@@ -22,45 +22,47 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class CandidateUtil {
     private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
-    String edgeType = "http://dbpedia.org/ontology/";
-    // TODO do it language depend
-    // String nodeType = "http://dbpedia.org/resource/";
-    String nodeType = "http://de.dbpedia.org/resource/";
+    String nodeType = null;
     LabelURLIndex rdfsLabelIndex;
     LabelURLIndex surfaceFormIndex;
     SubjectPredicateObjectIndex index;
     SubjectPredicateObjectIndex redirectIndex;
 
-    public CandidateUtil() {
-        String directory = "/data/r.usbeck";
-        // String directory = "/Users/ricardousbeck";
-        String language = "dbpedia_de";// "dbpedia_de";// "dbpedia_en"
+    /**
+     * 
+     * @param languageTag
+     *            en or de
+     * @param dataDirectory
+     *            parent directory of index and dump file directory.
+     *            E.g., /data/r.usbeck
+     *            ---> /data/r.usbeck/index/..,
+     *            ---> /data/r.usbeck/dbpedia_[LANGUAGE]
+     */
+    public CandidateUtil(String languageTag, String dataDirectory) {
+        if (languageTag.equals("de")) {
+            nodeType = "http://de.dbpedia.org/resource/";
+        } else if (languageTag.equals("en")) {
+            nodeType = "http://dbpedia.org/resource/";
+        }
+        String directory = dataDirectory; // "/data/r.usbeck";
+        String language = "dbpedia_" + languageTag;
         ArrayList<String> tmp = new ArrayList<String>();
-        // TODO hack language abbreviation
-        tmp.add(directory + "/" + language + "/instance_types_de.nt");
-        tmp.add(directory + "/" + language + "/mappingbased_properties_de.nt");
-        tmp.add(directory + "/" + language + "/specific_mappingbased_properties_de.nt");
-        tmp.add(directory + "/" + language + "/disambiguations_de.nt");
-        this.rdfsLabelIndex = new LabelURLIndex(directory + "/" + language + "/labels_de.nt", directory + "/index" +
-                language + "/label_rdfs_label", LabelURLIndex.N_TRIPLES);
-        this.surfaceFormIndex = new LabelURLIndex(directory + "/" + language + "/de_surface_forms.tsv", directory +
-                "/index" + language + "/label_surface", LabelURLIndex.TSV);
-
-        // tmp.add(directory + "/" + language + "/instance_types_en.nt");
-        // tmp.add(directory + "/" + language + "/mappingbased_properties_en.nt");
-        // tmp.add(directory + "/" + language + "/specific_mappingbased_properties_en.nt");
-        // tmp.add(directory + "/" + language + "/disambiguations_en.nt");
-        //
-        // this.rdfsLabelIndex = new LabelURLIndex(directory + "/" + language + "/labels_en.nt", directory + "/index" +
-        // language + "/label_rdfs_label", LabelURLIndex.N_TRIPLES);
-        // this.surfaceFormIndex = new LabelURLIndex(directory + "/" + language + "/en_surface_forms.tsv", directory +
-        // "/index" + language + "/label_surface", LabelURLIndex.TSV);
-
+        tmp.add(directory + "/" + language + "/instance_types_" + languageTag + ".nt");
+        tmp.add(directory + "/" + language + "/mappingbased_properties_" + languageTag + ".nt");
+        tmp.add(directory + "/" + language + "/specific_mappingbased_properties_" + languageTag + ".nt");
+        tmp.add(directory + "/" + language + "/disambiguations_" + languageTag + ".nt");
         this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntology");
 
+        String rdfsLabelFile = directory + "/" + language + "/labels_" + languageTag + ".nt";
+        String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
+        this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES);
+
+        String surfaceFormsFile = directory + "/" + language + "/" + languageTag + "_surface_forms.tsv";
+        String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
+        this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.TSV);
+
         tmp = new ArrayList<String>();
-        // tmp.add(directory + "/" + language + "/redirects_transitive_en.nt");
-        tmp.add(directory + "/" + language + "/redirects_transitive_de.nt");
+        tmp.add(directory + "/" + language + "/redirects_transitive_" + languageTag + ".nt");
         this.redirectIndex = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntologyRedirects");
 
     }
@@ -99,12 +101,57 @@ public class CandidateUtil {
             if (!expansion) {
                 heuristicExpansion.add(label);
             }
-            // go for rdfslabel
-            // go for surface forms
-            // TODO only rdfs label
-            // checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label);
             if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label))
                 checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label);
+        }
+    }
+
+    public void addNodeToGraph(DirectedSparseGraph<MyNode, String> graph, HashMap<String, MyNode> nodes, NamedEntityInText entity, Triple c, String candidateURL) {
+        MyNode currentNode = new MyNode(candidateURL, 0, 0);
+        log.debug(currentNode.toString());
+        // candidates are connected to a specific label in the text via their start position
+        if (!graph.addVertex(currentNode)) {
+            int st = entity.getStartPos();
+            if (nodes.get(candidateURL) == null) {
+                /*
+                 * TODO jung bug obviously jung hashcodes colide, although the node doesn't exist it can't be added
+                 */
+                log.error("This vertex couldn't be added because of an bug in Jung: "
+                        + candidateURL);
+            } else {
+                nodes.get(candidateURL).addId(st);
+                log.debug("\t\tCandidate has not been insert: " + c
+                        + " but inserted an additional labelId at that node.");
+            }
+        } else {
+            currentNode.addId(entity.getStartPos());
+            nodes.put(candidateURL, currentNode);
+        }
+    }
+
+    public void close() {
+        try {
+            index.close();
+            redirectIndex.close();
+            rdfsLabelIndex.close();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+        }
+    }
+
+    public SubjectPredicateObjectIndex getIndex() {
+        return index;
+    }
+
+    public String redirect(String candidateURL) {
+        List<Triple> redirect = redirectIndex.search(candidateURL);
+        if (redirect.size() == 1) {
+            return redirect.get(0).getObject();
+        } else if (redirect.size() > 1) {
+            log.error("More than one transitive redirect" + candidateURL);
+            return candidateURL;
+        } else {
+            return candidateURL;
         }
     }
 
@@ -195,29 +242,6 @@ public class CandidateUtil {
         return addedCandidates;
     }
 
-    public void addNodeToGraph(DirectedSparseGraph<MyNode, String> graph, HashMap<String, MyNode> nodes, NamedEntityInText entity, Triple c, String candidateURL) {
-        MyNode currentNode = new MyNode(candidateURL, 0, 0);
-        log.debug(currentNode.toString());
-        // candidates are connected to a specific label in the text via their start position
-        if (!graph.addVertex(currentNode)) {
-            int st = entity.getStartPos();
-            if (nodes.get(candidateURL) == null) {
-                /*
-                 * TODO jung bug obviously jung hashcodes colide, although the node doesn't exist it can't be added
-                 */
-                log.error("This vertex couldn't be added because of an bug in Jung: "
-                        + candidateURL);
-            } else {
-                nodes.get(candidateURL).addId(st);
-                log.debug("\t\tCandidate has not been insert: " + c
-                        + " but inserted an additional labelId at that node.");
-            }
-        } else {
-            currentNode.addId(entity.getStartPos());
-            nodes.put(candidateURL, currentNode);
-        }
-    }
-
     private String disambiguates(String candidateURL) {
         List<Triple> tmp = index.search(candidateURL);
         if (tmp.isEmpty())
@@ -232,7 +256,7 @@ public class CandidateUtil {
         return candidateURL;
     }
 
-    public String cleanLabelsfromCorporationIdentifier(String label) {
+    private String cleanLabelsfromCorporationIdentifier(String label) {
         if (label.endsWith("corp")) {
             label = label.substring(0, label.lastIndexOf("corp"));
         } else if (label.endsWith("Corp")) {
@@ -317,29 +341,4 @@ public class CandidateUtil {
         return false;
     }
 
-    public String redirect(String candidateURL) {
-        List<Triple> redirect = redirectIndex.search(candidateURL);
-        if (redirect.size() == 1) {
-            return redirect.get(0).getObject();
-        } else if (redirect.size() > 1) {
-            log.error("More than one transitive redirect" + candidateURL);
-            return candidateURL;
-        } else {
-            return candidateURL;
-        }
-    }
-
-    public void close() {
-        try {
-            index.close();
-            redirectIndex.close();
-            rdfsLabelIndex.close();
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
-        }
-    }
-
-    public SubjectPredicateObjectIndex getIndex() {
-        return index;
-    }
 }

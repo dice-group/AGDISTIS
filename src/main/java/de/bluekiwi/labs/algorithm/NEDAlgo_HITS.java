@@ -25,21 +25,17 @@ public class NEDAlgo_HITS {
     private Logger log = LoggerFactory.getLogger(NEDAlgo_HITS.class);
     private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private String edgeType = "http://dbpedia.org/ontology/";
-    // TODO language dependend
-    private String nodeType = "http://de.dbpedia.org/resource/";
-    private CandidateUtil cu;
-
-    public CandidateUtil getCu() {
-        return cu;
-    }
-
-    private SubjectPredicateObjectIndex index;
+    private String nodeType = null;
+    private CandidateUtil cu = null;
+    private SubjectPredicateObjectIndex index = null;
     private DirectedSparseGraph<MyNode, String>[] graph = null;
-    private HashSet<String> restrictedEdges;
+    // needed for the experiment about which properties increase accuracy
+    private HashSet<String> restrictedEdges = null;
 
     @SuppressWarnings("unchecked")
-    public NEDAlgo_HITS(int numberOfDocuments) {
-        cu = new CandidateUtil();
+    public NEDAlgo_HITS(int numberOfDocuments, String languageTag, String dataDirectory) {
+        nodeType = "http://" + languageTag + ".dbpedia.org/resource/";
+        cu = new CandidateUtil(languageTag, dataDirectory);
         index = cu.getIndex();
         graph = new DirectedSparseGraph[numberOfDocuments];
     }
@@ -50,7 +46,7 @@ public class NEDAlgo_HITS {
             try {
                 // 0) insert candidates into Text
                 cu.insertCandidatesIntoText(graph[documentId], document, threshholdTrigram);
-                // 1) let spread activation/ breadth first searc run
+                // 1) let spread activation/ breadth first search run
                 int maxDepth = 2;
                 BreadthFirstSearch bfs = new BreadthFirstSearch(index);
                 bfs.run(maxDepth, graph[documentId], edgeType, nodeType);
@@ -74,8 +70,7 @@ public class NEDAlgo_HITS {
             h.runHits(tmp, 20);
             log.info("DocumentId: " + documentId + " numberOfNodes: " + graph[documentId].getVertexCount() + " reduced to " + tmp.getVertexCount());
             log.info("DocumentId: " + documentId + " numberOfEdges: " + graph[documentId].getEdgeCount() + " reduced to " + tmp.getEdgeCount());
-            // 3) store the candidate with the highest hub, highest authority
-            // ratio
+            // 3) store the candidate with the highest hub, highest authority ratio
             ArrayList<MyNode> orderedList = new ArrayList<MyNode>();
             orderedList.addAll(tmp.getVertices());
             Collections.sort(orderedList);
@@ -94,6 +89,10 @@ public class NEDAlgo_HITS {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public CandidateUtil getCu() {
+        return cu;
     }
 
     private DirectedSparseGraph<MyNode, String> clone(DirectedSparseGraph<MyNode, String> orig) {
@@ -142,8 +141,7 @@ public class NEDAlgo_HITS {
             HITS h = new HITS();
             h.runHits(graph, 20);
 
-            // 3) store the candidate with the highest hub, highest authority
-            // ratio
+            // 3) store the candidate with the highest hub, highest authority ratio
             ArrayList<MyNode> orderedList = new ArrayList<MyNode>();
             orderedList.addAll(graph.getVertices());
             Collections.sort(orderedList);
@@ -158,28 +156,11 @@ public class NEDAlgo_HITS {
                                     m.getCandidateURI());
                             break;
                         }
-                        // double sumAuth1Step = 0;
-                        // double sumHub1Step = 0;
-                        // for (MyNode suc : graph.getSuccessors(m))
-                        // {
-                        // sumAuth1Step += suc.getAuthorityWeight();
-                        // sumHub1Step += suc.getHubWeight();
-                        // }
-                        // log.info("\tSumAuthorityWeightOneStepAway: " +
-                        // sumAuth1Step +
-                        // " \tSumHubWeightsOneStepAway: "
-                        // + sumHub1Step);
                     }
 
                 }
             }
 
-            // if (text.getId() == 81) {
-            // SimpleGraphViewWithJung sgv = new SimpleGraphViewWithJung();
-            // sgv.showGraph(graph);
-            // Thread.sleep(100000);
-            // sgv.close();
-            // }
         } catch (RepositoryException e) {
             log.error(e.getLocalizedMessage());
         } catch (InterruptedException e) {
@@ -210,5 +191,4 @@ public class NEDAlgo_HITS {
     public DirectedSparseGraph<MyNode, String>[] getAllGraphs() {
         return graph;
     }
-
 }

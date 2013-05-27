@@ -23,23 +23,21 @@ public class PropertyWriter {
     private static Logger log = LoggerFactory.getLogger(PropertyWriter.class);
 
     public static void main(String[] args) {
-        String OUTPUT_FILE = "/data/r.usbeck/Dropbox/reuters.xml";
-        String ONTOLOGY_FILE = "/data/r.usbeck/Dropbox/ontology_properties.txt";
-
-        // String OUTPUT_FILE = "/Users/ricardousbeck/Dropbox/reuters.xml";
-        // String ONTOLOGY_FILE = "/Users/ricardousbeck/Dropbox/ontology_properties.txt";
-
-        CorpusXmlReader reader = new CorpusXmlReader(new File(OUTPUT_FILE));
-        Corpus corpus = reader.getCorpus();
+        String INPUT_FILE = " reuters.xml";
+        String ONTOLOGY_FILE = "ontology_properties.txt";
+        String languageTag = "en"; // de
+        String dataDirectory = "/data/r.usbeck";
+        double threshholdTrigram = 0.835;
 
         // get all properties
         DBpediaOwlReader owl = new DBpediaOwlReader(ONTOLOGY_FILE);
+        CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
+        Corpus corpus = reader.getCorpus();
 
         HashSet<String> propertiesToTest = new HashSet<String>();
         propertiesToTest.addAll(owl.hashset);
 
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments());
-        double threshholdTrigram = 0.835;
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory);
         HashMap<String, Integer> hist = new HashMap<String, Integer>();
         for (Document document : corpus) {
             algo.runPreStep(document, threshholdTrigram, document.getDocumentId());
