@@ -47,22 +47,22 @@ public class CandidateUtil {
         String directory = dataDirectory; // "/data/r.usbeck";
         String language = "dbpedia_" + languageTag;
         ArrayList<String> tmp = new ArrayList<String>();
-        tmp.add(directory + "/" + language + "/instance_types_" + languageTag + ".nt");
-        tmp.add(directory + "/" + language + "/mappingbased_properties_" + languageTag + ".nt");
-        tmp.add(directory + "/" + language + "/specific_mappingbased_properties_" + languageTag + ".nt");
-        tmp.add(directory + "/" + language + "/disambiguations_" + languageTag + ".nt");
-        this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntology");
+        tmp.add(directory + "/instance_types_" + languageTag + ".nt");
+        tmp.add(directory + "/mappingbased_properties_" + languageTag + ".nt");
+        tmp.add(directory + "/specific_mappingbased_properties_" + languageTag + ".nt");
+        tmp.add(directory + "/disambiguations_" + languageTag + ".nt");
+        this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index"+language+"/dbpediaOntology");
 
-        String rdfsLabelFile = directory + "/" + language + "/labels_" + languageTag + ".nt";
+        String rdfsLabelFile = directory + "/labels_" + languageTag + ".nt";
         String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
         this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES);
 
-        String surfaceFormsFile = directory + "/" + language + "/" + languageTag + "_surface_forms.tsv";
+        String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
         String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
         this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.TSV);
 
         tmp = new ArrayList<String>();
-        tmp.add(directory + "/" + language + "/redirects_transitive_" + languageTag + ".nt");
+        tmp.add(directory + "/redirects_transitive_" + languageTag + ".nt");
         this.redirectIndex = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntologyRedirects");
 
     }
