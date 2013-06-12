@@ -40,6 +40,13 @@ public class NEDAlgo_HITS {
         graph = new DirectedSparseGraph[numberOfDocuments];
     }
 
+    public NEDAlgo_HITS(String modelDirectory) {
+        nodeType = "http://dbpedia.org/resource/";
+        cu = new CandidateUtil(modelDirectory);
+        index = cu.getIndex();
+        graph = new DirectedSparseGraph[1];
+    }
+
     public void runPreStep(Document document, double threshholdTrigram, int documentId) {
         if (graph[documentId] == null) {
             graph[documentId] = new DirectedSparseGraph<MyNode, String>();

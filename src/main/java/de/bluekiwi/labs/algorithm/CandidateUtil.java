@@ -51,7 +51,7 @@ public class CandidateUtil {
         tmp.add(directory + "/mappingbased_properties_" + languageTag + ".nt");
         tmp.add(directory + "/specific_mappingbased_properties_" + languageTag + ".nt");
         tmp.add(directory + "/disambiguations_" + languageTag + ".nt");
-        this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index"+language+"/dbpediaOntology");
+        this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntology");
 
         String rdfsLabelFile = directory + "/labels_" + languageTag + ".nt";
         String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
@@ -65,6 +65,14 @@ public class CandidateUtil {
         tmp.add(directory + "/redirects_transitive_" + languageTag + ".nt");
         this.redirectIndex = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntologyRedirects");
 
+    }
+
+    public CandidateUtil(String modelDirectory) {
+        nodeType = "http://dbpedia.org/resource/";
+        this.index = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntology");
+        this.rdfsLabelIndex = new LabelURLIndex(modelDirectory + "/label_rdfs_label");
+        this.surfaceFormIndex = new LabelURLIndex(modelDirectory + "/label_surface");
+        this.redirectIndex = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntologyRedirects");
     }
 
     public void insertCandidatesIntoText(DirectedSparseGraph<MyNode, String> graph, Document document, double threshholdTrigram) {

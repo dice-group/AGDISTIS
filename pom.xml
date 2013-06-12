@@ -53,6 +53,11 @@
 	</prerequisites>
 	<repositories>
 		<repository>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.org</url>
+		</repository>
+		<repository>
 			<id>aduna</id>
 			<name>Aduna Software</name>
 			<url>http://repo.aduna-software.org/maven2/releases/</url>
@@ -137,6 +142,45 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.2</version>
+		</dependency>
+		<!-- Jung Graph -->
+		<dependency>
+			<groupId>net.sf.jung</groupId>
+			<artifactId>jung-graph-impl</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<!-- local libs -->
+		<dependency>
+			<groupId>de.bluekiwi</groupId>
+			<artifactId>QRToolNED.datatypes</artifactId>
+			<version>0.0.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/QRToolNED.datatypes-0.0.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>de.bluekiwi</groupId>
+			<artifactId>uber-topicmodeling.io</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>de.bluekiwi</groupId>
+			<artifactId>aida</artifactId>
+			<version>0.0.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/aida.jar</systemPath>
+		</dependency>
+		<!-- REST interface -->
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.simple</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 	</dependencies>
 </project>

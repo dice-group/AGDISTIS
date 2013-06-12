@@ -76,6 +76,19 @@ public class LabelURLIndex {
         }
     }
 
+    public LabelURLIndex(String idxDirectory) {
+        try {
+            analyzer = new StandardAnalyzer(Version.LUCENE_40);
+            File indexDirectory = new File(idxDirectory);
+            directory = new MMapDirectory(indexDirectory);
+            ireader = DirectoryReader.open(directory);
+            isearcher = new IndexSearcher(ireader);
+
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        }
+    }
+
     private void indexTSVFile(String surfaceFormsTSV) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(surfaceFormsTSV));

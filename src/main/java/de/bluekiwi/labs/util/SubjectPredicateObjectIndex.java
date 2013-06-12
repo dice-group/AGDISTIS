@@ -51,6 +51,21 @@ public class SubjectPredicateObjectIndex {
         init(files, idxDirectory);
     }
 
+    public SubjectPredicateObjectIndex(String idxDirectory) {
+        try {
+            analyzer = new KeywordAnalyzer();
+            File indexDirectory = new File(idxDirectory);
+            directory = new MMapDirectory(indexDirectory);
+            ireader = DirectoryReader.open(directory);
+            isearcher = new IndexSearcher(ireader);
+
+            parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_SUBJECT, analyzer);
+            parser.setDefaultOperator(QueryParser.Operator.AND);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        }
+    }
+
     public void init(List<String> files, String idxDirectory) {
         try {
             analyzer = new KeywordAnalyzer();
