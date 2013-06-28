@@ -53,8 +53,9 @@ public class SpotlightPoster {
     public void doTASK(Document document) throws IOException {
         String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         text += "<annotation ";
-        String textValue = document.getProperty(DocumentText.class).getStringValue();
+        String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "");
         text += "text=\"" + textValue + "\">\n";
+        // text += "text=\" \">\n";
         for (NamedEntityInText ne : document.getProperty(NamedEntitiesInText.class)) {
             String namedEntity = textValue.substring(ne.getStartPos(), ne.getEndPos());
             text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" + ne.getStartPos() + "\" />\n";
@@ -62,10 +63,10 @@ public class SpotlightPoster {
         }
         text += "</annotation>";
         text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
-
+        System.out.println(text);
         String urlParameters = "text=" + text + "";
         String request = "http://spotlight.dbpedia.org/rest/disambiguate";
-
+        // String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
         URL url = new URL(request);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);

@@ -18,7 +18,7 @@ public class SpotlightCompare {
 
     public static void main(String[] args) throws Exception {
         SpotlightPoster spot = new SpotlightPoster();
-        for (String INPUT_FILE : new String[] { "reuters.xml", "500newsgoldstandard.xml" }) {// "german_corpus.xml"
+        for (String INPUT_FILE : new String[] { "german_corpus.xml" }) {// "reuters.xml", "500newsgoldstandard.xml"
             CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
             Corpus corpus = reader.getCorpus();
             double t = 0, n = 0;
@@ -42,8 +42,8 @@ public class SpotlightCompare {
                                 t++;
                                 log.info("\t Disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
                             } else if (correctVotingURL.equals("http://aksw.org/notInWiki") ||
-                                    correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/") ||
-                                    correctVotingURL.startsWith("http://de.dbpedia.org/")) {
+                                    // correctVotingURL.startsWith("http://de.dbpedia.org/") ||
+                                    correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) {
                                 log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
                             } else {
                                 n++;
