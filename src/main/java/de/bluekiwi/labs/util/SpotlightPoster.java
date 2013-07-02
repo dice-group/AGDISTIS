@@ -65,8 +65,8 @@ public class SpotlightPoster {
         text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
         System.out.println(text);
         String urlParameters = "text=" + text + "";
-        String request = "http://spotlight.dbpedia.org/rest/disambiguate";
-        // String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
+        // String request = "http://spotlight.dbpedia.org/rest/disambiguate";
+        String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
         URL url = new URL(request);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
@@ -87,7 +87,7 @@ public class SpotlightPoster {
         }
         wr.close();
         reader.close();
-
+        System.out.println(sb.toString());
         parseHTML(sb);
     }
 

@@ -22,57 +22,88 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class CandidateUtil {
     private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
-    String nodeType = null;
-    LabelURLIndex rdfsLabelIndex;
-    LabelURLIndex surfaceFormIndex;
-    SubjectPredicateObjectIndex index;
-    SubjectPredicateObjectIndex redirectIndex;
+    private String nodeType = null;
+    private LabelURLIndex rdfsLabelIndex;
+    private LabelURLIndex surfaceFormIndex;
+    private SubjectPredicateObjectIndex index;
+    private SubjectPredicateObjectIndex redirectIndex;
+    private SubjectPredicateObjectIndex yago2dbpedia;
 
     /**
+     * @param knowledgeBase
+     *            "http://yago-knowledge.org/resource/" or "http://dbpedia.org/resource/"
      * 
      * @param languageTag
      *            en or de
      * @param dataDirectory
-     *            parent directory of index and dump file directory.
-     *            E.g., /data/r.usbeck
-     *            ---> /data/r.usbeck/index/..,
+     *            parent directory of index and dump file directory. E.g., /data/r.usbeck ---> /data/r.usbeck/index/..,
      *            ---> /data/r.usbeck/dbpedia_[LANGUAGE]
      */
-    public CandidateUtil(String languageTag, String dataDirectory) {
-        if (languageTag.equals("de")) {
-            nodeType = "http://de.dbpedia.org/resource/";
-        } else if (languageTag.equals("en")) {
-            nodeType = "http://dbpedia.org/resource/";
+    public CandidateUtil(String languageTag, String directory, String knowledgeBase) {
+        if (knowledgeBase.equals("http://yago-knowledge.org/resource/")) {
+            nodeType = "http://yago-knowledge.org/resource/";
+            directory += "/yago";
+            ArrayList<String> tmp = new ArrayList<String>();
+            tmp.add(directory + "/yagoTypes.ttl");
+            tmp.add(directory + "/yagoTransitiveType.ttl");
+            tmp.add(directory + "/yagoFacts.ttl");
+            tmp.add(directory + "/yagoLiteralFacts.ttl");
+            this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index/yagoOntology", nodeType, SubjectPredicateObjectIndex.TTL);
+
+            String rdfsLabelFile = directory + "/yagoLabels.ttl";
+            String rdfsLabelIndexDirectory = directory + "/index/yagoLabels";
+            this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.TTL, nodeType);
+
+            // no surface forms are given for yago
+            // no redirects forms are given for yago
+
+            tmp = new ArrayList<String>();
+            tmp.add(directory + "/yagoDBpediaInstances.ttl");
+            this.yago2dbpedia = new SubjectPredicateObjectIndex(tmp, directory + "/index/yago2dbpedia", nodeType, SubjectPredicateObjectIndex.TTL);
+        } else {
+            if (languageTag.equals("de")) {
+                nodeType = "http://de.dbpedia.org/resource/";
+            } else if (languageTag.equals("en")) {
+                nodeType = "http://dbpedia.org/resource/";
+            }
+            String language = "dbpedia_" + languageTag;
+            ArrayList<String> tmp = new ArrayList<String>();
+            tmp.add(directory + "/instance_types_" + languageTag + ".nt");
+            tmp.add(directory + "/mappingbased_properties_" + languageTag + ".nt");
+            tmp.add(directory + "/specific_mappingbased_properties_" + languageTag + ".nt");
+            tmp.add(directory + "/disambiguations_" + languageTag + ".nt");
+            this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntology", nodeType, SubjectPredicateObjectIndex.N_TRIPLES);
+
+            String rdfsLabelFile = directory + "/labels_" + languageTag + ".nt";
+            String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
+            this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES, nodeType);
+
+            String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
+            String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
+            this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.TSV, nodeType);
+
+            tmp = new ArrayList<String>();
+            tmp.add(directory + "/redirects_transitive_" + languageTag + ".nt");
+            this.redirectIndex = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntologyRedirects", nodeType, SubjectPredicateObjectIndex.N_TRIPLES);
         }
-        String directory = dataDirectory; // "/data/r.usbeck";
-        String language = "dbpedia_" + languageTag;
-        ArrayList<String> tmp = new ArrayList<String>();
-        tmp.add(directory + "/instance_types_" + languageTag + ".nt");
-        tmp.add(directory + "/mappingbased_properties_" + languageTag + ".nt");
-        tmp.add(directory + "/specific_mappingbased_properties_" + languageTag + ".nt");
-        tmp.add(directory + "/disambiguations_" + languageTag + ".nt");
-        this.index = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntology");
-
-        String rdfsLabelFile = directory + "/labels_" + languageTag + ".nt";
-        String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
-        this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES);
-
-        String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
-        String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
-        this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.TSV);
-
-        tmp = new ArrayList<String>();
-        tmp.add(directory + "/redirects_transitive_" + languageTag + ".nt");
-        this.redirectIndex = new SubjectPredicateObjectIndex(tmp, directory + "/index" + language + "/dbpediaOntologyRedirects");
 
     }
 
-    public CandidateUtil(String modelDirectory) {
-        nodeType = "http://dbpedia.org/resource/";
-        this.index = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntology");
-        this.rdfsLabelIndex = new LabelURLIndex(modelDirectory + "/label_rdfs_label");
-        this.surfaceFormIndex = new LabelURLIndex(modelDirectory + "/label_surface");
-        this.redirectIndex = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntologyRedirects");
+    public CandidateUtil(String modelDirectory, String knowledgeBase) {
+        if (knowledgeBase.equals("http://yago-knowledge.org/resource/")) {
+            nodeType = "http://yago-knowledge.org/resource/";
+            this.index = new SubjectPredicateObjectIndex(modelDirectory + "/yagoOntology");
+            this.rdfsLabelIndex = new LabelURLIndex(modelDirectory + "/yagoLabels");
+            this.yago2dbpedia = new SubjectPredicateObjectIndex(modelDirectory + "/yago2dbpedia");
+            // no surface forms are given for yago
+            // no redirects forms are given for yago
+        } else {
+            nodeType = "http://dbpedia.org/resource/";
+            this.index = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntology");
+            this.rdfsLabelIndex = new LabelURLIndex(modelDirectory + "/label_rdfs_label");
+            this.surfaceFormIndex = new LabelURLIndex(modelDirectory + "/label_surface");
+            this.redirectIndex = new SubjectPredicateObjectIndex(modelDirectory + "/dbpediaOntologyRedirects");
+        }
     }
 
     public void insertCandidatesIntoText(DirectedSparseGraph<MyNode, String> graph, Document document, double threshholdTrigram) {
@@ -109,8 +140,12 @@ public class CandidateUtil {
             if (!expansion) {
                 heuristicExpansion.add(label);
             }
-            if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label))
-                checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label);
+            checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://yago-knowledge.org/resource/");
+            // if using Yago there are no surface forms
+            // if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label
+            // ,"http://dbpedia.org/resource/"))
+            // checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity,
+            // label,"http://dbpedia.org/resource/");
         }
     }
 
@@ -163,7 +198,8 @@ public class CandidateUtil {
         }
     }
 
-    private boolean checkSurfaceFormsCandidates(DirectedSparseGraph<MyNode, String> graph, HashMap<String, MyNode> nodes, double threshholdTrigram, NamedEntityInText entity, String label) {
+    private boolean checkSurfaceFormsCandidates(DirectedSparseGraph<MyNode, String> graph, HashMap<String, MyNode> nodes, double threshholdTrigram, NamedEntityInText entity, String label,
+            String knowledgeBase) {
         boolean addedCandidates = false;
         label = cleanLabelsfromCorporationIdentifier(label);
         label = label.trim();
@@ -198,7 +234,7 @@ public class CandidateUtil {
                 }
                 // follow redirect
                 candidateURL = redirect(candidateURL);
-                if (fitsIntoDomain(candidateURL)) {
+                if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
                 }
@@ -207,7 +243,8 @@ public class CandidateUtil {
         return addedCandidates;
     }
 
-    private boolean checkRdfsLabelCandidates(DirectedSparseGraph<MyNode, String> graph, double threshholdTrigram, HashMap<String, MyNode> nodes, NamedEntityInText entity, String label) {
+    private boolean checkRdfsLabelCandidates(DirectedSparseGraph<MyNode, String> graph, double threshholdTrigram, HashMap<String, MyNode> nodes, NamedEntityInText entity, String label,
+            String knowledgeBase) {
         boolean addedCandidates = false;
         label = cleanLabelsfromCorporationIdentifier(label);
         label = label.trim();
@@ -240,8 +277,9 @@ public class CandidateUtil {
                     continue;
                 }
                 // follow redirect
-                candidateURL = redirect(candidateURL);
-                if (fitsIntoDomain(candidateURL)) {
+                // cannot follow redirects in yago
+                // candidateURL = redirect(candidateURL);
+                if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
                 }
@@ -305,48 +343,83 @@ public class CandidateUtil {
     }
 
     private double trigramForURLLabel(String candidateURL, String label, String nodeType) {
-        HashSet<String> trigramsForLabel = new HashSet<String>();
-        for (int i = 3; i < label.length(); i++) {
-            trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
-        }
         List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
         if (labelOfCandidate.isEmpty()) {
             return 0;
         }
-        String replace = labelOfCandidate.get(0).getObject().replace(nodeType, "").toLowerCase();
-        replace = replace.replace("&", "and");
-        HashSet<String> trigramsForCandidate = new HashSet<String>();
-        for (int i = 3; i < replace.length(); i++) {
-            trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
-        }
         HashSet<String> union = new HashSet<String>();
-        union.addAll(trigramsForLabel);
-        union.addAll(trigramsForCandidate);
-        trigramsForLabel.retainAll(trigramsForCandidate);
-        log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + (double) trigramsForLabel.size() / ((double) union.size()));
-        return (double) trigramsForLabel.size() / ((double) union.size());
+        double sim = 0;
+        // ensure that there is one maximum matching label
+        for (Triple t : labelOfCandidate) {
+            HashSet<String> trigramsForLabel = new HashSet<String>();
+            for (int i = 3; i < label.length(); i++) {
+                trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
+            }
+            union = new HashSet<String>();
+            String replace = t.getObject().replace(nodeType, "").toLowerCase();
+            replace = replace.replace("&", "and");
+            HashSet<String> trigramsForCandidate = new HashSet<String>();
+            for (int i = 3; i < replace.length(); i++) {
+                trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
+            }
+            union.addAll(trigramsForLabel);
+            union.addAll(trigramsForCandidate);
+            trigramsForLabel.retainAll(trigramsForCandidate);
+            // log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + sim);
+            double tmp = (double) trigramsForLabel.size() / ((double) union.size());
+            if (sim < tmp)
+                sim = tmp;
+        }
+
+        return sim;
     }
 
-    private boolean fitsIntoDomain(String candidateURL) {
+    private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {
         HashSet<String> whiteList = new HashSet<String>();
-        whiteList.add("http://dbpedia.org/ontology/Place");
-        whiteList.add("http://dbpedia.org/ontology/Person");
-        whiteList.add("http://dbpedia.org/ontology/Organisation");
-        whiteList.add("http://dbpedia.org/class/yago/YagoGeoEntity");
-        whiteList.add("http://xmlns.com/foaf/0.1/Person");
-        whiteList.add("http://dbpedia.org/ontology/WrittenWork");
+        if ("http://dbpedia.org/resource/".equals(knowledgeBase)) {
+            whiteList.add("http://dbpedia.org/ontology/Place");
+            whiteList.add("http://dbpedia.org/ontology/Person");
+            whiteList.add("http://dbpedia.org/ontology/Organisation");
+            whiteList.add("http://dbpedia.org/class/yago/YagoGeoEntity");
+            whiteList.add("http://xmlns.com/foaf/0.1/Person");
+            whiteList.add("http://dbpedia.org/ontology/WrittenWork");
+        }
+        else {
+            // whiteList.add("http://yago-knowledge.org/resource/Place");
+            // whiteList.add("http://dbpedia.org/ontology/Person");
+            // whiteList.add("http://dbpedia.org/ontology/Organisation");
+            whiteList.add("http://yago-knowledge.org/resource/yagoGeoEntity");
+            whiteList.add("http://yago-knowledge.org/resource/yagoLegalActor");
+            whiteList.add("http://yago-knowledge.org/resource/wordnet_exchange_111409538");
+            // whiteList.add("http://dbpedia.org/ontology/WrittenWork");
+        }
+
         List<Triple> tmp = index.search(candidateURL);
         if (tmp.isEmpty())
             return true;
         for (Triple triple : tmp) {
             String predicate = triple.getPredicate();
             if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) {
+                if (!triple.getObject().contains("wordnet") && !triple.getObject().contains("wikicategory"))
+                    log.debug("\ttype: " + triple.getObject());
                 if (whiteList.contains(triple.getObject())) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public String mapToDbpedia(String correctVotingURL) {
+        List<Triple> mapping = yago2dbpedia.search(correctVotingURL);
+        if (mapping.size() == 1) {
+            return mapping.get(0).getObject();
+        } else if (mapping.size() > 1) {
+            log.error("More than one mapping" + correctVotingURL);
+            return correctVotingURL;
+        } else {
+            return correctVotingURL;
+        }
     }
 
 }

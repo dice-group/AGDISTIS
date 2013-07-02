@@ -32,6 +32,7 @@ import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.ntriples.NTriplesParser;
+import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
 public class SubjectPredicateObjectIndex {
@@ -39,6 +40,8 @@ public class SubjectPredicateObjectIndex {
     private String FIELD_NAME_SUBJECT = "subject";
     private String FIELD_NAME_PREDICATE = "predicat";
     private String FIELD_NAME_OBJECT = "object";
+    public static final String N_TRIPLES = "NTriples";
+    public static final String TTL = "TTL";
 
     private Directory directory;
     private Analyzer analyzer;
@@ -47,8 +50,8 @@ public class SubjectPredicateObjectIndex {
     private DirectoryReader ireader;
     private IndexWriter iwriter;
 
-    public SubjectPredicateObjectIndex(List<String> files, String idxDirectory) {
-        init(files, idxDirectory);
+    public SubjectPredicateObjectIndex(List<String> files, String idxDirectory, String baseURI, String type) {
+        init(files, idxDirectory, baseURI, type);
     }
 
     public SubjectPredicateObjectIndex(String idxDirectory) {
@@ -66,7 +69,7 @@ public class SubjectPredicateObjectIndex {
         }
     }
 
-    public void init(List<String> files, String idxDirectory) {
+    public void init(List<String> files, String idxDirectory, String baseURI, String type) {
         try {
             analyzer = new KeywordAnalyzer();
             File indexDirectory = new File(idxDirectory);
@@ -79,7 +82,11 @@ public class SubjectPredicateObjectIndex {
                 iwriter = new IndexWriter(directory, config);
                 for (String file : files)
                 {
-                    indexNTriplesFile(file);
+                    if (type.equals(TTL))
+                        indexTTLFile(file, baseURI);
+                    if (type.equals(N_TRIPLES))
+                        indexNTriplesFile(file, baseURI);
+
                 }
                 iwriter.close();
             }
@@ -93,14 +100,33 @@ public class SubjectPredicateObjectIndex {
         }
     }
 
-    private void indexNTriplesFile(String file) {
+    private void indexTTLFile(String file, String baseURI) {
+        try {
+            log.info("Start parsing: " + file);
+            RDFParser parser = new TurtleParser();
+            OnlineStatementHandler osh = new OnlineStatementHandler();
+            parser.setRDFHandler(osh);
+            parser.setStopAtFirstError(false);
+            parser.parse(new FileReader(file), baseURI);
+            log.info("Finished parsing: " + file);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        } catch (RDFParseException e) {
+            log.error(e.getLocalizedMessage());
+        } catch (RDFHandlerException e) {
+            log.error(e.getLocalizedMessage());
+        }
+
+    }
+
+    private void indexNTriplesFile(String file, String baseUri) {
         try {
             log.info("Start parsing: " + file);
             RDFParser parser = new NTriplesParser();
             OnlineStatementHandler osh = new OnlineStatementHandler();
             parser.setRDFHandler(osh);
             parser.setStopAtFirstError(false);
-            parser.parse(new FileReader(file), "http://dbpedia.org/resource/");
+            parser.parse(new FileReader(file), baseUri);
             log.info("Finished parsing: " + file);
         } catch (RDFParseException e) {
             log.error(e.getLocalizedMessage());
@@ -115,6 +141,8 @@ public class SubjectPredicateObjectIndex {
 
     private void addDocumentToIndex(IndexWriter iwriter, String subject, String predicate, String object) {
         Document doc = new Document();
+        subject = subject.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
+        object = object.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
         doc.add(new StringField(FIELD_NAME_SUBJECT, subject, Store.YES));
         doc.add(new StringField(FIELD_NAME_PREDICATE, predicate, Store.YES));
         doc.add(new StringField(FIELD_NAME_OBJECT, object, Store.YES));

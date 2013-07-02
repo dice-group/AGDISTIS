@@ -33,16 +33,16 @@ public class NEDAlgo_HITS {
     private HashSet<String> restrictedEdges = null;
 
     @SuppressWarnings("unchecked")
-    public NEDAlgo_HITS(int numberOfDocuments, String languageTag, String dataDirectory) {
-        nodeType = "http://" + languageTag + ".dbpedia.org/resource/";
-        cu = new CandidateUtil(languageTag, dataDirectory);
+    public NEDAlgo_HITS(int numberOfDocuments, String languageTag, String dataDirectory, String knowledgeBase) {
+        nodeType = knowledgeBase;
+        cu = new CandidateUtil(languageTag, dataDirectory, knowledgeBase);
         index = cu.getIndex();
         graph = new DirectedSparseGraph[numberOfDocuments];
     }
 
-    public NEDAlgo_HITS(String modelDirectory) {
-        nodeType = "http://dbpedia.org/resource/";
-        cu = new CandidateUtil(modelDirectory);
+    public NEDAlgo_HITS(String modelDirectory, String knowledgeBase) {
+        nodeType = knowledgeBase;
+        cu = new CandidateUtil(modelDirectory, knowledgeBase);
         index = cu.getIndex();
         graph = new DirectedSparseGraph[1];
     }

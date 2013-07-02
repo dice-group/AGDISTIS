@@ -25,7 +25,7 @@ public class Disambiguate {
         double threshholdTrigram = 0.835;
 
         // DISAMBIGUATION ALGORITHM
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(1, languageTag, dataDirectory);
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(1, languageTag, dataDirectory, "http://dbpedia.org/resource/");
         // NEDAlgo_wihtoutGraphTechniques algo = new
         // NEDAlgo_wihtoutGraphTechniques(corpus.getNumberOfDocuments());
 
@@ -71,7 +71,7 @@ public class Disambiguate {
         document.addProperty(text);
         document.addProperty(nes);
 
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(1, languageTag, dataDirectory);
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(1, languageTag, dataDirectory, "http://dbpedia.org/resource/");
 
         algo.run(document, threshholdTrigram, maxDepth);
         // algo.run(document, threshholdTrigram); --> used for algo without

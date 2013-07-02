@@ -36,4 +36,8 @@ public class Triple {
         this.object = object;
     }
 
+    public String toString() {
+        return subject + " " + predicate + " " + object;
+    }
+
 }

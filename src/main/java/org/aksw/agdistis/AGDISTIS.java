@@ -19,7 +19,8 @@ public class AGDISTIS {
     private NEDAlgo_HITS algo = null;
 
     public AGDISTIS(String modelDirectory) {
-        algo = new NEDAlgo_HITS(modelDirectory);
+        String knowledgeBase = "http://dbpedia.org/resource/";
+        algo = new NEDAlgo_HITS(modelDirectory, knowledgeBase);
     }
 
     public static void main(String[] args) throws IOException {

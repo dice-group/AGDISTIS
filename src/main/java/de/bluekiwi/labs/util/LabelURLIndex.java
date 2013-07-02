@@ -35,11 +35,13 @@ import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.ntriples.NTriplesParser;
+import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
 public class LabelURLIndex {
     public static final String TSV = "TSV";
     public static final String N_TRIPLES = "NTriples";
+    public static final String TTL = "TTL";
     private org.slf4j.Logger log = LoggerFactory.getLogger(LabelURLIndex.class);
     private String FIELD_NAME_URL = "url";
     private String FIELD_NAME_LABEL = "label";
@@ -50,7 +52,7 @@ public class LabelURLIndex {
     private DirectoryReader ireader;
     private IndexWriter iwriter;
 
-    public LabelURLIndex(String file, String idxDirectory, String type)
+    public LabelURLIndex(String file, String idxDirectory, String type, String baseURI)
     {
         try {
             analyzer = new StandardAnalyzer(Version.LUCENE_40);
@@ -62,8 +64,10 @@ public class LabelURLIndex {
                 directory = new MMapDirectory(indexDirectory);
                 IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
                 iwriter = new IndexWriter(directory, config);
+                if (type.equals(TTL))
+                    indexTTLFile(file, baseURI);
                 if (type.equals(N_TRIPLES))
-                    indexNTriplesFile(file);
+                    indexNTriplesFile(file, baseURI);
                 if (type.equals(TSV))
                     indexTSVFile(file);
                 iwriter.close();
@@ -109,14 +113,34 @@ public class LabelURLIndex {
         }
     }
 
-    private void indexNTriplesFile(String file) {
+    private void indexTTLFile(String file, String baseURI) {
         try {
+            log.info("Start parsing: " + file);
+            RDFParser parser = new TurtleParser();
+            OnlineStatementHandler osh = new OnlineStatementHandler();
+            parser.setRDFHandler(osh);
+            parser.setStopAtFirstError(false);
+            log.info("Finished parsing: " + file);
+            parser.parse(new FileReader(file), baseURI);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        } catch (RDFParseException e) {
+            log.error(e.getLocalizedMessage());
+        } catch (RDFHandlerException e) {
+            log.error(e.getLocalizedMessage());
+        }
+
+    }
+
+    private void indexNTriplesFile(String file, String baseUri) {
+        try {
+            log.info("Start parsing: " + file);
             RDFParser parser = new NTriplesParser();
             OnlineStatementHandler osh = new OnlineStatementHandler();
             parser.setRDFHandler(osh);
             parser.setStopAtFirstError(false);
-
-            parser.parse(new FileReader(file), "http://dbpedia.org/resource/");
+            log.info("Finished parsing: " + file);
+            parser.parse(new FileReader(file), baseUri);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         } catch (RDFParseException e) {

@@ -19,8 +19,8 @@ public class NEDAlgo_wihtoutGraphTechniques {
     private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private CandidateUtil cu;
 
-    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, String dataDirectory) {
-        cu = new CandidateUtil(languageTag, dataDirectory);
+    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, String dataDirectory, String knowledgeBase) {
+        cu = new CandidateUtil(languageTag, dataDirectory, knowledgeBase);
     }
 
     public void run(Document document, double threshholdTrigram) {

@@ -38,7 +38,7 @@ public class PropertyOrder_mostDecreasingProperty {
         // INIT PARAMETERS AND ALGORITHM
         CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory);
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/");
 
         // CALCULATE MOST OFTEN USED PROPERTIES
         Stack<String> mostOftenProperties = loadPropertyOrder(PROPERTY_FILE);
