@@ -140,12 +140,13 @@ public class CandidateUtil {
             if (!expansion) {
                 heuristicExpansion.add(label);
             }
-            checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://yago-knowledge.org/resource/");
-            // if using Yago there are no surface forms
-            // if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label
-            // ,"http://dbpedia.org/resource/"))
-            // checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity,
-            // label,"http://dbpedia.org/resource/");
+            if (nodeType.equals("http://yago-knowledge.org/resource/")) {
+                checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
+            }
+            else {
+                if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/"))
+                    checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label, "http://dbpedia.org/resource/");
+            }
         }
     }
 
@@ -233,7 +234,9 @@ public class CandidateUtil {
                     continue;
                 }
                 // follow redirect
-                candidateURL = redirect(candidateURL);
+                if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+                    candidateURL = redirect(candidateURL);
+                }
                 if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
@@ -277,8 +280,9 @@ public class CandidateUtil {
                     continue;
                 }
                 // follow redirect
-                // cannot follow redirects in yago
-                // candidateURL = redirect(candidateURL);
+                if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+                    candidateURL = redirect(candidateURL);
+                }
                 if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
@@ -343,35 +347,58 @@ public class CandidateUtil {
     }
 
     private double trigramForURLLabel(String candidateURL, String label, String nodeType) {
-        List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
-        if (labelOfCandidate.isEmpty()) {
-            return 0;
-        }
-        HashSet<String> union = new HashSet<String>();
         double sim = 0;
-        // ensure that there is one maximum matching label
-        for (Triple t : labelOfCandidate) {
+        if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+            List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
+            if (labelOfCandidate.isEmpty()) {
+                return 0;
+            }
+            HashSet<String> union = new HashSet<String>();
+
+            // ensure that there is one maximum matching label
+            for (Triple t : labelOfCandidate) {
+                HashSet<String> trigramsForLabel = new HashSet<String>();
+                for (int i = 3; i < label.length(); i++) {
+                    trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
+                }
+                union = new HashSet<String>();
+                String replace = t.getObject().replace(nodeType, "").toLowerCase();
+                replace = replace.replace("&", "and");
+                HashSet<String> trigramsForCandidate = new HashSet<String>();
+                for (int i = 3; i < replace.length(); i++) {
+                    trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
+                }
+                union.addAll(trigramsForLabel);
+                union.addAll(trigramsForCandidate);
+                trigramsForLabel.retainAll(trigramsForCandidate);
+                // log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + sim);
+                double tmp = (double) trigramsForLabel.size() / ((double) union.size());
+                if (sim < tmp)
+                    sim = tmp;
+            }
+            return sim;
+        } else {
             HashSet<String> trigramsForLabel = new HashSet<String>();
             for (int i = 3; i < label.length(); i++) {
                 trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
             }
-            union = new HashSet<String>();
-            String replace = t.getObject().replace(nodeType, "").toLowerCase();
+            List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
+            if (labelOfCandidate.isEmpty()) {
+                return 0;
+            }
+            String replace = labelOfCandidate.get(0).getObject().replace(nodeType, "").toLowerCase();
             replace = replace.replace("&", "and");
             HashSet<String> trigramsForCandidate = new HashSet<String>();
             for (int i = 3; i < replace.length(); i++) {
                 trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
             }
+            HashSet<String> union = new HashSet<String>();
             union.addAll(trigramsForLabel);
             union.addAll(trigramsForCandidate);
             trigramsForLabel.retainAll(trigramsForCandidate);
-            // log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + sim);
-            double tmp = (double) trigramsForLabel.size() / ((double) union.size());
-            if (sim < tmp)
-                sim = tmp;
+            log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + (double) trigramsForLabel.size() / ((double) union.size()));
+            return (double) trigramsForLabel.size() / ((double) union.size());
         }
-
-        return sim;
     }
 
     private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {

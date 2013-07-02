@@ -30,7 +30,7 @@ public class AIDAcompare {
     private static org.slf4j.Logger log = LoggerFactory.getLogger(AIDAcompare.class);
 
     public static void main(String[] args) throws Exception {
-        String INPUT_FILE = " 500newsgoldstandard.xml";// reuters.xml , german_corpus.xml
+        String INPUT_FILE = "AIDACorpus.xml"; // " 500newsgoldstandard.xml";// reuters.xml , german_corpus.xml
         CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
         double t = 0, n = 0;
