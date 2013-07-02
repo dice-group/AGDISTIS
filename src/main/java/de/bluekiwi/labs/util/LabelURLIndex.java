@@ -27,7 +27,10 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.MMapDirectory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
@@ -57,8 +60,9 @@ public class LabelURLIndex {
         try {
             analyzer = new StandardAnalyzer(Version.LUCENE_40);
             File indexDirectory = new File(idxDirectory);
+
             if (indexDirectory.exists() && indexDirectory.isDirectory() && indexDirectory.listFiles().length > 0) {
-                directory = new MMapDirectory(indexDirectory);
+                directory = new RAMDirectory(new SimpleFSDirectory(indexDirectory), IOContext.DEFAULT);
             } else {
                 indexDirectory.mkdir();
                 directory = new MMapDirectory(indexDirectory);

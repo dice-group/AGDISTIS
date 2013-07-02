@@ -38,65 +38,67 @@ public class TextDisambiguation_DBpedia {
                 double t = 0, n = 0;
                 int documentId = 0;
                 for (Document document : corpus) {
-                    try{
-                    System.gc();
-                    log.info("Text: " + documentId);
-                    if (0 < document.getProperty(DocumentText.class).getText().length()) {
-                        algo.run(document, threshholdTrigram, maxDepth);
-                        // algo.run(document, threshholdTrigram); --> used for algo without graph techniques
-                        NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
-                        for (NamedEntityInText namedEntity : namedEntities) {
-                            if (namedEntity.getLength() > 2) {
-                                String correctVotingURL = namedEntity.getNamedEntityUri();
-                                if (correctVotingURL.startsWith("rln:"))
-                                    correctVotingURL = correctVotingURL.replace("rln:", "http://rdflivenews.aksw.org/resource/");
-                                if (correctVotingURL.startsWith("dbpr:"))
-                                    correctVotingURL = correctVotingURL.replace("dbpr:", "http://dbpedia.org/resource/");
-                                correctVotingURL = algo.getCu().redirect(correctVotingURL);
-                                String disambiguatedURL = algo.getCu().redirect(algo.findResult(namedEntity));
-                                if (correctVotingURL != null) {
-                                    if (correctVotingURL.equals(disambiguatedURL)) {
-                                        t++;
-                                        log.info("\t Disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
-                                    } else if (languageTag.equals("en")) {
-                                        if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")
-                                                || correctVotingURL.startsWith("http://de.dbpedia.org/")) {
-                                            log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
-                                        } else {
-                                            n++;
-                                            log.info("\t Not disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
+                    try {
+                        System.gc();
+                        log.info("Text: " + documentId);
+                        if (0 < document.getProperty(DocumentText.class).getText().length()) {
+                            algo.run(document, threshholdTrigram, maxDepth);
+                            // algo.run(document, threshholdTrigram); --> used for algo without graph techniques
+                            NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+                            for (NamedEntityInText namedEntity : namedEntities) {
+                                if (namedEntity.getLength() > 2) {
+                                    String correctVotingURL = namedEntity.getNamedEntityUri();
+                                    if (correctVotingURL.startsWith("rln:"))
+                                        correctVotingURL = correctVotingURL.replace("rln:", "http://rdflivenews.aksw.org/resource/");
+                                    if (correctVotingURL.startsWith("dbpr:"))
+                                        correctVotingURL = correctVotingURL.replace("dbpr:", "http://dbpedia.org/resource/");
+                                    correctVotingURL = algo.getCu().redirect(correctVotingURL);
+                                    String disambiguatedURL = algo.getCu().redirect(algo.findResult(namedEntity));
+                                    if (correctVotingURL != null) {
+                                        if (correctVotingURL.equals(disambiguatedURL)) {
+                                            t++;
+                                            log.info("\t Disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
+                                        } else if (languageTag.equals("en")) {
+                                            if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")
+                                                    || correctVotingURL.startsWith("http://de.dbpedia.org/")) {
+                                                log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
+                                            } else {
+                                                n++;
+                                                log.info("\t Not disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
+                                            }
+                                        } else if (languageTag.equals("de")) {
+                                            if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) {
+                                                log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
+                                            } else {
+                                                n++;
+                                                log.info("\t Not disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
+                                            }
                                         }
-                                    } else if (languageTag.equals("de")) {
-                                        if (correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) {
-                                            log.info("\t Closed World Assumption: " + correctVotingURL + " -> " + disambiguatedURL);
-                                        } else {
-                                            n++;
-                                            log.info("\t Not disambiguated: " + correctVotingURL + " -> " + disambiguatedURL);
-                                        }
+                                    } else if (disambiguatedURL == null) {
+                                        int start = namedEntity.getStartPos();
+                                        int end = namedEntity.getEndPos();
+                                        String label = document.getProperty(DocumentText.class).getText().substring(start, end);
+                                        n++;
+                                        log.info("\t No candidates: " + label + " -> " + correctVotingURL);
+                                    } else {
+                                        log.info("\t Strange: " + correctVotingURL + " -> " + disambiguatedURL);
                                     }
-                                } else if (disambiguatedURL == null) {
-                                    int start = namedEntity.getStartPos();
-                                    int end = namedEntity.getEndPos();
-                                    String label = document.getProperty(DocumentText.class).getText().substring(start, end);
-                                    n++;
-                                    log.info("\t No candidates: " + label + " -> " + correctVotingURL);
-                                } else {
-                                    log.info("\t Strange: " + correctVotingURL + " -> " + disambiguatedURL);
                                 }
                             }
+                        } else {
+                            log.error("Text is empty!");
                         }
-                    } else {
-                        log.error("Text is empty!");
+                        documentId++;
+                    } catch (Exception e) {
+                        log.error("Cound not process doc: " + documentId);
+                        log.error(e.getLocalizedMessage());
                     }
-                    documentId++;
-                }catch(Exception e){
-                    log.e
-                }
                 }
                 bw.write((t / (t + n)) + "\t" + threshholdTrigram + "\n");
                 bw.flush();
                 log.error(" NED: " + t / (t + n) + " \t " + threshholdTrigram);
-            
+
+            }
             bw.close();
         }
         algo.close();

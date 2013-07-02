@@ -1,20 +1,18 @@
 package de.bluekiwi.labs.util;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.unister.semweb.topicmodeling.utils.doc.Document;
 import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
@@ -53,7 +51,7 @@ public class SpotlightPoster {
     public void doTASK(Document document) throws IOException {
         String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         text += "<annotation ";
-        String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "");
+        String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "").replace("\"", "'");
         text += "text=\"" + textValue + "\">\n";
         // text += "text=\" \">\n";
         for (NamedEntityInText ne : document.getProperty(NamedEntitiesInText.class)) {
@@ -62,11 +60,11 @@ public class SpotlightPoster {
             // System.out.println(namedEntity);
         }
         text += "</annotation>";
+        // System.out.println(text);
         text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
-        System.out.println(text);
         String urlParameters = "text=" + text + "";
-        // String request = "http://spotlight.dbpedia.org/rest/disambiguate";
-        String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
+        String request = "http://spotlight.dbpedia.org/rest/disambiguate";
+        // String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
         URL url = new URL(request);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
@@ -74,6 +72,7 @@ public class SpotlightPoster {
         connection.setUseCaches(false);
         connection.setInstanceFollowRedirects(true);
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("charset", "utf-8");
         connection.setRequestProperty("Content-Length", "" + Integer.toString(urlParameters.getBytes().length));
         DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
@@ -81,45 +80,41 @@ public class SpotlightPoster {
         wr.flush();
         connection.disconnect();
         StringBuilder sb = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        while (reader.ready()) {
-            sb.append(reader.readLine());
+        // BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+        char buffer[] = new char[1024];
+        int length =
+                reader.read(buffer);
+        while (length > 0) {
+            while (length > 0) {
+                sb.append(buffer, 0, length);
+                length = reader.read(buffer);
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            length = reader.read(buffer);
         }
         wr.close();
         reader.close();
-        System.out.println(sb.toString());
-        parseHTML(sb);
+        // System.out.println(URLDecoder.decode(sb.toString(), "UTF-8"));
+        parseJSON(sb.toString().replace("@URI", "URI").replace("@offset", "offset"));
+
     }
 
-    private void parseHTML(StringBuilder sb) throws UnsupportedEncodingException {
-        org.jsoup.nodes.Document doc = Jsoup.parse(sb.toString());
-        // Elements links = doc.select("a[href]");
-        // for (Element texts : links) {
-        // System.out.println(texts);
-        // }
-        Elements links = doc.select("div");
-        for (Element texts : links) {
-            int pos = 0;
-            char[] data = texts.html().toCharArray();
-            for (int i = 0; i < data.length; ++i) {
-                if (data[i] == '<' && data[i + 1] != '/') {
-                    String title = "<";
-                    pos = i - 1;
-                    do {
-                        i++;
-                        title += data[i];
-                        if (data[i] == '>') {
-                            break;
-                        }
-                    } while (true);
-                    org.jsoup.nodes.Document titleHTML = Jsoup.parse(title);
-                    String titleString = titleHTML.select("a").attr("title");
-                    titleString = URLDecoder.decode(titleString, "UTF-8");
-                    positionToURL.put(pos, titleString);
-                }
-                ++pos;
-            }
+    private void parseJSON(String string) throws IOException {
+        Reader reader = new StringReader(string);
+
+        Gson gson = new GsonBuilder().create();
+        JsonText p = gson.fromJson(reader, JsonText.class);
+        for (JsonEntity ent : p.Resources) {
+            positionToURL.put(ent.offset, URLDecoder.decode(ent.URI, "UTF-8"));
         }
+
+        reader.close();
+
     }
 
     public String findResult(int startPos) {
