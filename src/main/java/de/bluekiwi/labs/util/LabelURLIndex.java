@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -27,10 +28,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
@@ -54,19 +52,25 @@ public class LabelURLIndex {
     private QueryParser parser;
     private DirectoryReader ireader;
     private IndexWriter iwriter;
+    private HashMap<String, List<Triple>> cache;
+    private HashMap<String, List<Triple>> cacheSearch;
 
-    public LabelURLIndex(String file, String idxDirectory, String type, String baseURI)
-    {
+    public LabelURLIndex(String file, String idxDirectory, String type,
+            String baseURI) {
         try {
             analyzer = new StandardAnalyzer(Version.LUCENE_40);
             File indexDirectory = new File(idxDirectory);
 
-            if (indexDirectory.exists() && indexDirectory.isDirectory() && indexDirectory.listFiles().length > 0) {
-                directory = new RAMDirectory(new SimpleFSDirectory(indexDirectory), IOContext.DEFAULT);
+            if (indexDirectory.exists() && indexDirectory.isDirectory()
+                    && indexDirectory.listFiles().length > 0) {
+                // directory = new RAMDirectory(new
+                // SimpleFSDirectory(indexDirectory), IOContext.DEFAULT);
+                directory = new MMapDirectory(indexDirectory);
             } else {
                 indexDirectory.mkdir();
                 directory = new MMapDirectory(indexDirectory);
-                IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+                IndexWriterConfig config = new IndexWriterConfig(
+                        Version.LUCENE_40, analyzer);
                 iwriter = new IndexWriter(directory, config);
                 if (type.equals(TTL))
                     indexTTLFile(file, baseURI);
@@ -78,7 +82,8 @@ public class LabelURLIndex {
             }
             ireader = DirectoryReader.open(directory);
             isearcher = new IndexSearcher(ireader);
-
+            cache = new HashMap<String, List<Triple>>();
+            cacheSearch = new HashMap<String, List<Triple>>();
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -91,7 +96,8 @@ public class LabelURLIndex {
             directory = new MMapDirectory(indexDirectory);
             ireader = DirectoryReader.open(directory);
             isearcher = new IndexSearcher(ireader);
-
+            cache = new HashMap<String, List<Triple>>();
+            cacheSearch = new HashMap<String, List<Triple>>();
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -99,7 +105,8 @@ public class LabelURLIndex {
 
     private void indexTSVFile(String surfaceFormsTSV) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(surfaceFormsTSV));
+            BufferedReader br = new BufferedReader(new FileReader(
+                    surfaceFormsTSV));
             while (br.ready()) {
                 String[] line = br.readLine().split("\t");
                 String subject = line[0];
@@ -124,8 +131,8 @@ public class LabelURLIndex {
             OnlineStatementHandler osh = new OnlineStatementHandler();
             parser.setRDFHandler(osh);
             parser.setStopAtFirstError(false);
-            log.info("Finished parsing: " + file);
             parser.parse(new FileReader(file), baseURI);
+            log.info("Finished parsing: " + file);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         } catch (RDFParseException e) {
@@ -154,28 +161,38 @@ public class LabelURLIndex {
         }
     }
 
-    private void addDocumentToIndex(String subject, String object) {
+    private void addDocumentToIndex(String subject, String predicate,
+            String object) {
         try {
-            Document doc = new Document();
-            doc.add(new StringField(FIELD_NAME_URL, subject, Store.YES));
-            doc.add(new TextField(FIELD_NAME_LABEL, object, Store.YES));
-            iwriter.addDocument(doc);
+            if (subject.startsWith("http://yago-knowledge.org/resource/")
+                    && predicate
+                            .equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
+                Document doc = new Document();
+                doc.add(new StringField(FIELD_NAME_URL, subject, Store.YES));
+                doc.add(new TextField(FIELD_NAME_LABEL, object, Store.YES));
+                iwriter.addDocument(doc);
+            }
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
     }
 
     public List<Triple> searchInLabels(String object, boolean replaceObject) {
+        if (cacheSearch.containsKey(object)) {
+            return cacheSearch.get(object);
+        }
         List<Triple> triples = new ArrayList<Triple>();
         try {
             analyzer = new StandardAnalyzer(Version.LUCENE_40);
-            parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_LABEL, analyzer);
+            parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_LABEL,
+                    analyzer);
             parser.setDefaultOperator(QueryParser.Operator.AND);
             Query query = parser.parse(object);
-            ScoreDoc[] hits = isearcher.search(query, 100000).scoreDocs;
+            ScoreDoc[] hits = isearcher.search(query, 1000).scoreDocs;
             for (int i = 0; i < hits.length; i++) {
                 Document hitDoc = isearcher.doc(hits[i].doc);
-                String subject = java.net.URLDecoder.decode(hitDoc.get(FIELD_NAME_URL), "UTF-8");
+                String subject = java.net.URLDecoder.decode(
+                        hitDoc.get(FIELD_NAME_URL), "UTF-8");
                 String predicate = "http://www.w3.org/2000/01/rdf-schema#label";
                 if (replaceObject)
                     object = hitDoc.get(FIELD_NAME_LABEL);
@@ -184,10 +201,14 @@ public class LabelURLIndex {
         } catch (Exception e) {
             log.error(e.getLocalizedMessage() + " -> " + object);
         }
+        cache.put(object, triples);
         return triples;
     }
 
     public List<Triple> getLabelForURI(String subject) {
+        if (cache.containsKey(subject)) {
+            return cache.get(subject);
+        }
         parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_URL, analyzer);
         parser.setDefaultOperator(QueryParser.Operator.AND);
         analyzer = new KeywordAnalyzer();
@@ -197,13 +218,15 @@ public class LabelURLIndex {
             TermQuery tq = new TermQuery(new Term(FIELD_NAME_URL, subject));
             BooleanQuery bq = new BooleanQuery();
             bq.add(tq, BooleanClause.Occur.SHOULD);
-            TopScoreDocCollector collector = TopScoreDocCollector.create(100000, true);
+            TopScoreDocCollector collector = TopScoreDocCollector.create(
+                    1000, true);
             isearcher.search(bq, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
             for (int i = 0; i < hits.length; i++) {
                 Document hitDoc = isearcher.doc(hits[i].doc);
-                String object = java.net.URLDecoder.decode(hitDoc.get(FIELD_NAME_LABEL), "UTF-8");
+                String object = java.net.URLDecoder.decode(
+                        hitDoc.get(FIELD_NAME_LABEL), "UTF-8");
                 String predicate = "rdfs:label";
                 triples.add(new Triple(subject, predicate, object));
             }
@@ -211,7 +234,7 @@ public class LabelURLIndex {
         } catch (Exception e) {
             log.warn(e.getLocalizedMessage() + " -> " + subject);
         }
-        // cache.put(subject, triples);
+        cache.put(subject, triples);
         return triples;
     }
 
@@ -228,8 +251,9 @@ public class LabelURLIndex {
         @Override
         public void handleStatement(Statement st) {
             String subject = st.getSubject().stringValue();
+            String predicate = st.getPredicate().stringValue();
             String object = st.getObject().stringValue();
-            addDocumentToIndex(subject, object);
+            addDocumentToIndex(subject, predicate, object);
         }
     }
 }

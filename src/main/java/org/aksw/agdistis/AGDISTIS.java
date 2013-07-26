@@ -24,8 +24,9 @@ public class AGDISTIS {
     }
 
     public static void main(String[] args) throws IOException {
-        String preAnnotatedText = "[[Barack Obama]] meets [[Angela Merkel]] in [[Berlin]] to discuss a [[new world order]]";
-        String modelDirectory = "model/indexdbpedia_en";
+        String preAnnotatedText = "<entity>Barack Obama</entity>  meets <entity>Angela Merkel</entity>  in <entity>Berlin</entity>  to discuss a <entity>new world order</entity> ";
+        // String modelDirectory = "/home/rusbeck/AGDISTIS/indexdbpedia_en";
+        String modelDirectory = "/data/r.usbeck/indexdbpedia_en";
         AGDISTIS agdistis = new AGDISTIS(modelDirectory);
         HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
         for (NamedEntityInText namedEntity : results.keySet()) {
@@ -42,12 +43,11 @@ public class AGDISTIS {
         ArrayList<NamedEntityInText> list = new ArrayList<NamedEntityInText>();
         log.info("\tText: " + preAnnotatedText);
         for (int c = 0; c < preAnnotatedText.length(); c++) {
-            if (preAnnotatedText.length() > c + 2) {
-                if (preAnnotatedText.substring(c, c + 2).equals("[[")) {
-                    c++;
-                    c++;
+            if (preAnnotatedText.length() > c + 8) {
+                if (preAnnotatedText.substring(c, c + 8).equals("<entity>")) {
+                    c += 8;
                     int beginIndex = c;
-                    int endIndex = preAnnotatedText.indexOf("]]", c);
+                    int endIndex = preAnnotatedText.indexOf("</entity>", c);
                     String label = preAnnotatedText.substring(beginIndex, endIndex);
                     log.info("\t" + beginIndex + " " + endIndex + " " + label);
                     list.add(new NamedEntityInText(beginIndex, endIndex - beginIndex, label));

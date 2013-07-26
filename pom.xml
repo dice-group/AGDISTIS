@@ -3,7 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aksw</groupId>
 	<artifactId>AGDISTIS</artifactId>
-	<version>0.0.1-SNAPSHOT</version><!-- BUILD -->
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<!-- BUILD -->
 	<build>
 		<plugins>
 			<!-- MAVEN Compiler Plugin -->
@@ -12,6 +14,13 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<attachClasses>true</attachClasses>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -37,8 +46,39 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>7.0.0.v20091005</version>
+				<configuration>
+					<scanIntervalSeconds>2</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>github.numberformat</groupId>
+				<artifactId>blog-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<gitUrl>https://github.com/numberformat/20110220</gitUrl>
+				</configuration>
+				<executions>
+					<execution>
+						<id>1</id>
+						<phase>site</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>numberformat-releases</id>
+			<url>https://raw.github.com/numberformat/20130213/master/repo</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<!-- PROPERTIES -->
 	<properties>
 		<java.version>1.6</java.version>
@@ -171,16 +211,29 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/aida.jar</systemPath>
 		</dependency>
-		<!-- REST interface -->
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.simple</artifactId>
-			<version>2.1.0</version>
-		</dependency>
+		<!-- REST interface <dependency> <groupId>org.restlet.jse</groupId> <artifactId>org.restlet.ext.simple</artifactId> 
+			<version>2.1.0</version> </dependency> <dependency> <groupId>org.restlet.jse</groupId> 
+			<artifactId>org.restlet</artifactId> <version>2.1.0</version> </dependency> -->
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet</artifactId>
-			<version>2.1.0</version>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.simple</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.servlet</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_2.5_spec</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
@@ -193,6 +246,11 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
 </project>

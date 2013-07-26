@@ -118,7 +118,8 @@ public class CandidateUtil {
         HashMap<String, MyNode> nodes = new HashMap<String, MyNode>();
         for (NamedEntityInText entity : namedEntities) {
             String label = text.substring(entity.getStartPos(), entity.getEndPos());
-            log.info(label);
+            log.info("\tLabel: " + label);
+            long start = System.currentTimeMillis();
             String tmp = label;
             boolean expansion = false;
             for (String key : heuristicExpansion) {
@@ -140,12 +141,14 @@ public class CandidateUtil {
             if (!expansion) {
                 heuristicExpansion.add(label);
             }
-            checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://yago-knowledge.org/resource/");
-            // if using Yago there are no surface forms
-            // if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label
-            // ,"http://dbpedia.org/resource/"))
-            // checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity,
-            // label,"http://dbpedia.org/resource/");
+            if (nodeType.equals("http://yago-knowledge.org/resource/")) {
+                checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
+            }
+            else {
+                if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/"))
+                    checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label, "http://dbpedia.org/resource/");
+            }
+            log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
         }
     }
 
@@ -233,7 +236,9 @@ public class CandidateUtil {
                     continue;
                 }
                 // follow redirect
-                candidateURL = redirect(candidateURL);
+                if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+                    candidateURL = redirect(candidateURL);
+                }
                 if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
@@ -250,6 +255,7 @@ public class CandidateUtil {
         label = label.trim();
 
         List<Triple> candidates = rdfsLabelIndex.searchInLabels(label, false);
+        log.info("\t\tnumber of candidates: " + candidates.size());
         if (candidates.size() == 0) {
             log.info("\t\t\tNo candidates for: " + label);
             if (label.endsWith("'s")) {
@@ -268,17 +274,18 @@ public class CandidateUtil {
             String candidateURL = c.getSubject();
             // rule of thumb: no year numbers in candidates
             if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
-                // iff it is a disambiguation resource, skip it
-                if (disambiguates(candidateURL) != candidateURL) {
-                    continue;
-                }
                 // trigram similarity
                 if (trigramForURLLabel(candidateURL, label, nodeType) < threshholdTrigram) {
                     continue;
                 }
+                // iff it is a disambiguation resource, skip it
+                if (disambiguates(candidateURL) != candidateURL) {
+                    continue;
+                }
                 // follow redirect
-                // cannot follow redirects in yago
-                // candidateURL = redirect(candidateURL);
+                if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+                    candidateURL = redirect(candidateURL);
+                }
                 if (fitsIntoDomain(candidateURL, knowledgeBase)) {
                     addNodeToGraph(graph, nodes, entity, c, candidateURL);
                     addedCandidates = true;
@@ -343,35 +350,58 @@ public class CandidateUtil {
     }
 
     private double trigramForURLLabel(String candidateURL, String label, String nodeType) {
-        List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
-        if (labelOfCandidate.isEmpty()) {
-            return 0;
-        }
-        HashSet<String> union = new HashSet<String>();
         double sim = 0;
-        // ensure that there is one maximum matching label
-        for (Triple t : labelOfCandidate) {
+        if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
+            List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
+            if (labelOfCandidate.isEmpty()) {
+                return 0;
+            }
+            HashSet<String> union = new HashSet<String>();
+
+            // ensure that there is one maximum matching label
+            for (Triple t : labelOfCandidate) {
+                HashSet<String> trigramsForLabel = new HashSet<String>();
+                for (int i = 3; i < label.length(); i++) {
+                    trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
+                }
+                union = new HashSet<String>();
+                String replace = t.getObject().replace(nodeType, "").toLowerCase();
+                replace = replace.replace("&", "and");
+                HashSet<String> trigramsForCandidate = new HashSet<String>();
+                for (int i = 3; i < replace.length(); i++) {
+                    trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
+                }
+                union.addAll(trigramsForLabel);
+                union.addAll(trigramsForCandidate);
+                trigramsForLabel.retainAll(trigramsForCandidate);
+                // log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + sim);
+                double tmp = (double) trigramsForLabel.size() / ((double) union.size());
+                if (sim < tmp)
+                    sim = tmp;
+            }
+            return sim;
+        } else {
             HashSet<String> trigramsForLabel = new HashSet<String>();
             for (int i = 3; i < label.length(); i++) {
                 trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
             }
-            union = new HashSet<String>();
-            String replace = t.getObject().replace(nodeType, "").toLowerCase();
+            List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
+            if (labelOfCandidate.isEmpty()) {
+                return 0;
+            }
+            String replace = labelOfCandidate.get(0).getObject().replace(nodeType, "").toLowerCase();
             replace = replace.replace("&", "and");
             HashSet<String> trigramsForCandidate = new HashSet<String>();
             for (int i = 3; i < replace.length(); i++) {
                 trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
             }
+            HashSet<String> union = new HashSet<String>();
             union.addAll(trigramsForLabel);
             union.addAll(trigramsForCandidate);
             trigramsForLabel.retainAll(trigramsForCandidate);
-            // log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + sim);
-            double tmp = (double) trigramsForLabel.size() / ((double) union.size());
-            if (sim < tmp)
-                sim = tmp;
+            log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + (double) trigramsForLabel.size() / ((double) union.size()));
+            return (double) trigramsForLabel.size() / ((double) union.size());
         }
-
-        return sim;
     }
 
     private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {
@@ -385,13 +415,9 @@ public class CandidateUtil {
             whiteList.add("http://dbpedia.org/ontology/WrittenWork");
         }
         else {
-            // whiteList.add("http://yago-knowledge.org/resource/Place");
-            // whiteList.add("http://dbpedia.org/ontology/Person");
-            // whiteList.add("http://dbpedia.org/ontology/Organisation");
             whiteList.add("http://yago-knowledge.org/resource/yagoGeoEntity");
             whiteList.add("http://yago-knowledge.org/resource/yagoLegalActor");
             whiteList.add("http://yago-knowledge.org/resource/wordnet_exchange_111409538");
-            // whiteList.add("http://dbpedia.org/ontology/WrittenWork");
         }
 
         List<Triple> tmp = index.search(candidateURL);

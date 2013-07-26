@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -49,9 +50,11 @@ public class SubjectPredicateObjectIndex {
     private QueryParser parser;
     private DirectoryReader ireader;
     private IndexWriter iwriter;
+    private HashMap<String, List<Triple>> cache;
 
     public SubjectPredicateObjectIndex(List<String> files, String idxDirectory, String baseURI, String type) {
         init(files, idxDirectory, baseURI, type);
+        cache = new HashMap<String, List<Triple>>();
     }
 
     public SubjectPredicateObjectIndex(String idxDirectory) {
@@ -64,6 +67,7 @@ public class SubjectPredicateObjectIndex {
 
             parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_SUBJECT, analyzer);
             parser.setDefaultOperator(QueryParser.Operator.AND);
+            cache = new HashMap<String, List<Triple>>();
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -154,16 +158,16 @@ public class SubjectPredicateObjectIndex {
     }
 
     public List<Triple> search(String subject) {
-        // if (cache.containsKey(subject)) {
-        // return cache.get(subject);
-        // }
+        if (cache.containsKey(subject)) {
+            return cache.get(subject);
+        }
         List<Triple> triples = new ArrayList<Triple>();
         try {
             log.debug("\t start asking index...");
             TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
             BooleanQuery bq = new BooleanQuery();
             bq.add(tq, BooleanClause.Occur.SHOULD);
-            TopScoreDocCollector collector = TopScoreDocCollector.create(100000, true);
+            TopScoreDocCollector collector = TopScoreDocCollector.create(1000, true);
             isearcher.search(bq, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
@@ -177,7 +181,7 @@ public class SubjectPredicateObjectIndex {
         } catch (Exception e) {
             log.warn(e.getLocalizedMessage() + " -> " + subject);
         }
-        // cache.put(subject, triples);
+        cache.put(subject, triples);
         return triples;
     }
 

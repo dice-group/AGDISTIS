@@ -21,7 +21,7 @@ public class TextDisambiguation_Yago {
     private static Logger log = LoggerFactory.getLogger(TextDisambiguation_Yago.class);
 
     public static void main(String[] args) throws IOException {
-        String TestFile = "reuters.xml";// "500newsgoldstandard.xml" "german_corpus.xml"
+        String TestFile = "AIDACorpus.xml";// "reuters.xml";// "500newsgoldstandard.xml" "german_corpus.xml"
         String languageTag = "en"; // de
         String dataDirectory = "/data/r.usbeck";
         CorpusXmlReader reader = new CorpusXmlReader(new File(TestFile));
@@ -31,10 +31,10 @@ public class TextDisambiguation_Yago {
         NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://yago-knowledge.org/resource/");
         // NEDAlgo_wihtoutGraphTechniques algo = new NEDAlgo_wihtoutGraphTechniques(corpus.getNumberOfDocuments());
 
-        for (int maxDepth = 1; maxDepth <= 3; ++maxDepth) {
+        for (int maxDepth = 2; maxDepth <= 3; ++maxDepth) {
             BufferedWriter bw = new BufferedWriter(new FileWriter("Test_" + TestFile + "_" + maxDepth + "_Yago.txt", true));
             bw.write("input: " + TestFile + "\n");
-            for (double threshholdTrigram = 0.99; threshholdTrigram > 0.5; threshholdTrigram -= 0.01) {
+            for (double threshholdTrigram = 1; threshholdTrigram > 0.5; threshholdTrigram -= 0.01) {
                 double t = 0, n = 0;
                 int documentId = 0;
                 for (Document document : corpus) {

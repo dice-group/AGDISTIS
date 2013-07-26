@@ -132,10 +132,15 @@ public class NEDAlgo_HITS {
         NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
         algorithmicResult = new HashMap<Integer, String>();
         DirectedSparseGraph<MyNode, String> graph = new DirectedSparseGraph<MyNode, String>();
+
         try {
             // 0) insert candidates into Text
+        	log.debug("\tinsert candidates");
             cu.insertCandidatesIntoText(graph, document, threshholdTrigram);
+            
             // 1) let spread activation/ breadth first searc run
+        	log.debug("\trun BFS");
+
             BreadthFirstSearch bfs = new BreadthFirstSearch(index);
             bfs.run(maxDepth, graph, edgeType, nodeType);
 
@@ -145,10 +150,12 @@ public class NEDAlgo_HITS {
             // sa.run(spreadActivationThreshold, maxDepth, lambda, graph);
 
             // 2) let HITS run
+            log.debug("\trun HITS");
             HITS h = new HITS();
             h.runHits(graph, 20);
 
             // 3) store the candidate with the highest hub, highest authority ratio
+            log.debug("\torder results");
             ArrayList<MyNode> orderedList = new ArrayList<MyNode>();
             orderedList.addAll(graph.getVertices());
             Collections.sort(orderedList);
