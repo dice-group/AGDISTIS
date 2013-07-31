@@ -109,38 +109,37 @@ public class CandidateUtil {
     public void insertCandidatesIntoText(DirectedSparseGraph<MyNode, String> graph, Document document, double threshholdTrigram) {
         NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
         String text = document.getProperty(DocumentText.class).getText();
-
-        HashSet<String> heuristicExpansion = new HashSet<String>();
+        HashMap<String, MyNode> nodes = new HashMap<String, MyNode>();
 
         // start with longest Named Entities
         Collections.sort(namedEntities.getNamedEntities(), new NamedEntityLengthComparator());
         Collections.reverse(namedEntities.getNamedEntities());
-        HashMap<String, MyNode> nodes = new HashMap<String, MyNode>();
+        // HashSet<String> heuristicExpansion = new HashSet<String>();
         for (NamedEntityInText entity : namedEntities) {
             String label = text.substring(entity.getStartPos(), entity.getEndPos());
             log.info("\tLabel: " + label);
             long start = System.currentTimeMillis();
-            String tmp = label;
-            boolean expansion = false;
-            for (String key : heuristicExpansion) {
-                if (key.contains(label)) {
-                    // take the shortest possible expansion
-                    if (tmp.length() > key.length() && tmp != label) {
-                        tmp = key;
-                        expansion = true;
-                        log.debug("Heuristik expansion: " + label + "-->" + key);
-                    }
-                    if (tmp.length() < key.length() && tmp == label) {
-                        tmp = key;
-                        expansion = true;
-                        log.debug("Heuristik expansion: " + label + "-->" + key);
-                    }
-                }
-            }
-            label = tmp;
-            if (!expansion) {
-                heuristicExpansion.add(label);
-            }
+            // String tmp = label;
+            // boolean expansion = false;
+            // for (String key : heuristicExpansion) {
+            // if (key.contains(label)) {
+            // // take the shortest possible expansion
+            // if (tmp.length() > key.length() && tmp != label) {
+            // tmp = key;
+            // expansion = true;
+            // log.debug("Heuristik expansion: " + label + "-->" + key);
+            // }
+            // if (tmp.length() < key.length() && tmp == label) {
+            // tmp = key;
+            // expansion = true;
+            // log.debug("Heuristik expansion: " + label + "-->" + key);
+            // }
+            // }
+            // }
+            // label = tmp;
+            // if (!expansion) {
+            // heuristicExpansion.add(label);
+            // }
             if (nodeType.equals("http://yago-knowledge.org/resource/")) {
                 checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
             }
