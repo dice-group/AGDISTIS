@@ -39,6 +39,8 @@ import org.openrdf.rio.ntriples.NTriplesParser;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
+import de.bluekiwi.labs.util.Triple;
+
 public class LabelURLIndex {
     public static final String TSV = "TSV";
     public static final String N_TRIPLES = "NTriples";
@@ -61,10 +63,8 @@ public class LabelURLIndex {
             analyzer = new StandardAnalyzer(Version.LUCENE_40);
             File indexDirectory = new File(idxDirectory);
 
-            if (indexDirectory.exists() && indexDirectory.isDirectory()
-                    && indexDirectory.listFiles().length > 0) {
-                // directory = new RAMDirectory(new
-                // SimpleFSDirectory(indexDirectory), IOContext.DEFAULT);
+            if (indexDirectory.exists() && indexDirectory.isDirectory() && indexDirectory.listFiles().length > 0) {
+                // directory = new RAMDirectory(new SimpleFSDirectory(indexDirectory), IOContext.DEFAULT);
                 directory = new MMapDirectory(indexDirectory);
             } else {
                 indexDirectory.mkdir();
@@ -161,12 +161,9 @@ public class LabelURLIndex {
         }
     }
 
-    private void addDocumentToIndex(String subject, String predicate,
-            String object) {
+    private void addDocumentToIndex(String subject, String predicate, String object) {
         try {
-            if (subject.startsWith("http://yago-knowledge.org/resource/")
-                    && predicate
-                            .equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
+            if (subject.startsWith("http://yago-knowledge.org/resource/") && predicate.equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
                 Document doc = new Document();
                 doc.add(new StringField(FIELD_NAME_URL, subject, Store.YES));
                 doc.add(new TextField(FIELD_NAME_LABEL, object, Store.YES));

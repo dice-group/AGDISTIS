@@ -14,6 +14,7 @@ import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
 import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
 
+import de.bluekiwi.labs.algorithm.NamedEntityLengthComparator;
 import de.bluekiwi.labs.util.LabelURLIndex;
 import de.bluekiwi.labs.util.SubjectPredicateObjectIndex;
 import de.bluekiwi.labs.util.Triple;
