@@ -17,7 +17,6 @@ public class FirstStepsApplication extends Application {
 
         // Defines only one route
         router.attachDefault(GetDisambiguation.class);
-
         return router;
     }
 }

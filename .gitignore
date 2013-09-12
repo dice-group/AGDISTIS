@@ -17,3 +17,10 @@ tmp/**/*
 .classpath
 .settings/
 .loadpath
+
+## Project specific stuff ###
+AIDA-YAGO2-dataset.tsv
+AIDACorpus.xml
+log/
+txt/
+

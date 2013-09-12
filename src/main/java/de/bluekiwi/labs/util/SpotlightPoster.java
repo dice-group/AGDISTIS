@@ -52,15 +52,17 @@ public class SpotlightPoster {
         String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         text += "<annotation ";
         String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "").replace("\"", "'");
-        text += "text=\"" + textValue + "\">\n";
+        text += "text=\"" + textValue.replace("<entity>", "").replace("</entity>", "") + "\">\n";
         // text += "text=\" \">\n";
+        int off = 8;
         for (NamedEntityInText ne : document.getProperty(NamedEntitiesInText.class)) {
             String namedEntity = textValue.substring(ne.getStartPos(), ne.getEndPos());
-            text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" + ne.getStartPos() + "\" />\n";
+            text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" + (ne.getStartPos() -off) + "\" />\n";
             // System.out.println(namedEntity);
+            off+=9;
         }
         text += "</annotation>";
-        // System.out.println(text);
+        System.out.println("HERE");
         text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
         String urlParameters = "text=" + text + "";
         String request = "http://spotlight.dbpedia.org/rest/disambiguate";
@@ -110,6 +112,7 @@ public class SpotlightPoster {
         Gson gson = new GsonBuilder().create();
         JsonText p = gson.fromJson(reader, JsonText.class);
         for (JsonEntity ent : p.Resources) {
+        	System.out.println(ent + " " +URLDecoder.decode(ent.URI, "UTF-8"));
             positionToURL.put(ent.offset, URLDecoder.decode(ent.URI, "UTF-8"));
         }
 
