@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 import de.bluekiwi.labs.graph.HITS;
-import de.bluekiwi.labs.vis.MyNode;
+import de.bluekiwi.labs.graph.Node;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 
@@ -9,22 +9,22 @@ public class HitsTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void testSimpleHITS() throws InterruptedException {
-        Graph g = new DirectedSparseMultigraph<MyNode, String>();
-        MyNode a = new MyNode("dbpedia:Barack_Obama,_Sr.", 0, 0);
-        MyNode b = new MyNode("dbpedia:Barack_Obama", 0, 0);
-        MyNode c = new MyNode("dbpedia:Washington,_D.C.", 0, 0);
-        MyNode d = new MyNode("dbpedia:Washington,_D.C._(novel)", 0, 0);
+        Graph g = new DirectedSparseMultigraph<Node, String>();
+        Node a = new Node("dbpedia:Barack_Obama,_Sr.", 0, 0);
+        Node b = new Node("dbpedia:Barack_Obama", 0, 0);
+        Node c = new Node("dbpedia:Washington,_D.C.", 0, 0);
+        Node d = new Node("dbpedia:Washington,_D.C._(novel)", 0, 0);
 
-        MyNode e1 = new MyNode("dbpedia:Ann_Dunham", 0, 1);
-        MyNode e2 = new MyNode("dbpedia:University_of_Hawaii", 0, 1);
-        MyNode e3 = new MyNode("dbpedia:Hawaii", 0, 1);
-        MyNode e4 = new MyNode("dbpedia:White_House", 0, 1);
-        MyNode e5 = new MyNode("dbpedia:Federal_district", 0, 1);
-        MyNode e6 = new MyNode("dbpedia:Elizabeth_II", 0, 1);
-        MyNode e7 = new MyNode("dbpedia:London", 0, 1);
-        MyNode e8 = new MyNode("dbpedia:New_York", 0, 1);
-        MyNode e9 = new MyNode("dbpedia:United_Kingdom", 0, 1);
-        MyNode e10 = new MyNode("dbpedia:Gore_Vidal", 0, 1);
+        Node e1 = new Node("dbpedia:Ann_Dunham", 0, 1);
+        Node e2 = new Node("dbpedia:University_of_Hawaii", 0, 1);
+        Node e3 = new Node("dbpedia:Hawaii", 0, 1);
+        Node e4 = new Node("dbpedia:White_House", 0, 1);
+        Node e5 = new Node("dbpedia:Federal_district", 0, 1);
+        Node e6 = new Node("dbpedia:Elizabeth_II", 0, 1);
+        Node e7 = new Node("dbpedia:London", 0, 1);
+        Node e8 = new Node("dbpedia:New_York", 0, 1);
+        Node e9 = new Node("dbpedia:United_Kingdom", 0, 1);
+        Node e10 = new Node("dbpedia:Gore_Vidal", 0, 1);
 
         g.addEdge("dbpedia:Barack_Obama,_Sr.", a, b);
         g.addEdge("dbpedia:Barack_Obama,_Sr.1", a, e1);
@@ -59,7 +59,7 @@ public class HitsTest {
         int k = 20;
         algo.runHits(g, k);
         for (Object m : g.getVertices()) {
-            MyNode mm = (MyNode) m;
+            Node mm = (Node) m;
             System.out.println(mm.getCandidateURI() + " x: " + mm.getAuthorityWeight() + " y: " + mm.getHubWeight());
         }
 
