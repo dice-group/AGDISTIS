@@ -14,10 +14,9 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
-
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -42,7 +41,8 @@ public class NEDAlgo_HITS {
 
     public NEDAlgo_HITS(String modelDirectory, String knowledgeBase) {
         nodeType = knowledgeBase;
-        cu = new CandidateUtil(modelDirectory, knowledgeBase);
+        cu = new CandidateUtil("en", modelDirectory, knowledgeBase);
+
         index = cu.getIndex();
         graph = new DirectedSparseGraph[1];
     }

@@ -8,10 +8,10 @@ import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.DocumentText;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class AGDISTIS {
     private static Logger log = LoggerFactory.getLogger(AGDISTIS.class);
@@ -24,8 +24,8 @@ public class AGDISTIS {
 
     public static void main(String[] args) throws IOException {
         String preAnnotatedText = "<entity>Barack Obama</entity>  meets <entity>Angela Merkel</entity>  in <entity>Berlin</entity>  to discuss a <entity>new world order</entity> ";
-        // String modelDirectory = "/home/rusbeck/AGDISTIS/indexdbpedia_en";
-        String modelDirectory = "/data/r.usbeck/indexdbpedia_en";
+//         String modelDirectory = "/Users/ricardousbeck/dbpedia_en";
+        String modelDirectory = "/data/r.usbeck";
         AGDISTIS agdistis = new AGDISTIS(modelDirectory);
         HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
         for (NamedEntityInText namedEntity : results.keySet()) {
@@ -53,7 +53,7 @@ public class AGDISTIS {
                 }
             }
         }
-        NamedEntitiesInText nes = new NamedEntitiesInText(list);
+        NamedEntitiesInText nes = new  NamedEntitiesInText(list);
         DocumentText text = new DocumentText(preAnnotatedText);
 
         document.addProperty(text);

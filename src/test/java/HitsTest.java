@@ -1,7 +1,7 @@
+import org.aksw.agdistis.graph.HITS;
+import org.aksw.agdistis.graph.Node;
 import org.junit.Test;
 
-import de.bluekiwi.labs.graph.HITS;
-import de.bluekiwi.labs.graph.Node;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 

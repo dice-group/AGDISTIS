@@ -10,7 +10,7 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);

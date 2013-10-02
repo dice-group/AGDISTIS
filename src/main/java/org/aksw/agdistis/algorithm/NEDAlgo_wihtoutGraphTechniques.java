@@ -8,10 +8,9 @@ import org.aksw.agdistis.graph.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
-
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class NEDAlgo_wihtoutGraphTechniques {

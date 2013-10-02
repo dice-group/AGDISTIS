@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.aksw.agdistis.datatypes.Candidate;
 import org.apache.commons.codec.binary.Base64;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
@@ -22,8 +23,6 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sparql.SPARQLRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.unister.semweb.ned.QRToolNED.datatypes.Candidate;
 
 public class DBPedia {
     private Logger log = LoggerFactory.getLogger(DBPedia.class);

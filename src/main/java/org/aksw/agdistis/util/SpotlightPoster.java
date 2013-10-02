@@ -13,10 +13,11 @@ import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
+
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.DocumentText;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class SpotlightPoster {
 

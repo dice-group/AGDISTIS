@@ -3,11 +3,11 @@ package org.aksw.agdistis.experiment;
 import java.io.File;
 import java.io.IOException;
 
-import com.unister.semweb.topicmodeling.io.xml.CorpusXmlReader;
-import com.unister.semweb.topicmodeling.utils.corpus.Corpus;
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.io.xml.CorpusXmlReader;
+import datatypeshelper.utils.corpus.Corpus;
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.DocumentText;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
 
 public class Textlength {
 

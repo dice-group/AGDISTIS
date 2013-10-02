@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Ordering;
-import com.unister.semweb.topicmodeling.io.xml.CorpusXmlReader;
-import com.unister.semweb.topicmodeling.utils.corpus.Corpus;
-import com.unister.semweb.topicmodeling.utils.doc.Document;
 
+import datatypeshelper.io.xml.CorpusXmlReader;
+import datatypeshelper.utils.corpus.Corpus;
+import datatypeshelper.utils.doc.Document;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class PropertyWriter {

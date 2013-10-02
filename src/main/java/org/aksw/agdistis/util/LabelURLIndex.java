@@ -70,6 +70,7 @@ public class LabelURLIndex {
                 IndexWriterConfig config = new IndexWriterConfig(
                         Version.LUCENE_40, analyzer);
                 iwriter = new IndexWriter(directory, config);
+                iwriter.commit();
                 if (type.equals(TTL))
                     indexTTLFile(file, baseURI);
                 if (type.equals(N_TRIPLES))
@@ -148,8 +149,8 @@ public class LabelURLIndex {
             OnlineStatementHandler osh = new OnlineStatementHandler();
             parser.setRDFHandler(osh);
             parser.setStopAtFirstError(false);
-            log.info("Finished parsing: " + file);
             parser.parse(new FileReader(file), baseUri);
+            log.info("Finished parsing: " + file);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         } catch (RDFParseException e) {
@@ -161,12 +162,10 @@ public class LabelURLIndex {
 
     private void addDocumentToIndex(String subject, String predicate, String object) {
         try {
-            if (subject.startsWith("http://yago-knowledge.org/resource/") && predicate.equals("http://www.w3.org/2004/02/skos/core#prefLabel")) {
                 Document doc = new Document();
                 doc.add(new StringField(FIELD_NAME_URL, subject, Store.YES));
                 doc.add(new TextField(FIELD_NAME_LABEL, object, Store.YES));
                 iwriter.addDocument(doc);
-            }
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }

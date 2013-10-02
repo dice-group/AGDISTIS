@@ -15,12 +15,12 @@ import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.io.xml.CorpusXmlReader;
-import com.unister.semweb.topicmodeling.utils.corpus.Corpus;
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
+import datatypeshelper.io.xml.CorpusXmlReader;
+import datatypeshelper.utils.corpus.Corpus;
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.DocumentText;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class PropertyOrder_mostDecreasingProperty {
     private static Logger log = LoggerFactory.getLogger(PropertyOrder_mostDecreasingProperty.class);

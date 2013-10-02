@@ -84,6 +84,7 @@ public class SubjectPredicateObjectIndex {
                 directory = new MMapDirectory(indexDirectory);
                 IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
                 iwriter = new IndexWriter(directory, config);
+                iwriter.commit();
                 for (String file : files)
                 {
                     if (type.equals(TTL))
@@ -145,8 +146,8 @@ public class SubjectPredicateObjectIndex {
 
     private void addDocumentToIndex(IndexWriter iwriter, String subject, String predicate, String object) {
         Document doc = new Document();
-        subject = subject.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
-        object = object.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
+//        subject = subject.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
+//        object = object.replace("http://yago-knowledge/resource/", "http://yago-knowledge.org/resource/");
         doc.add(new StringField(FIELD_NAME_SUBJECT, subject, Store.YES));
         doc.add(new StringField(FIELD_NAME_PREDICATE, predicate, Store.YES));
         doc.add(new StringField(FIELD_NAME_OBJECT, object, Store.YES));

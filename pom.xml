@@ -190,20 +190,11 @@
 			<version>2.0.1</version>
 		</dependency>
 		<!-- local libs -->
-		<dependency>
-			<groupId>de.bluekiwi</groupId>
-			<artifactId>QRToolNED.datatypes</artifactId>
-			<version>0.0.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/QRToolNED.datatypes-0.0.1.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>de.bluekiwi</groupId>
-			<artifactId>uber-topicmodeling.io</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath>
-		</dependency>
+		<!-- <dependency> <groupId>de.bluekiwi</groupId> <artifactId>QRToolNED.datatypes</artifactId> 
+			<version>0.0.1</version> <scope>system</scope> <systemPath>${project.basedir}/lib/QRToolNED.datatypes-0.0.1.jar</systemPath> 
+			</dependency> <dependency> <groupId>de.bluekiwi</groupId> <artifactId>uber-topicmodeling.io</artifactId> 
+			<version>0.0.2-SNAPSHOT</version> <scope>system</scope> <systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath> 
+			</dependency> -->
 		<dependency>
 			<groupId>de.bluekiwi</groupId>
 			<artifactId>aida</artifactId>
@@ -252,5 +243,24 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<!-- Mutable Pair -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<!-- Brics Automatons -->
+		<dependency>
+			<groupId>dk.brics.automaton</groupId>
+			<artifactId>automaton</artifactId>
+			<version>1.11-8</version>
+		</dependency>
+		<!-- Combopooleddatasource -->
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
+
 	</dependencies>
 </project>

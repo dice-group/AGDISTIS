@@ -2,14 +2,13 @@ package org.aksw.agdistis.algorithm;
 
 import java.util.HashMap;
 
+import org.aksw.agdistis.datatypes.Candidate;
+import org.aksw.agdistis.datatypes.Label;
+import org.aksw.agdistis.datatypes.TextWithLabels;
 import org.aksw.agdistis.util.DBPedia;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.unister.semweb.ned.QRToolNED.datatypes.Candidate;
-import com.unister.semweb.ned.QRToolNED.datatypes.Label;
-import com.unister.semweb.ned.QRToolNED.datatypes.TextWithLabels;
 
 public class NEDAlgo_Prior {
     Logger log = LoggerFactory.getLogger(NEDAlgo_Prior.class);

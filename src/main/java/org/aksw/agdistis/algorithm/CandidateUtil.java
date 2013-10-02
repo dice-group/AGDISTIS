@@ -13,11 +13,10 @@ import org.aksw.agdistis.util.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unister.semweb.topicmodeling.utils.doc.Document;
-import com.unister.semweb.topicmodeling.utils.doc.DocumentText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntitiesInText;
-import com.unister.semweb.topicmodeling.utils.doc.ner.NamedEntityInText;
-
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.DocumentText;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
+import datatypeshelper.utils.doc.ner.NamedEntityInText;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class CandidateUtil {
@@ -80,9 +79,12 @@ public class CandidateUtil {
 			String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
 			this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES, nodeType);
 
-			String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
+//			String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
+			//hack for not using surfaceforms
+			String surfaceFormsFile = directory + "/labels_" + languageTag + ".nt";
+
 			String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
-			this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.TSV, nodeType);
+			this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.N_TRIPLES, nodeType);
 
 			tmp = new ArrayList<String>();
 			tmp.add(directory + "/redirects_transitive_" + languageTag + ".nt");

@@ -4,15 +4,14 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 
+import org.aksw.agdistis.datatypes.Label;
+import org.aksw.agdistis.datatypes.TextWithLabels;
+import org.aksw.agdistis.datatypes.Voting;
+import org.aksw.agdistis.db.DbAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.unister.semweb.ned.QRToolNED.datatypes.Label;
-import com.unister.semweb.ned.QRToolNED.datatypes.TextWithLabels;
-import com.unister.semweb.ned.QRToolNED.datatypes.Voting;
-import com.unister.semweb.ned.QRToolNED.db.DbAdapter;
 
 public class JudgeAgreement {
     private static Logger log = LoggerFactory.getLogger(JudgeAgreement.class);

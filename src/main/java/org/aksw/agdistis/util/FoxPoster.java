@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.aksw.agdistis.datatypes.Candidate;
+import org.aksw.agdistis.datatypes.Label;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
@@ -22,9 +24,6 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.StatementCollector;
 import org.openrdf.rio.ntriples.NTriplesParser;
 import org.openrdf.rio.turtle.TurtleParser;
-
-import com.unister.semweb.ned.QRToolNED.datatypes.Candidate;
-import com.unister.semweb.ned.QRToolNED.datatypes.Label;
 
 public class FoxPoster {
 
