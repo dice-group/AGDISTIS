@@ -63,7 +63,6 @@ public class SpotlightPoster {
             off+=9;
         }
         text += "</annotation>";
-        System.out.println("HERE");
         text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
         String urlParameters = "text=" + text + "";
         String request = "http://spotlight.dbpedia.org/rest/disambiguate";
@@ -113,7 +112,7 @@ public class SpotlightPoster {
         Gson gson = new GsonBuilder().create();
         JsonText p = gson.fromJson(reader, JsonText.class);
         for (JsonEntity ent : p.Resources) {
-        	System.out.println(ent + " " +URLDecoder.decode(ent.URI, "UTF-8"));
+//        	System.out.println(ent + " " +URLDecoder.decode(ent.URI, "UTF-8"));
             positionToURL.put(ent.offset, URLDecoder.decode(ent.URI, "UTF-8"));
         }
 
