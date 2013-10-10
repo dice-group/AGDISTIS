@@ -99,4 +99,73 @@ public class TextDisambiguation_Yago {
         }
         algo.close();
     }
-}
+private static void fmeasure(String languageTag, Corpus corpus, NEDAlgo_HITS algo, int maxDepth, double threshholdTrigram, BufferedWriter bw) throws IOException {
+	double tp = 0, fp = 0, fn = 0, tn = 0;
+	int documentId = 0;
+	for (Document document : corpus) {
+		long startTime = System.currentTimeMillis();
+		try {
+			System.gc();
+			log.info("Text: " + documentId);
+			if (0 < document.getProperty(DocumentText.class).getText().length()) {
+				algo.run(document, threshholdTrigram, maxDepth);
+				// algo.run(document, threshholdTrigram); --> used for algo
+				// without graph techniques
+				NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+				for (NamedEntityInText namedEntity : namedEntities) {
+					if (namedEntity.getLength() > 2) {
+						String correctVotingURL = namedEntity.getNamedEntityUri();
+						if (correctVotingURL.startsWith("rln:"))
+							correctVotingURL = correctVotingURL.replace("rln:", "http://rdflivenews.aksw.org/resource/");
+						if (correctVotingURL.startsWith("dbpr:"))
+							correctVotingURL = correctVotingURL.replace("dbpr:", "http://dbpedia.org/resource/");
+						correctVotingURL = algo.getCu().redirect(correctVotingURL);
+						String disambiguatedURL = algo.getCu().redirect(algo.findResult(namedEntity));
+						if (correctVotingURL.startsWith("http://de.dbpedia.org/resource/")) {
+							correctVotingURL = "http://aksw.org/notInWiki";
+						}
+						// log.info("\t\t"+correctVotingURL + " " +
+						// disambiguatedURL);
+						if (languageTag.equals("en")) {
+							if (correctVotingURL.equals(disambiguatedURL)) {
+								tp++;
+								log.info("\t tp: " + correctVotingURL + " -> " + disambiguatedURL);
+							} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL == null) {
+								fn++;
+								log.info("\t fn: " + correctVotingURL + " -> " + disambiguatedURL);
+							} else if ((correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.equals("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL == null) {
+								tn++;
+								log.info("\t tn: " + correctVotingURL + " -> " + disambiguatedURL);
+							} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL.startsWith("http://dbpedia.org/resource/") && !(correctVotingURL.equals(disambiguatedURL))) {
+								fp++;
+								log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
+							} else if ((correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.equals("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL.startsWith("http://dbpedia.org/resource/")) {
+								fp++;
+								log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
+							} else {
+								log.error("STRANGE: " + correctVotingURL + " -> " + disambiguatedURL);
+							}
+						} else if (languageTag.equals("de")) {
+							// TODO
+						}
+
+					}
+				}
+			} else {
+				log.error("Text is empty!");
+			}
+			documentId++;
+		} catch (Exception e) {
+			log.error("Cound not process doc: " + documentId);
+			log.error(e.getLocalizedMessage());
+		}
+//		bw.write("Doc:\t" + documentId + "\ttime\t" + (System.currentTimeMillis() - startTime) + "\tentities\t" + document.getProperty(NamedEntitiesInText.class).getNamedEntities().size());
+//		bw.newLine();
+//		bw.flush();
+	}
+	double precision = tp / (tp + fp);
+	double recall = tp / (tp + fn);
+	log.error("NED f1: " + (2 * ((precision * recall) / (precision + recall))) + " \t " + precision + "\t" + recall + "\t" + threshholdTrigram);
+	bw.write("NED f1: " + (2 * ((precision * recall) / (precision + recall))) + " \t " + precision + "\t" + recall + "\t" + threshholdTrigram);
+	bw.flush();
+}}
