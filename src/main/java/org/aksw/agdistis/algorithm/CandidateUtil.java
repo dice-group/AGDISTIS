@@ -79,9 +79,10 @@ public class CandidateUtil {
 			String rdfsLabelIndexDirectory = directory + "/index" + language + "/label_rdfs_label";
 			this.rdfsLabelIndex = new LabelURLIndex(rdfsLabelFile, rdfsLabelIndexDirectory, LabelURLIndex.N_TRIPLES, nodeType);
 
-//			String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
-			//hack for not using surfaceforms
-			String surfaceFormsFile = directory + "/labels_" + languageTag + ".nt";
+			String surfaceFormsFile = directory + "/" + languageTag + "_surface_forms.tsv";
+			// hack for not using surfaceforms
+			// String surfaceFormsFile = directory + "/labels_" + languageTag +
+			// ".nt";
 
 			String surfaceFormsIndexDirectory = directory + "/index" + language + "/label_surface";
 			this.surfaceFormIndex = new LabelURLIndex(surfaceFormsFile, surfaceFormsIndexDirectory, LabelURLIndex.N_TRIPLES, nodeType);
@@ -118,32 +119,12 @@ public class CandidateUtil {
 		// start with longest Named Entities
 		Collections.sort(namedEntities.getNamedEntities(), new NamedEntityLengthComparator());
 		Collections.reverse(namedEntities.getNamedEntities());
-		// HashSet<String> heuristicExpansion = new HashSet<String>();
+		HashSet<String> heuristicExpansion = new HashSet<String>();
 		for (NamedEntityInText entity : namedEntities) {
 			String label = text.substring(entity.getStartPos(), entity.getEndPos());
 			log.info("\tLabel: " + label);
 			long start = System.currentTimeMillis();
-			// String tmp = label;
-			// boolean expansion = false;
-			// for (String key : heuristicExpansion) {
-			// if (key.contains(label)) {
-			// // take the shortest possible expansion
-			// if (tmp.length() > key.length() && tmp != label) {
-			// tmp = key;
-			// expansion = true;
-			// log.debug("Heuristik expansion: " + label + "-->" + key);
-			// }
-			// if (tmp.length() < key.length() && tmp == label) {
-			// tmp = key;
-			// expansion = true;
-			// log.debug("Heuristik expansion: " + label + "-->" + key);
-			// }
-			// }
-			// }
-			// label = tmp;
-			// if (!expansion) {
-			// heuristicExpansion.add(label);
-			// }
+			label = heuristicExpansion(heuristicExpansion, label);
 			if (nodeType.equals("http://yago-knowledge.org/resource/")) {
 				checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
 			} else {
@@ -152,6 +133,31 @@ public class CandidateUtil {
 			}
 			log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
 		}
+	}
+
+	private String heuristicExpansion(HashSet<String> heuristicExpansion, String label) {
+		String tmp = label;
+		boolean expansion = false;
+		for (String key : heuristicExpansion) {
+			if (key.contains(label)) {
+				// take the shortest possible expansion
+				if (tmp.length() > key.length() && tmp != label) {
+					tmp = key;
+					expansion = true;
+					log.debug("Heuristik expansion: " + label + "-->" + key);
+				}
+				if (tmp.length() < key.length() && tmp == label) {
+					tmp = key;
+					expansion = true;
+					log.debug("Heuristik expansion: " + label + "-->" + key);
+				}
+			}
+		}
+		label = tmp;
+		if (!expansion) {
+			heuristicExpansion.add(label);
+		}
+		return label;
 	}
 
 	public void addNodeToGraph(DirectedSparseGraph<Node, String> graph, HashMap<String, Node> nodes, NamedEntityInText entity, Triple c, String candidateURL) {

@@ -4,7 +4,7 @@
 	<groupId>org.aksw</groupId>
 	<artifactId>AGDISTIS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<!-- BUILD -->
 	<build>
 		<plugins>

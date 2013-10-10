@@ -43,6 +43,7 @@ public class SubjectPredicateObjectIndex {
     private String FIELD_NAME_OBJECT = "object";
     public static final String N_TRIPLES = "NTriples";
     public static final String TTL = "TTL";
+	private int numberOfDocsRetrievedFromIndex = 100;
 
     private Directory directory;
     private Analyzer analyzer;
@@ -168,7 +169,7 @@ public class SubjectPredicateObjectIndex {
             TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
             BooleanQuery bq = new BooleanQuery();
             bq.add(tq, BooleanClause.Occur.SHOULD);
-            TopScoreDocCollector collector = TopScoreDocCollector.create(1000, true);
+            TopScoreDocCollector collector = TopScoreDocCollector.create(numberOfDocsRetrievedFromIndex, true);
             isearcher.search(bq, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
