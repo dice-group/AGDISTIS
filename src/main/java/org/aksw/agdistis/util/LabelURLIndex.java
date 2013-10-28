@@ -178,7 +178,7 @@ public class LabelURLIndex {
 		try {
 			analyzer = new StandardAnalyzer(Version.LUCENE_40);
 			parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_LABEL, analyzer);
-			parser.setDefaultOperator(QueryParser.Operator.AND);
+			parser.setDefaultOperator(QueryParser.Operator.OR);
 			Query query = parser.parse(QueryParser.escape(object));
 
 			ScoreDoc[] hits = isearcher.search(query, numberOfDocsRetrievedFromIndex).scoreDocs;
