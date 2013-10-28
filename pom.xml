@@ -131,6 +131,7 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- Sesame -->
 		<dependency>
+
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-runtime</artifactId>
 			<version>2.7.0-beta1</version>
