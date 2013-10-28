@@ -33,6 +33,7 @@ public class AIDAcompare {
 	private static org.slf4j.Logger log = LoggerFactory.getLogger(AIDAcompare.class);
 
 	public static void main(String[] args) throws Exception {
+
 		String INPUT_FILE = "reuters.xml"; // " 500newsgoldstandard.xml";//
 											// reuters.xml ,
 											// german_corpus.xml
@@ -124,6 +125,12 @@ public class AIDAcompare {
 							if (correctVotingURL.startsWith("http://de.dbpedia.org/resource/")) {
 								correctVotingURL = "http://aksw.org/notInWiki";
 							}
+							if (correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) {
+								correctVotingURL = "http://aksw.org/notInWiki";
+							}
+							if(disambiguatedURL.startsWith("http://dbpedia.org/resource/--NME--")){
+								disambiguatedURL =null;
+							}
 							// log.info("\t\t"+correctVotingURL + " " +
 							// disambiguatedURL);
 							if (languageTag.equals("en")) {
@@ -163,8 +170,10 @@ public class AIDAcompare {
 		double precision = tp / (tp + fp);
 		double recall = tp / (tp + fn);
 		log.error("NED f1: " + (2 * ((precision * recall) / (precision + recall))) + " \t " + precision + "\t" + recall );
-		bw.write("NED f1: " + (2 * ((precision * recall) / (precision + recall))) + " \t " + precision + "\t" + recall );
-		bw.flush();
-		bw.close();
+
+//		bw.write("NED f1: " + (2 * ((precision * recall) / (precision + recall))) + " \t " + precision + "\t" + recall );
+//		bw.flush();
+//		bw.close();
+
 	}
 }

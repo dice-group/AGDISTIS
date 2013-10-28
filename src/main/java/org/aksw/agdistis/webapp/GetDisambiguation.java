@@ -18,8 +18,8 @@ public class GetDisambiguation extends ServerResource {
 	private Spotlight spotlight;
 
 	public GetDisambiguation() {
-//		String modelDirectory = "/home/rusbeck/AGDISTIS/indexdbpedia_en";
-		String modelDirectory = "/data/r.usbeck/indexdbpedia_en";
+		String modelDirectory = "/home/rusbeck/AGDISTIS/";
+//		String modelDirectory = "/data/r.usbeck/indexdbpedia_en";
 		agdistis = new AGDISTIS(modelDirectory);
 		spotlight = new Spotlight();
 	}

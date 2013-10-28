@@ -11,7 +11,7 @@ public class RunApp {
             Component component = new Component();
 
             // Add a new HTTP server listening on port 8082.
-            component.getServers().add(Protocol.HTTP, 8082);
+            component.getServers().add(Protocol.HTTP, 8080);
 
             // Attach the sample application.
             component.getDefaultHost().attach(new FirstStepsApplication());

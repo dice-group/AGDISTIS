@@ -128,6 +128,7 @@ public class CandidateUtil {
 			if (nodeType.equals("http://yago-knowledge.org/resource/")) {
 				checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
 			} else {
+//				checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/");
 				if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/"))
 					checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label, "http://dbpedia.org/resource/");
 			}

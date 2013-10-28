@@ -24,8 +24,10 @@ public class AGDISTIS {
 
     public static void main(String[] args) throws IOException {
         String preAnnotatedText = "<entity>Barack Obama</entity>  meets <entity>Angela Merkel</entity>  in <entity>Berlin</entity>  to discuss a <entity>new world order</entity> ";
-//         String modelDirectory = "/Users/ricardousbeck/dbpedia_en";
-        String modelDirectory = "/data/r.usbeck";
+
+         String modelDirectory = "/Users/ricardousbeck/AGDISTIS";
+//     String modelDirectory = "/data/r.usbeck";
+
         AGDISTIS agdistis = new AGDISTIS(modelDirectory);
         HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
         for (NamedEntityInText namedEntity : results.keySet()) {
