@@ -5,15 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import mpi.aida.Disambiguator;
-import mpi.aida.Preparator;
-import mpi.aida.config.settings.DisambiguationSettings;
-import mpi.aida.config.settings.PreparationSettings;
-import mpi.aida.config.settings.disambiguation.CocktailPartyDisambiguationSettings;
-import mpi.aida.config.settings.preparation.StanfordHybridPreparationSettings;
-import mpi.aida.data.DisambiguationResults;
-import mpi.aida.data.PreparedInput;
-
 import org.aksw.agdistis.util.SpotlightPoster;
 import org.slf4j.LoggerFactory;
 
@@ -29,16 +20,12 @@ public class SpotlightCompare {
 
 	public static void main(String[] args) throws Exception {
 		SpotlightPoster spot = new SpotlightPoster();
-
 		for (String INPUT_FILE : new String[] { "reuters.xml" }) {// "AIDACorpus.xml",
-
 																		// "reuters.xml",
 																		// "500newsgoldstandard.xml"
 			CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
 			Corpus corpus = reader.getCorpus();
-
 			fmeasure("en", spot, corpus, INPUT_FILE);
-
 
 		}
 	}
@@ -47,7 +34,6 @@ public class SpotlightCompare {
 		double tp = 0, fp = 0, fn = 0, tn = 0;
 		int documentId = 0;
 		BufferedWriter bw = new BufferedWriter(new FileWriter("AIDA_" + iNPUT_FILE + ".txt", true));
-
 		bw.write("input: " + iNPUT_FILE + "\n");
 		for (Document document : corpus) {
 			try {
@@ -68,7 +54,6 @@ public class SpotlightCompare {
 								correctVotingURL = correctVotingURL.replace("dbpr:", "http://dbpedia.org/resource/");
 							String disambiguatedURL = spot.findResult(namedEntity.getStartPos());
 
-
 							if (correctVotingURL.startsWith("http://de.dbpedia.org/resource/")) {
 								correctVotingURL = "http://aksw.org/notInWiki";
 							}
@@ -77,29 +62,15 @@ public class SpotlightCompare {
 									tp++;
 									log.info("\t tp: " + correctVotingURL + " -> " + disambiguatedURL);
 								} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL == null) {
-							if (correctVotingURL.startsWith("http://aksw.org/notInWiki")) {
-								correctVotingURL = "http://aksw.org/notInWiki";
-							}
-							if (correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) {
-								correctVotingURL = "http://aksw.org/notInWiki";
-							}
-							if (languageTag.equals("de")) {
-								if (correctVotingURL.equals(disambiguatedURL)) {
-									tp++;
-									log.info("\t tp: " + correctVotingURL + " -> " + disambiguatedURL);
-								} else if (correctVotingURL.startsWith("http://de.dbpedia.org/resource/") && disambiguatedURL == null) {
-
 									fn++;
 									log.info("\t fn: " + correctVotingURL + " -> " + disambiguatedURL);
 								} else if ((correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.equals("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL == null) {
 									tn++;
 									log.info("\t tn: " + correctVotingURL + " -> " + disambiguatedURL);
-
-								} else if (correctVotingURL.startsWith("http://de.dbpedia.org/resource/") && disambiguatedURL.startsWith("http://de.dbpedia.org/resource/") && !(correctVotingURL.equals(disambiguatedURL))) {
+								} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL.startsWith("http://dbpedia.org/resource/") && !(correctVotingURL.equals(disambiguatedURL))) {
 									fp++;
 									log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
-								} else if ((correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.equals("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL.startsWith("http://de.dbpedia.org/resource/")) {
-
+								} else if ((correctVotingURL.equals("http://aksw.org/notInWiki") || correctVotingURL.equals("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL.startsWith("http://dbpedia.org/resource/")) {
 									fp++;
 									log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
 								} else {
