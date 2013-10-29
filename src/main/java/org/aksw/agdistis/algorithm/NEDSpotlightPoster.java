@@ -24,17 +24,18 @@ import datatypeshelper.utils.doc.DocumentText;
 import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
 import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
-public class SpotlightPoster implements DisambiguationAlgorithm {
-	Logger log = LoggerFactory.getLogger(SpotlightPoster.class);
+public class NEDSpotlightPoster implements DisambiguationAlgorithm {
+	Logger log = LoggerFactory.getLogger(NEDSpotlightPoster.class);
 	HashMap<Integer, String> positionToURL;
 
-	public SpotlightPoster() {
+	public NEDSpotlightPoster() {
 		positionToURL = new HashMap<Integer, String>();
 	}
 
 	public static void main(String args[]) throws IOException {
 
-		NamedEntitiesInText nes = new NamedEntitiesInText(new NamedEntityInText(38, 8, "Lovelace"), new NamedEntityInText(62, 11, "Rob Epstein"), new NamedEntityInText(78, 16, "Jeffery Friedman"), new NamedEntityInText(101, 9, "Admission"), new NamedEntityInText(126, 10, "Paul Weitz"));
+		NamedEntitiesInText nes = new NamedEntitiesInText(new NamedEntityInText(38, 8, "Lovelace"), new NamedEntityInText(62, 11, "Rob Epstein"), new NamedEntityInText(78, 16, "Jeffery Friedman"), new NamedEntityInText(101, 9, "Admission"),
+				new NamedEntityInText(126, 10, "Paul Weitz"));
 
 		String sentence = "Recent work includes the 2013 films ``Lovelace,'' directed by Rob Epstein and Jeffery Friedman and ``Admission,'' directed by Paul Weitz.";
 
@@ -44,12 +45,13 @@ public class SpotlightPoster implements DisambiguationAlgorithm {
 		document.addProperty(text);
 		document.addProperty(nes);
 
-		SpotlightPoster spot = new SpotlightPoster();
+		NEDSpotlightPoster spot = new NEDSpotlightPoster();
 		spot.doTASK(document);
 
 	}
 
 	public void doTASK(Document document) throws IOException {
+		log.info(""+document.getProperty(DocumentText.class));
 		String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		text += "<annotation ";
 		String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "").replace("\"", "'");
@@ -65,7 +67,7 @@ public class SpotlightPoster implements DisambiguationAlgorithm {
 			// off+=9;
 		}
 		text += "</annotation>";
-		// System.out.println(text);
+		log.info(text);
 		text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
 		String urlParameters = "text=" + text + "";
 		// System.out.println(urlParameters);
@@ -122,8 +124,7 @@ public class SpotlightPoster implements DisambiguationAlgorithm {
 		Gson gson = new GsonBuilder().create();
 		JsonText p = gson.fromJson(reader, JsonText.class);
 		for (JsonEntity ent : p.Resources) {
-			// System.out.println(ent + " " +URLDecoder.decode(ent.URI,
-			// "UTF-8"));
+			log.info(ent.offset + " " + URLDecoder.decode(ent.URI, "UTF-8"));
 			positionToURL.put(ent.offset, URLDecoder.decode(ent.URI, "UTF-8"));
 		}
 

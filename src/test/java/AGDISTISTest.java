@@ -3,7 +3,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.aksw.agdistis.webapp.AGDISTIS;
+import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.junit.Test;
 
 import datatypeshelper.utils.doc.ner.NamedEntityInText;
@@ -24,7 +24,7 @@ public class AGDISTISTest {
 
 		String modelDirectory = "/data/r.usbeck";
 
-		AGDISTIS agdistis = new AGDISTIS(modelDirectory);
+		DisambiguationAlgorithm agdistis = new AGDISTIS(modelDirectory);
 		HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
 		for (NamedEntityInText namedEntity : results.keySet()) {
 			String disambiguatedURL = results.get(namedEntity);

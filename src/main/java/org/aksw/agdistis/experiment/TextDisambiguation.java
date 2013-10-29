@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.SpotlightPoster;
+import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +32,11 @@ public class TextDisambiguation {
 
 //			DisambiguationAlgorithm algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, nodeType, edgeType);
 //			DisambiguationAlgorithm algo = new AIDADisambiguator();
-			DisambiguationAlgorithm algo = new SpotlightPoster();
+			DisambiguationAlgorithm algo = new NEDSpotlightPoster();
 			
 			for (int maxDepth = 2; maxDepth <= 2; ++maxDepth) {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("Test_" + TestFile + "_" + maxDepth + "_newDataset.txt", true));
-				bw.write("input: " + TestFile + "\n");
+//				BufferedWriter bw = new BufferedWriter(new FileWriter("Test_" + TestFile + "_" + maxDepth + "_newDataset.txt", true));
+//				bw.write("input: " + TestFile + "\n");
 
 				algo.setMaxDepth(maxDepth);
 				for (double threshholdTrigram = 1; threshholdTrigram > 0.8; threshholdTrigram -= 0.01) {
@@ -49,7 +49,7 @@ public class TextDisambiguation {
 					
 					System.gc();
 				}
-				bw.close();
+//				bw.close();
 			}
 			algo.close();
 		}

@@ -14,7 +14,7 @@ public class RunApp {
             component.getServers().add(Protocol.HTTP, 8080);
 
             // Attach the sample application.
-            component.getDefaultHost().attach(new FirstStepsApplication());
+            component.getDefaultHost().attach(new RestletApplication());
 
             // Start the component.
             component.start();
