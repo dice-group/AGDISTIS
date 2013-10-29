@@ -37,7 +37,7 @@ public class AGDISTIS {
     }
 
     public HashMap<NamedEntityInText, String> runDisambiguation(String preAnnotatedText) throws IOException {
-        double threshholdTrigram = 0.825;
+        double threshholdTrigram = 1;
         int maxDepth = 2;
 
         Document document = new Document();

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -186,9 +187,11 @@ public class LabelURLIndex {
 				Document hitDoc = isearcher.doc(hits[i].doc);
 				String subject = java.net.URLDecoder.decode(hitDoc.get(FIELD_NAME_URL), "UTF-8");
 				String predicate = "http://www.w3.org/2000/01/rdf-schema#label";
+				String o = hitDoc.get(FIELD_NAME_LABEL);
+
 				if (replaceObject)
 					object = hitDoc.get(FIELD_NAME_LABEL);
-				triples.add(new Triple(subject, predicate, object));
+				triples.add(new Triple(subject, predicate, o));
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + object);
@@ -201,12 +204,17 @@ public class LabelURLIndex {
 		if (cache.containsKey(subject)) {
 			return cache.get(subject);
 		}
+		analyzer = new KeywordAnalyzer();
 		parser = new QueryParser(Version.LUCENE_40, FIELD_NAME_URL, analyzer);
 		parser.setDefaultOperator(QueryParser.Operator.AND);
-		analyzer = new KeywordAnalyzer();
 		List<Triple> triples = new ArrayList<Triple>();
 		try {
 			log.debug("\t start asking index...");
+			int lastIndexOf = "http://dbpedia.org/resource/".length();
+			String substring = subject.substring(lastIndexOf);
+			subject = "http://dbpedia.org/resource/"+ URLEncoder.encode(substring, "UTF-8");
+			System.out.println(subject);
+
 			TermQuery tq = new TermQuery(new Term(FIELD_NAME_URL, subject));
 			BooleanQuery bq = new BooleanQuery();
 			bq.add(tq, BooleanClause.Occur.SHOULD);
@@ -217,6 +225,7 @@ public class LabelURLIndex {
 			for (int i = 0; i < hits.length; i++) {
 				Document hitDoc = isearcher.doc(hits[i].doc);
 				String object = java.net.URLDecoder.decode(hitDoc.get(FIELD_NAME_LABEL), "UTF-8");
+				System.out.println(object);
 				String predicate = "rdfs:label";
 				triples.add(new Triple(subject, predicate, object));
 			}

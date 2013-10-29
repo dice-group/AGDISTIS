@@ -128,7 +128,6 @@ public class CandidateUtil {
 			if (nodeType.equals("http://yago-knowledge.org/resource/")) {
 				checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType);
 			} else {
-//				checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/");
 				if (!checkRdfsLabelCandidates(graph, threshholdTrigram, nodes, entity, label, "http://dbpedia.org/resource/"))
 					checkSurfaceFormsCandidates(graph, nodes, threshholdTrigram, entity, label, "http://dbpedia.org/resource/");
 			}
@@ -280,7 +279,7 @@ public class CandidateUtil {
 			// rule of thumb: no year numbers in candidates
 			if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
 				// trigram similarity
-				if (trigramForURLLabel(candidateURL, label, nodeType) < threshholdTrigram) {
+				if (trigramForURLLabel(c, label, nodeType) < threshholdTrigram) {
 					continue;
 				}
 				// iff it is a disambiguation resource, skip it
@@ -353,15 +352,17 @@ public class CandidateUtil {
 		return (double) trigramsForLabel.size() / ((double) union.size());
 	}
 
-	private double trigramForURLLabel(String candidateURL, String label, String nodeType) {
+	private double trigramForURLLabel(Triple candidateStatement, String label, String nodeType) {
 		double sim = 0;
 		if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
-			List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
-			if (labelOfCandidate.isEmpty()) {
-				return 0;
-			}
+			// List<Triple> labelOfCandidate =
+			// rdfsLabelIndex.getLabelForURI(candidateURL);
+			// if (labelOfCandidate.isEmpty()) {
+			// return 0;
+			// }
+			List<Triple> labelOfCandidate = new ArrayList<Triple>();
+			labelOfCandidate.add(candidateStatement);
 			HashSet<String> union = new HashSet<String>();
-
 			// ensure that there is one maximum matching label
 			for (Triple t : labelOfCandidate) {
 				HashSet<String> trigramsForLabel = new HashSet<String>();
@@ -386,26 +387,35 @@ public class CandidateUtil {
 			}
 			return sim;
 		} else {
-			HashSet<String> trigramsForLabel = new HashSet<String>();
-			for (int i = 3; i < label.length(); i++) {
-				trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
-			}
-			List<Triple> labelOfCandidate = rdfsLabelIndex.getLabelForURI(candidateURL);
-			if (labelOfCandidate.isEmpty()) {
-				return 0;
-			}
-			String replace = labelOfCandidate.get(0).getObject().replace(nodeType, "").toLowerCase();
-			replace = replace.replace("&", "and");
-			HashSet<String> trigramsForCandidate = new HashSet<String>();
-			for (int i = 3; i < replace.length(); i++) {
-				trigramsForCandidate.add(replace.substring(i - 3, i).toLowerCase());
-			}
-			HashSet<String> union = new HashSet<String>();
-			union.addAll(trigramsForLabel);
-			union.addAll(trigramsForCandidate);
-			trigramsForLabel.retainAll(trigramsForCandidate);
-			log.debug("\t\tcandidate: " + replace + " => orig: " + label + "=" + (double) trigramsForLabel.size() / ((double) union.size()));
-			return (double) trigramsForLabel.size() / ((double) union.size());
+			// TODO adjust for use with Yago
+			// HashSet<String> trigramsForLabel = new HashSet<String>();
+			// for (int i = 3; i < label.length(); i++) {
+			// trigramsForLabel.add(label.substring(i - 3, i).toLowerCase());
+			// }
+			// List<Triple> labelOfCandidate =
+			// rdfsLabelIndex.getLabelForURI(candidateURL);
+			// if (labelOfCandidate.isEmpty()) {
+			// return 0;
+			// }
+			// String replace =
+			// labelOfCandidate.get(0).getObject().replace(nodeType,
+			// "").toLowerCase();
+			// replace = replace.replace("&", "and");
+			// HashSet<String> trigramsForCandidate = new HashSet<String>();
+			// for (int i = 3; i < replace.length(); i++) {
+			// trigramsForCandidate.add(replace.substring(i - 3,
+			// i).toLowerCase());
+			// }
+			// HashSet<String> union = new HashSet<String>();
+			// union.addAll(trigramsForLabel);
+			// union.addAll(trigramsForCandidate);
+			// trigramsForLabel.retainAll(trigramsForCandidate);
+			// log.debug("\t\tcandidate: " + replace + " => orig: " + label +
+			// "=" + (double) trigramsForLabel.size() / ((double)
+			// union.size()));
+			// return (double) trigramsForLabel.size() / ((double)
+			// union.size());
+			return 1;
 		}
 	}
 
