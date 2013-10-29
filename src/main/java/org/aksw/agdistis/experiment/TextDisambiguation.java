@@ -22,7 +22,7 @@ public class TextDisambiguation {
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
-		for (String TestFile : new String[] { "reuters.xml" }) {// "500newsgoldstandard.xml"
+		for (String TestFile : new String[] { "datasets/reuters.xml" }) {// "500newsgoldstandard.xml"
 																// "german_corpus_new.xml"
 																// "AIDACorpus.xml"
 
