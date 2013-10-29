@@ -61,7 +61,7 @@ public class JudgeAgreement {
     }
 
     public static DbAdapter loadDBAdapter() {
-        ClassLoader classLoader = TextDisambiguation_DBpedia.class.getClassLoader();
+        ClassLoader classLoader = TextDisambiguation.class.getClassLoader();
         URL resource = classLoader.getResource("applicationContext-jdbc.xml");
         String APPLICATION_CONTEXT_LOCATION = resource.toString().replace("file://", "");
         ApplicationContext context = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_LOCATION);

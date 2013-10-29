@@ -27,6 +27,7 @@ public class PropertyWriter {
         String ONTOLOGY_FILE = "ontology_properties.txt";
         String languageTag = "en"; // de
         String dataDirectory = "/data/r.usbeck";
+        String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
         double threshholdTrigram = 0.835;
 
         // get all properties
@@ -37,7 +38,7 @@ public class PropertyWriter {
         HashSet<String> propertiesToTest = new HashSet<String>();
         propertiesToTest.addAll(owl.hashset);
 
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/");
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/",edgeType);
         HashMap<String, Integer> hist = new HashMap<String, Integer>();
         for (Document document : corpus) {
             algo.runPreStep(document, threshholdTrigram, document.getDocumentId());

@@ -31,13 +31,13 @@ public class PropertyOrder_mostDecreasingProperty {
         String languageTag = "en"; // de
         String dataDirectory = "/data/r.usbeck";
         double threshholdTrigram = 0.835;
-
+        String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
         BufferedWriter bw = new BufferedWriter(new FileWriter("propertyOrder.log"));
 
         // INIT PARAMETERS AND ALGORITHM
         CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/");
+        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/", edgeType);
 
         // CALCULATE MOST OFTEN USED PROPERTIES
         Stack<String> mostOftenProperties = loadPropertyOrder(PROPERTY_FILE);

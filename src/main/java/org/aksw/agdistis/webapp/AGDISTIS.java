@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +16,15 @@ import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class AGDISTIS {
     private static Logger log = LoggerFactory.getLogger(AGDISTIS.class);
-    private NEDAlgo_HITS algo = null;
+    private DisambiguationAlgorithm algo = null;
 
     public AGDISTIS(String modelDirectory) {
         String knowledgeBase = "http://dbpedia.org/resource/";
+        double threshholdTrigram = 1;
+        int maxDepth = 2;
         algo = new NEDAlgo_HITS(modelDirectory, knowledgeBase);
+        algo.setMaxDepth(maxDepth);
+        algo.setThreshholdTrigram(threshholdTrigram);
     }
 
     public static void main(String[] args) throws IOException {
@@ -37,8 +42,7 @@ public class AGDISTIS {
     }
 
     public HashMap<NamedEntityInText, String> runDisambiguation(String preAnnotatedText) throws IOException {
-        double threshholdTrigram = 1;
-        int maxDepth = 2;
+      
 
         Document document = new Document();
         ArrayList<NamedEntityInText> list = new ArrayList<NamedEntityInText>();
@@ -60,8 +64,8 @@ public class AGDISTIS {
 
         document.addProperty(text);
         document.addProperty(nes);
-
-        algo.run(document, threshholdTrigram, maxDepth);
+        algo.run(document);
+        
         NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
         HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         for (NamedEntityInText namedEntity : namedEntities) {
