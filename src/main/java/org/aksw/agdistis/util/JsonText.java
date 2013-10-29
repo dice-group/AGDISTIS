@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonText {
-    List<JsonEntity> Resources = new ArrayList<JsonEntity>();
+    public List<JsonEntity> Resources = new ArrayList<JsonEntity>();
 
     @Override
     public String toString() {

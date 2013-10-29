@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.aksw.agdistis.util.SpotlightPoster;
+import org.aksw.agdistis.algorithm.SpotlightPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

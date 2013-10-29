@@ -1,4 +1,4 @@
-package org.aksw.agdistis.util;
+package org.aksw.agdistis.algorithm;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +11,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
+import org.aksw.agdistis.util.JsonEntity;
+import org.aksw.agdistis.util.JsonText;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,8 +24,8 @@ import datatypeshelper.utils.doc.DocumentText;
 import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
 import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
-public class SpotlightPoster {
-
+public class SpotlightPoster implements DisambiguationAlgorithm {
+	Logger log = LoggerFactory.getLogger(SpotlightPoster.class);
 	HashMap<Integer, String> positionToURL;
 
 	public SpotlightPoster() {
@@ -60,13 +65,14 @@ public class SpotlightPoster {
 			// off+=9;
 		}
 		text += "</annotation>";
-//		System.out.println(text);
+		// System.out.println(text);
 		text = URLEncoder.encode(text, "UTF-8").replace("+", "%20");
 		String urlParameters = "text=" + text + "";
 		// System.out.println(urlParameters);
-		// String request = "http://spotlight.dbpedia.org/rest/disambiguate";
+		String request = "http://spotlight.dbpedia.org/rest/disambiguate";
 		// String request = "http://localhost:2222/rest/disambiguate";
-		String request = "http://200.131.219.34:8080/dbpedia-spotlight-de/rest/disambiguate";
+		// String request =
+		// "http://200.131.219.34:8080/dbpedia-spotlight-de/rest/disambiguate";
 		// String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
 		// String request =
 		// "http://ec2-54-214-114-131.us-west-2.compute.amazonaws.com:8080/rest/disambiguate";
@@ -125,8 +131,35 @@ public class SpotlightPoster {
 
 	}
 
-	public String findResult(int startPos) {
-		return positionToURL.get(startPos);
+	@Override
+	public void run(Document document) {
+		try {
+			doTASK(document);
+		} catch (IOException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+	@Override
+	public String findResult(NamedEntityInText namedEntity) {
+		return positionToURL.get(namedEntity.getStartPos());
+	}
+
+	@Override
+	public void close() {
+	}
+
+	@Override
+	public void setThreshholdTrigram(double threshholdTrigram) {
+	}
+
+	@Override
+	public void setMaxDepth(int maxDepth) {
+	}
+
+	@Override
+	public String getRedirect(String findResult) {
+		return findResult;
 	}
 
 }
