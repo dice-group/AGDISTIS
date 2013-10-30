@@ -4,11 +4,20 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
+import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
+import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
+import datatypeshelper.utils.doc.Document;
+import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
 import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class AGDISTISTest {
+	String languageTag = "en"; // de
+	String dataDirectory = "/data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
+
 	@Test
 	public void testUmlaute() throws InterruptedException, IOException {
 		String osumi = "Masaaki Ōsumi";
@@ -22,18 +31,24 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + osumi + "</entity> directed <entity>" + movie + "</entity>.";
 
-		String modelDirectory = "/data/r.usbeck";
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(1, languageTag, dataDirectory, nodeType, edgeType);
+		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+		agdistis.run(d);
+		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = agdistis.findResult(namedEntity);
+			results.put(namedEntity, disambiguatedURL);
+		}
 
-		DisambiguationAlgorithm agdistis = new AGDISTIS(modelDirectory);
-		HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
 		for (NamedEntityInText namedEntity : results.keySet()) {
 			String disambiguatedURL = results.get(namedEntity);
-			System.out.println(namedEntity.getLabel() +" -> " + disambiguatedURL );
+			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
 			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
 		}
 
 	}
-	
+
 	@Test
 	public void testMinimalExample() throws InterruptedException, IOException {
 		// String osumi = "Masaaki Ōsumi";
@@ -48,18 +63,23 @@ public class AGDISTISTest {
 		correct.put(obama, obamaURL);
 		correct.put(merkel, merkelURL);
 		correct.put(city, cityURL);
-		
+
 		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
 
-		String modelDirectory = "/data/r.usbeck";
-		AGDISTIS agdistis = new AGDISTIS(modelDirectory);
-		HashMap<NamedEntityInText, String> results = agdistis.runDisambiguation(preAnnotatedText);
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(1, languageTag, dataDirectory, nodeType, edgeType);
+		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+		agdistis.run(d);
+		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = agdistis.findResult(namedEntity);
+			results.put(namedEntity, disambiguatedURL);
+		}
 		for (NamedEntityInText namedEntity : results.keySet()) {
 			String disambiguatedURL = results.get(namedEntity);
-			System.out.println(namedEntity.getLabel() +" -> " + disambiguatedURL );
+			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
 			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
 		}
 
 	}
-	
 }

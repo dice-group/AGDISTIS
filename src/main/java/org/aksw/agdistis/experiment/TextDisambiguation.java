@@ -39,7 +39,7 @@ public class TextDisambiguation {
 //				bw.write("input: " + TestFile + "\n");
 
 				algo.setMaxDepth(maxDepth);
-				for (double threshholdTrigram = 1; threshholdTrigram > 0.8; threshholdTrigram -= 0.01) {
+				for (double threshholdTrigram = 1; threshholdTrigram > 0.994; threshholdTrigram -= 0.01) {
 					algo.setThreshholdTrigram(threshholdTrigram);
 				
 					Evaluator ev = new Evaluator(languageTag, corpus, algo);

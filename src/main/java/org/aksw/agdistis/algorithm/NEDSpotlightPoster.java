@@ -51,20 +51,14 @@ public class NEDSpotlightPoster implements DisambiguationAlgorithm {
 	}
 
 	public void doTASK(Document document) throws IOException {
-		log.info(""+document.getProperty(DocumentText.class));
+		log.info("" + document.getProperty(DocumentText.class));
 		String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		text += "<annotation ";
 		String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "").replace("\"", "'");
-		text += "text=\"" + textValue.replaceAll("<entity>", "").replaceAll("</entity>", "") + "\">\n";
-		// text += "text=\" \">\n";
-		// int off = 8;
+		text += "text=\"" + textValue + "\">\n";
 		for (NamedEntityInText ne : document.getProperty(NamedEntitiesInText.class)) {
-			String namedEntity = textValue.substring(ne.getStartPos(), ne.getEndPos());
-			// text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" +
-			// (ne.getStartPos() -off) + "\" />\n";
+			String namedEntity = textValue.substring(ne.getStartPos(),ne.getEndPos());
 			text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" + (ne.getStartPos()) + "\" />\n";
-			// System.out.println(namedEntity);
-			// off+=9;
 		}
 		text += "</annotation>";
 		log.info(text);
