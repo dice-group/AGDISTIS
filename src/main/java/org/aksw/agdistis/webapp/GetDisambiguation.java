@@ -25,7 +25,7 @@ public class GetDisambiguation extends ServerResource {
 
 	public GetDisambiguation() {
 		String languageTag = "en"; // de
-		String dataDirectory = "/data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+		String dataDirectory = "/home/rusbeck/AGDISTIS/";///data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -65,31 +65,34 @@ public class GetDisambiguation extends ServerResource {
 
 	}
 
-	private Document textToDocument(String preAnnotatedText) {
+	public static Document textToDocument(String preAnnotatedText) {
 		Document document = new Document();
 		ArrayList<NamedEntityInText> list = new ArrayList<NamedEntityInText>();
 		log.info("\tText: " + preAnnotatedText);
-		for (int c = 0; c < preAnnotatedText.length(); c++) {
-			if (preAnnotatedText.length() > c + 8) {
-				if (preAnnotatedText.substring(c, c + 8).equals("<entity>")) {
-					c += 8;
-					int beginIndex = c;
-					int endIndex = preAnnotatedText.indexOf("</entity>", c);
-					String label = preAnnotatedText.substring(beginIndex, endIndex);
-					log.info("\t" + beginIndex + " " + endIndex + " " + label);
-					list.add(new NamedEntityInText(beginIndex, endIndex - beginIndex, label));
-				}
-			}
+		int startpos = 0, endpos = 0;
+		StringBuilder sb = new StringBuilder();
+		startpos = preAnnotatedText.indexOf("<entity>", startpos);
+		while (startpos >= 0) {
+			sb.append(preAnnotatedText.substring(endpos,startpos));
+			startpos += 8;
+			endpos = preAnnotatedText.indexOf("</entity>", startpos);
+			int newStartPos = sb.length();
+			String entityLabel = preAnnotatedText.substring(startpos, endpos);
+			list.add(new NamedEntityInText(newStartPos, entityLabel.length(), entityLabel));
+			sb.append(entityLabel);
+			endpos += 9;
+			startpos = preAnnotatedText.indexOf("<entity>", startpos);
 		}
+
 		NamedEntitiesInText nes = new NamedEntitiesInText(list);
-		DocumentText text = new DocumentText(preAnnotatedText);
+		DocumentText text = new DocumentText(preAnnotatedText.replaceAll("<entity>", "").replaceAll("</entity>", ""));
 
 		document.addProperty(text);
 		document.addProperty(nes);
 		return document;
 	}
 
-	private HashMap<NamedEntityInText, String> results(Document document, DisambiguationAlgorithm algo) {
+	private static HashMap<NamedEntityInText, String> results(Document document, DisambiguationAlgorithm algo) {
 		algo.run(document);
 		NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();

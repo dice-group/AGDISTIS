@@ -10,7 +10,7 @@
                  <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
                  <init-param>
                          <param-name>org.restlet.application</param-name>
-                         <param-value>org.aksw.agdistis.FirstStepsApplication</param-value>
+                         <param-value>org.aksw.agdistis.webapp.RestletApplication</param-value>
                  </init-param>
          </servlet>
   
