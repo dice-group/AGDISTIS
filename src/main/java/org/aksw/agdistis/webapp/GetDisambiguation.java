@@ -8,6 +8,8 @@ import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.restlet.data.Form;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
@@ -34,12 +36,15 @@ public class GetDisambiguation extends ServerResource {
 	}
 
 	@Post
-	public String postText(String req) {
-		log.info("Start working on Request");
-		String text = req.split("&")[0].substring("text='".length(), req.split("&")[0].length() - 1);
-		String type = req.split("&")[1].substring("type='".length(), req.split("&")[1].length() - 1);
-		log.info(text);
-		log.info(type);
+	public String postText(Representation entity) {  
+		log.info("Start working on Request for AGDISTIS");
+		Representation result = null;  
+        // Parse the given representation and retrieve data
+        Form form = new Form(entity);  
+        String text = form.getFirstValue("text");  
+        String type = form.getFirstValue("type");  
+		log.info("text: " + text);
+		log.info("type: " + type);
 		JSONArray arr = new org.json.simple.JSONArray();
 		HashMap<NamedEntityInText, String> results = null;
 		Document d = textToDocument(text);

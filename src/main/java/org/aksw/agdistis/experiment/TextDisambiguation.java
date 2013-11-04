@@ -1,12 +1,10 @@
 package org.aksw.agdistis.experiment;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
+import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +29,8 @@ public class TextDisambiguation {
 			log.info("Corpus size: " + corpus.getNumberOfDocuments());
 
 //			DisambiguationAlgorithm algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, nodeType, edgeType);
-//			DisambiguationAlgorithm algo = new AIDADisambiguator();
-			DisambiguationAlgorithm algo = new NEDSpotlightPoster();
+			DisambiguationAlgorithm algo = new NEDAIDADisambiguator();
+//			DisambiguationAlgorithm algo = new NEDSpotlightPoster();
 			
 			for (int maxDepth = 2; maxDepth <= 2; ++maxDepth) {
 //				BufferedWriter bw = new BufferedWriter(new FileWriter("Test_" + TestFile + "_" + maxDepth + "_newDataset.txt", true));
