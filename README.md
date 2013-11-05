@@ -1,31 +1,31 @@
 #AGDISTIS
 
-AGDISTIS - Agnostic Named Entity Disambiguation. This projects aimes at delivering a framework for disambiguating a priori annotated named entities. To the best of our knowledge based upon HITS and any knowledge base we outperform the state-of-the-art algorithm AIDA.
+AGDISTIS - Agnostic Named Entity Disambiguation. This projects aimes at delivering a framework for disambiguating a priori annotated named entities. More information about the project can be found here: http://aksw.org/projects/AGDISTIS
 
-##Requirements 
- 
-###General
+## Web Service
 
-Temporary you need the following files to work with the german DBpedia for example:
- * de_surface_forms.tsv   
- * mappingbased_properties_de.nt
- * disambiguations_de.nt  
- * redirects_transitive_de.nt
- * instance_types_de.nt   
- * specific_mappingbased_properties_de.nt
- * labels_de.nt
+We deployed AGDISTIS as a RESTful service reachable via the following command:
 
-Those have to be in a directory that is encoded in the Java variable "dataDirectory".
+curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'&type='agdistis'" http://139.18.2.164:8080/AGDISTIS
 
-###Judgement Agreement
+or
 
-src/main/resources/jdbc.properties contains information about a MySQL database, you need to set this to your mysql database
+curl --data-urlencode "text@test.txt" -d type=agdistis http://139.18.2.164:8080/AGDISTIS
 
-We also deliver the dump called "ned.sql" 
+AGDISTIS also provides also a Wrapper for DBpedia Spotlight. Just change the "type" to "spotlight" instead of "agdistis"
+Please note that every entity you need disambiguated must be recognized beforehand.
 
-This is used for judgement agreement
+## Run your own webservice
 
-###AIDA comparision
-For running the AIDA comparision follow the instruction of installation on: https://github.com/yago-naga/aida
+For running AGDISTIS on your machine go to the root directory and of AGDISTIS and execute
 
-Adapt the following: settings/database_aida.properties accordingly.
+mvn tomcat:run
+
+Now a webservice is running on localhost:8080
+
+## Running from source
+
+The easiest way of running AGDISTIS from source is to have a look at the Java Class /src/test/java/AGDISTISTest.java
+
+
+We hope you will enjoy using AGDISTIS!
