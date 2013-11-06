@@ -114,7 +114,8 @@ public class CandidateUtil {
 		if (redirect.size() == 1) {
 			return redirect.get(0).getObject();
 		} else if (redirect.size() > 1) {
-			log.error("More than one transitive redirect" + candidateURL);
+			//TODO explore that bug
+			log.warn("More than one transitive redirect " + candidateURL);
 			return candidateURL;
 		} else {
 			return candidateURL;
@@ -166,7 +167,7 @@ public class CandidateUtil {
 				}
 			}
 		}
-		if (!added)
+		if (!added&&!searchInSurfaceForms)
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, true);
 	}
 

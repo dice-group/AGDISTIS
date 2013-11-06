@@ -16,7 +16,7 @@ public class TextDisambiguation {
 
 	public static void main(String[] args) throws IOException {
 		String languageTag = "en"; // de
-		File dataDirectory = new File("/data/r.usbeck/indec_dbpedia_39_en"); // "/Users/ricardousbeck";
+		File dataDirectory = new File("/data/r.usbeck/index_dbpedia_39_en"); // "/Users/ricardousbeck";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -37,7 +37,7 @@ public class TextDisambiguation {
 //				bw.write("input: " + TestFile + "\n");
 
 				algo.setMaxDepth(maxDepth);
-				for (double threshholdTrigram = 1; threshholdTrigram > 0.994; threshholdTrigram -= 0.01) {
+				for (double threshholdTrigram = 1; threshholdTrigram > 0.7; threshholdTrigram -= 0.01) {
 					algo.setThreshholdTrigram(threshholdTrigram);
 				
 					Evaluator ev = new Evaluator(languageTag, corpus, algo);

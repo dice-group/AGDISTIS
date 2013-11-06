@@ -35,7 +35,7 @@ public class Evaluator {
 		for (Document document : corpus) {
 			try {
 				System.gc();
-				log.info("Text: " + documentId);
+				log.debug("Text: " + documentId);
 				if (0 < document.getProperty(DocumentText.class).getText().length()) {
 					algo.run(document);
 					NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
@@ -52,22 +52,21 @@ public class Evaluator {
 							}
 							correctVotingURL = algo.getRedirect(correctVotingURL);
 							String disambiguatedURL = algo.getRedirect(algo.findResult(namedEntity));
-							log.info("\t\t" + correctVotingURL + " -> " + disambiguatedURL);
 							if (correctVotingURL.equals(disambiguatedURL)) {
 								tp++;
-								log.info("\t tp: " + correctVotingURL + " -> " + disambiguatedURL);
+								log.debug("\t tp: " + correctVotingURL + " -> " + disambiguatedURL);
 							} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL == null) {
 								fn++;
-								log.info("\t fn: " + correctVotingURL + " -> " + disambiguatedURL);
+								log.debug("\t fn: " + correctVotingURL + " -> " + disambiguatedURL);
 							} else if ((correctVotingURL.startsWith("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL == null) {
 								tn++;
-								log.info("\t tn: " + correctVotingURL + " -> " + disambiguatedURL);
+								log.debug("\t tn: " + correctVotingURL + " -> " + disambiguatedURL);
 							} else if (correctVotingURL.startsWith("http://dbpedia.org/resource/") && disambiguatedURL.startsWith("http://dbpedia.org/resource/") && !(correctVotingURL.equals(disambiguatedURL))) {
 								fp++;
-								log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
+								log.debug("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
 							} else if ((correctVotingURL.startsWith("http://aksw.org/notInWiki") || correctVotingURL.startsWith("http://rdflivenews.aksw.org/resource/")) && disambiguatedURL.startsWith("http://dbpedia.org/resource/")) {
 								fp++;
-								log.info("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
+								log.debug("\t fp: " + correctVotingURL + " -> " + disambiguatedURL);
 							} else {
 								log.error("STRANGE: " + correctVotingURL + " -> " + disambiguatedURL);
 							}

@@ -29,14 +29,14 @@ public class TripleIndex {
 	private Directory directory;
 	private IndexSearcher isearcher;
 	private DirectoryReader ireader;
-	private HashMap<String, List<Triple>> cache;
+//	private HashMap<String, List<Triple>> cache;
 
 	public TripleIndex(File indexDirectory) {
 		try {
 			directory = new MMapDirectory(indexDirectory);
 			ireader = DirectoryReader.open(directory);
 			isearcher = new IndexSearcher(ireader);
-			cache = new HashMap<String, List<Triple>>();
+//			cache = new HashMap<String, List<Triple>>();
 		} catch (IOException e) {
 			log.error(e.getLocalizedMessage());
 		}
@@ -46,9 +46,9 @@ public class TripleIndex {
 		List<Triple> triples = new ArrayList<Triple>();
 		BooleanQuery bq = new BooleanQuery();
 		try {
-			if (cache.containsKey(subject+predicate+object)) {
-				return cache.get(subject+predicate+object);
-			}
+//			if (cache.containsKey(subject+predicate+object)) {
+//				return cache.get(subject+predicate+object);
+//			}
 			log.debug("\t start asking index...");
 			if (subject != null) {
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
@@ -74,7 +74,7 @@ public class TripleIndex {
 				triples.add(new Triple(s, p, o));
 			}
 			log.debug("\t finished asking index...");
-			cache.put(subject+predicate+object, triples);
+//			cache.put(subject+predicate+object, triples);
 		} catch (Exception e) {
 			log.warn(e.getLocalizedMessage() + " -> " + subject);
 		}
