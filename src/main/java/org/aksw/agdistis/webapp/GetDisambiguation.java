@@ -1,5 +1,6 @@
 package org.aksw.agdistis.webapp;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,18 +28,18 @@ public class GetDisambiguation extends ServerResource {
 
 	public GetDisambiguation() {
 		String languageTag = "en"; // de
-		String dataDirectory = "/home/rusbeck/AGDISTIS/";///data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+		File dataDirectory = new File("/home/rusbeck/AGDISTIS/index_dbpedia_39_en");///data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
-		agdistis = new NEDAlgo_HITS(1, languageTag, dataDirectory, nodeType, edgeType);
+		agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
 		spotlight = new NEDSpotlightPoster();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Post
 	public String postText(Representation entity) {  
 		log.info("Start working on Request for AGDISTIS");
-		Representation result = null;  
         // Parse the given representation and retrieve data
         Form form = new Form(entity);  
         String text = form.getFirstValue("text");  

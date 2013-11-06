@@ -1,5 +1,6 @@
 package org.aksw.agdistis.algorithm;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import java.util.HashSet;
 import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
-import org.aksw.agdistis.util.SubjectPredicateObjectIndex;
+import org.aksw.agdistis.util.TripleIndex;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,27 +28,19 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	private String edgeType = null;
 	private String nodeType = null;
 	private CandidateUtil cu = null;
-	private SubjectPredicateObjectIndex index = null;
+	private TripleIndex index = null;
 	private DirectedSparseGraph<Node, String>[] graph = null;
 	// needed for the experiment about which properties increase accuracy
 	private HashSet<String> restrictedEdges = null;
-	private double threshholdTrigram = 0.82;
+	private double threshholdTrigram = 0.95;
 	private int maxDepth = 2;
 
-	@SuppressWarnings("unchecked")
-	public NEDAlgo_HITS(int numberOfDocuments, String languageTag, String dataDirectory, String knowledgeBase, String edgeType) {
-		this.nodeType = knowledgeBase;
-		this.cu = new CandidateUtil(languageTag, dataDirectory, knowledgeBase);
+	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
+		this.nodeType = nodeType;
+		this.edgeType = nodeType;
+		this.cu = new CandidateUtil(indexDirectory);
 		this.index = cu.getIndex();
-		this.graph = new DirectedSparseGraph[numberOfDocuments];
-		this.edgeType = edgeType;
-	}
-
-	public NEDAlgo_HITS(String modelDirectory, String knowledgeBase) {
-		nodeType = knowledgeBase;
-		cu = new CandidateUtil("en", modelDirectory, knowledgeBase);
-		index = cu.getIndex();
-		graph = new DirectedSparseGraph[1];
+		this.graph = new DirectedSparseGraph[1];
 	}
 
 	public void runPreStep(Document document, double threshholdTrigram, int documentId) {
@@ -191,12 +184,6 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.aksw.agdistis.algorithm.DisambiguationAlgorithm#findResult(
-	 * datatypeshelper.utils.doc.ner.NamedEntityInText)
-	 */
 	@Override
 	public String findResult(NamedEntityInText namedEntity) {
 		if (algorithmicResult.containsKey(namedEntity.getStartPos())) {
@@ -208,11 +195,6 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.aksw.agdistis.algorithm.DisambiguationAlgorithm#close()
-	 */
 	@Override
 	public void close() {
 		cu.close();
@@ -226,11 +208,9 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 		return graph;
 	}
 
-
 	public void setThreshholdTrigram(double threshholdTrigram) {
 		this.threshholdTrigram = threshholdTrigram;
 	}
-
 
 	public void setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;

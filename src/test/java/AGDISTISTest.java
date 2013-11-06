@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -14,7 +15,7 @@ import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class AGDISTISTest {
 	String languageTag = "en"; // de
-	String dataDirectory = "/data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+	File dataDirectory = new File("/data/r.usbeck/index_dbpedia_39_en"); // "/home/rusbeck/AGDISTIS/";
 	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -22,16 +23,16 @@ public class AGDISTISTest {
 	public void testUmlaute() throws InterruptedException, IOException {
 		String osumi = "Masaaki Ōsumi";
 		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
-		String movie = "La Seine no Hoshi";
-		String movieURL = "http://dbpedia.org/resource/La_Seine_no_Hoshi";
+		String japan = "Japan";
+		String japanURL = "http://dbpedia.org/resource/Japan";
 
 		HashMap<String, String> correct = new HashMap<String, String>();
 		correct.put(osumi, osumiURL);
-		correct.put(movie, movieURL);
+		correct.put(japan, japanURL);
 
-		String preAnnotatedText = "<entity>" + osumi + "</entity> directed <entity>" + movie + "</entity>.";
+		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(1, languageTag, dataDirectory, nodeType, edgeType);
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
@@ -66,7 +67,7 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(1, languageTag, dataDirectory, nodeType, edgeType);
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(  dataDirectory, nodeType, edgeType);
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);

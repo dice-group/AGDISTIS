@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;

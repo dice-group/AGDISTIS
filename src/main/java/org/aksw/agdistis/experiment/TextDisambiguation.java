@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
+import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,7 @@ public class TextDisambiguation {
 
 	public static void main(String[] args) throws IOException {
 		String languageTag = "en"; // de
-		String dataDirectory = "/data/r.usbeck"; // "/Users/ricardousbeck";
+		File dataDirectory = new File("/data/r.usbeck/indec_dbpedia_39_en"); // "/Users/ricardousbeck";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -28,8 +28,8 @@ public class TextDisambiguation {
 			Corpus corpus = reader.getCorpus();
 			log.info("Corpus size: " + corpus.getNumberOfDocuments());
 
-//			DisambiguationAlgorithm algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, nodeType, edgeType);
-			DisambiguationAlgorithm algo = new NEDAIDADisambiguator();
+			DisambiguationAlgorithm algo = new NEDAlgo_HITS( dataDirectory, nodeType, edgeType);
+//			DisambiguationAlgorithm algo = new NEDAIDADisambiguator();
 //			DisambiguationAlgorithm algo = new NEDSpotlightPoster();
 			
 			for (int maxDepth = 2; maxDepth <= 2; ++maxDepth) {

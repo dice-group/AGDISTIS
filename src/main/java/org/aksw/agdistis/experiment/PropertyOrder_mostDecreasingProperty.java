@@ -29,15 +29,17 @@ public class PropertyOrder_mostDecreasingProperty {
         String PROPERTY_FILE = "propertyOrder.txt";
         String INPUT_FILE = "reuters.xml";
         String languageTag = "en"; // de
-        String dataDirectory = "/data/r.usbeck";
+        File indexDirectory = new File("/data/r.usbeck/index_dbpedia_39_en");
         double threshholdTrigram = 0.835;
+        
         String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
+        String nodeType = "http://dbpedia.org/resource/";
         BufferedWriter bw = new BufferedWriter(new FileWriter("propertyOrder.log"));
 
         // INIT PARAMETERS AND ALGORITHM
         CorpusXmlReader reader = new CorpusXmlReader(new File(INPUT_FILE));
         Corpus corpus = reader.getCorpus();
-        NEDAlgo_HITS algo = new NEDAlgo_HITS(corpus.getNumberOfDocuments(), languageTag, dataDirectory, "http://dbpedia.org/resource/", edgeType);
+        NEDAlgo_HITS algo = new NEDAlgo_HITS( indexDirectory, nodeType,edgeType);
 
         // CALCULATE MOST OFTEN USED PROPERTIES
         Stack<String> mostOftenProperties = loadPropertyOrder(PROPERTY_FILE);

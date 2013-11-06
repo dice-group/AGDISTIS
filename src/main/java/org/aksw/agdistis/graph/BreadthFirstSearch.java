@@ -6,17 +6,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.aksw.agdistis.util.SubjectPredicateObjectIndex;
 import org.aksw.agdistis.util.Triple;
+import org.aksw.agdistis.util.TripleIndex;
 import org.openrdf.repository.RepositoryException;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class BreadthFirstSearch {
 	private static HashMap<String, Node> findNode = new HashMap<String, Node>();
-	private SubjectPredicateObjectIndex index;
+	private TripleIndex index;
 
-	public BreadthFirstSearch(SubjectPredicateObjectIndex index) throws RepositoryException {
+	public BreadthFirstSearch(TripleIndex index) throws RepositoryException {
 		this.index = index;
 	}
 
@@ -30,7 +30,7 @@ public class BreadthFirstSearch {
 			Node currentNode = q.poll();
 			int level = currentNode.getLevel();
 			if (level < maxDepth) {
-				List<Triple> outgoingNodes = index.search(currentNode.getCandidateURI());
+				List<Triple> outgoingNodes = index.search(currentNode.getCandidateURI(),null,null);
 				for (Triple targetNode : outgoingNodes) {
 					if (targetNode.getPredicate().startsWith(edgeType) && targetNode.getObject().startsWith(nodeType)) {
 						int levelNow = level + 1;

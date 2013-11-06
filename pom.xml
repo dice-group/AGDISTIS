@@ -86,7 +86,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
 		<mavenVersion>4.0</mavenVersion>
-		<slf4j.version>1.6.6</slf4j.version>
+		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
@@ -125,16 +125,23 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			 <version>${slf4j.version}</version> 
 		</dependency>
 		<!-- slf4j: Logging Binding -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			 <version>${slf4j.version}</version> 
 		</dependency>
 
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- Jena -->
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
+		</dependency>
+
 		<!-- Sesame -->
 		<dependency>
 
@@ -156,29 +163,24 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
-			<version>4.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.collections</groupId>
-			<artifactId>collections-generic</artifactId>
-			<version>4.01</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
-			<version>4.3.1</version>
+			<version>4.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-queryparser</artifactId>
-			<version>4.3.1</version>
+			<version>4.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+		<dependency>
+	<groupId>org.apache.lucene</groupId>
+	<artifactId>lucene-spellchecker</artifactId>
+	<version>3.6.2</version>
+</dependency>
+            
 		<!-- validating URI -->
 		<dependency>
 			<groupId>commons-validator</groupId>
@@ -208,6 +210,16 @@
 			<version>0.0.1</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/aida.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.collections</groupId>
+			<artifactId>collections-generic</artifactId>
+			<version>4.01</version>
 		</dependency>
 		<!-- REST interface <dependency> <groupId>org.restlet.jse</groupId> <artifactId>org.restlet.ext.simple</artifactId> 
 			<version>2.1.0</version> </dependency> <dependency> <groupId>org.restlet.jse</groupId> 

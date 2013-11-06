@@ -1,5 +1,6 @@
 package org.aksw.agdistis.algorithm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ public class NEDAlgo_wihtoutGraphTechniques {
     private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private CandidateUtil cu;
 
-    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, String dataDirectory, String knowledgeBase) {
-        cu = new CandidateUtil(languageTag, dataDirectory, knowledgeBase);
+    public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, File indexDirectory, String knowledgeBase) {
+        cu = new CandidateUtil(indexDirectory);
     }
 
     public void run(Document document, double threshholdTrigram) {
