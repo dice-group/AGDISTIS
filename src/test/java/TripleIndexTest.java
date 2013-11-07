@@ -78,6 +78,15 @@ public class TripleIndexTest {
 			log.debug(t.toString());
 		}
 	}
+	@Test
+	public void testMultipleTermsPerField() {
+		String candidate = "New York";
+		List<Triple> type = index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", candidate);
+		assertTrue(type.size() > 1);
+		for (Triple t : type) {
+			log.debug(t.toString());
+		}
+	}
 
 	@Test
 	public void testSurfaceFormsDistance() {

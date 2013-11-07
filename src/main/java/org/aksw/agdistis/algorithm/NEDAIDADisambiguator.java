@@ -125,5 +125,9 @@ public class NEDAIDADisambiguator implements DisambiguationAlgorithm {
 	public void setMaxDepth(int maxDepth) {
 		
 	}
+	@Override
+	public double getThreshholdTrigram() {
+		return 0;
+	}
 
 }

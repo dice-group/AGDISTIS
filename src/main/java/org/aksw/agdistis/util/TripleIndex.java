@@ -3,20 +3,28 @@ package org.aksw.agdistis.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
+import org.apache.lucene.util.Version;
 import org.slf4j.LoggerFactory;
 
 public class TripleIndex {
@@ -24,19 +32,20 @@ public class TripleIndex {
 	public String FIELD_NAME_SUBJECT = "subject";
 	public String FIELD_NAME_PREDICATE = "predicate";
 	public String FIELD_NAME_OBJECT = "object";
-	private int numberOfDocsRetrievedFromIndex = 10000;
+	private int numberOfDocsRetrievedFromIndex = 100;
 
 	private Directory directory;
 	private IndexSearcher isearcher;
 	private DirectoryReader ireader;
-//	private HashMap<String, List<Triple>> cache;
+
+	// private HashMap<String, List<Triple>> cache;
 
 	public TripleIndex(File indexDirectory) {
 		try {
 			directory = new MMapDirectory(indexDirectory);
 			ireader = DirectoryReader.open(directory);
 			isearcher = new IndexSearcher(ireader);
-//			cache = new HashMap<String, List<Triple>>();
+			// cache = new HashMap<String, List<Triple>>();
 		} catch (IOException e) {
 			log.error(e.getLocalizedMessage());
 		}
@@ -46,10 +55,14 @@ public class TripleIndex {
 		List<Triple> triples = new ArrayList<Triple>();
 		BooleanQuery bq = new BooleanQuery();
 		try {
-//			if (cache.containsKey(subject+predicate+object)) {
-//				return cache.get(subject+predicate+object);
-//			}
+			// if (cache.containsKey(subject+predicate+object)) {
+			// return cache.get(subject+predicate+object);
+			// }
 			log.debug("\t start asking index...");
+			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
+				// System.out.println("HA");
+				// TODO fix bug here
+			}
 			if (subject != null) {
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
 				bq.add(tq, BooleanClause.Occur.MUST);
@@ -59,9 +72,19 @@ public class TripleIndex {
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
 			if (object != null) {
-				TermQuery tq = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				Query q = null;
+				if (predicate.equals("http://www.w3.org/2000/01/rdf-schema#label") || predicate.equals("http://www.w3.org/2004/02/skos/core#altLabel")) {
+					Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_44);
+					QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT, analyzer);
+					parser.setDefaultOperator(QueryParser.Operator.OR);
+					q = parser.parse(QueryParser.escape(object));
+				} else {
+					q = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
+				}
+				bq.add(q, BooleanClause.Occur.MUST);
 			}
+			// bq.setMinimumNumberShouldMatch(2);
+//			System.out.println(bq);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(numberOfDocsRetrievedFromIndex, true);
 			isearcher.search(bq, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -71,12 +94,14 @@ public class TripleIndex {
 				String s = hitDoc.get(FIELD_NAME_SUBJECT);
 				String p = hitDoc.get(FIELD_NAME_PREDICATE);
 				String o = hitDoc.get(FIELD_NAME_OBJECT);
-				triples.add(new Triple(s, p, o));
+				Triple triple = new Triple(s, p, o);
+				triples.add(triple);
+//				System.out.println(triple);
 			}
 			log.debug("\t finished asking index...");
-//			cache.put(subject+predicate+object, triples);
+			// cache.put(subject+predicate+object, triples);
 		} catch (Exception e) {
-			log.warn(e.getLocalizedMessage() + " -> " + subject);
+			log.error(e.getLocalizedMessage() + " -> " + subject);
 		}
 		return triples;
 	}

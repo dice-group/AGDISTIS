@@ -13,6 +13,8 @@ public interface DisambiguationAlgorithm {
 
 	public abstract void setThreshholdTrigram(double threshholdTrigram);
 
+	public abstract double getThreshholdTrigram();
+
 	public abstract void setMaxDepth(int maxDepth);
 
 	public abstract String getRedirect(String findResult);

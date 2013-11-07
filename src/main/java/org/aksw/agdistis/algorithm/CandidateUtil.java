@@ -114,7 +114,7 @@ public class CandidateUtil {
 		if (redirect.size() == 1) {
 			return redirect.get(0).getObject();
 		} else if (redirect.size() > 1) {
-			//TODO explore that bug
+			// TODO explore that bug
 			log.warn("More than one transitive redirect " + candidateURL);
 			return candidateURL;
 		} else {
@@ -153,6 +153,7 @@ public class CandidateUtil {
 				if (trigramForURLLabel(surfaceForm, label) < threshholdTrigram) {
 					continue;
 				}
+//				System.out.println(label + " -> " + surfaceForm + " : " + candidateURL);
 				// iff it is a disambiguation resource, skip it
 				if (isDisambiguationResource(candidateURL)) {
 					continue;
@@ -167,7 +168,7 @@ public class CandidateUtil {
 				}
 			}
 		}
-		if (!added&&!searchInSurfaceForms)
+		if (!added && !searchInSurfaceForms)
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, true);
 	}
 
@@ -176,6 +177,9 @@ public class CandidateUtil {
 		tmp.addAll(index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", label));
 		if (searchInSurfaceFormsToo)
 			tmp.addAll(index.search(null, "http://www.w3.org/2004/02/skos/core#altLabel", label));
+		for (Triple t : tmp) {
+			log.debug(label + " -> " + t.getObject());
+		}
 		return tmp;
 	}
 

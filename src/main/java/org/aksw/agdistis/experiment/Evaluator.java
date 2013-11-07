@@ -18,7 +18,6 @@ public class Evaluator {
 	private Corpus corpus;
 	private String languageTag;
 	private DisambiguationAlgorithm algo;
-	private double threshholdTrigram;
 
 	private double fmeasure;
 	private double accuracy;
@@ -85,7 +84,7 @@ public class Evaluator {
 		double precision = tp / (tp + fp);
 		double recall = tp / (tp + fn);
 		fmeasure = 2 * ((precision * recall) / (precision + recall));
-		log.error("NED f1: " + fmeasure + " \t" + threshholdTrigram);
+		log.error("NED f1: " + fmeasure + " \t" + algo.getThreshholdTrigram());
 
 	}
 
@@ -149,13 +148,13 @@ public class Evaluator {
 			}
 		}
 		accuracy = t / (t + n);
-		log.error("NED acc: " + accuracy + " \t " + threshholdTrigram);
+		log.error("NED acc: " + accuracy + " \t " + algo.getThreshholdTrigram());
 
 	}
 
 	public void writeAccuracyToFile(BufferedWriter bw) {
 		try {
-			bw.write("NED acc: " + accuracy + "\t" + threshholdTrigram + "\n");
+			bw.write("NED acc: " + accuracy + "\t" + algo.getThreshholdTrigram() + "\n");
 			bw.flush();
 		} catch (IOException e) {
 			log.error(e.getLocalizedMessage());
@@ -164,15 +163,11 @@ public class Evaluator {
 
 	public void writeFmeasureToFile(BufferedWriter bw) {
 		try {
-			bw.write("NED f1: " + fmeasure + "\t" + threshholdTrigram + "\n");
+			bw.write("NED f1: " + fmeasure + "\t" + algo.getThreshholdTrigram() + "\n");
 			bw.flush();
 		} catch (IOException e) {
 			log.error(e.getLocalizedMessage());
 		}
-	}
-
-	public void setThreshholdTrigram(double threshholdTrigram) {
-		this.threshholdTrigram = threshholdTrigram;
 	}
 
 }

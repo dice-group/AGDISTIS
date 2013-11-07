@@ -32,7 +32,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	private DirectedSparseGraph<Node, String>[] graph = null;
 	// needed for the experiment about which properties increase accuracy
 	private HashSet<String> restrictedEdges = null;
-	private double threshholdTrigram = 0.95;
+	private double threshholdTrigram = 0.9;
 	private int maxDepth = 2;
 
 	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
@@ -219,5 +219,10 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	@Override
 	public String getRedirect(String findResult) {
 		return cu.redirect(findResult);
+	}
+
+	@Override
+	public double getThreshholdTrigram() {
+		return this.threshholdTrigram;
 	}
 }

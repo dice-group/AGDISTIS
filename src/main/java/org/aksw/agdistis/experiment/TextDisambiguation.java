@@ -41,7 +41,6 @@ public class TextDisambiguation {
 					algo.setThreshholdTrigram(threshholdTrigram);
 				
 					Evaluator ev = new Evaluator(languageTag, corpus, algo);
-					ev.setThreshholdTrigram(threshholdTrigram);
 					ev.fmeasure();
 					// ev.writeFmeasureToFile(bw);
 					

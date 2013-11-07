@@ -57,7 +57,7 @@ public class NEDSpotlightPoster implements DisambiguationAlgorithm {
 		String textValue = document.getProperty(DocumentText.class).getStringValue().replace("&", "").replace("\"", "'");
 		text += "text=\"" + textValue + "\">\n";
 		for (NamedEntityInText ne : document.getProperty(NamedEntitiesInText.class)) {
-			String namedEntity = textValue.substring(ne.getStartPos(),ne.getEndPos());
+			String namedEntity = textValue.substring(ne.getStartPos(), ne.getEndPos());
 			text += "\t<surfaceForm name=\"" + namedEntity + "\" offset=\"" + (ne.getStartPos()) + "\" />\n";
 		}
 		text += "</annotation>";
@@ -157,4 +157,8 @@ public class NEDSpotlightPoster implements DisambiguationAlgorithm {
 		return findResult;
 	}
 
+	@Override
+	public double getThreshholdTrigram() {
+		return 0;
+	}
 }

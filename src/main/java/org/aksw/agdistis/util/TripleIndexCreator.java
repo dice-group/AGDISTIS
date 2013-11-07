@@ -11,9 +11,11 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -27,15 +29,15 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
-public class IndexCreator {
-	private org.slf4j.Logger log = LoggerFactory.getLogger(IndexCreator.class);
+public class TripleIndexCreator {
+	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreator.class);
 	private String FIELD_NAME_SUBJECT = "subject";
 	private String FIELD_NAME_PREDICATE = "predicate";
 	private String FIELD_NAME_OBJECT = "object";
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
 	public static final String TSV = "tsv";
-	public static final Version LUCENE_VERSION = Version.LUCENE_45;
+	public static final Version LUCENE_VERSION = Version.LUCENE_44;
 
 	private Analyzer analyzer;
 	private DirectoryReader ireader;
@@ -77,13 +79,13 @@ public class IndexCreator {
 			tmp.add(new File(dataDirectory + "/yagoLabels.ttl"));
 			tmp.add(new File(dataDirectory + "/yagoDBpediaInstances.ttl"));
 		}
-		IndexCreator ic = new IndexCreator(tmp, indexDirectory, knowledgeBase);
+		TripleIndexCreator ic = new TripleIndexCreator(tmp, indexDirectory, knowledgeBase);
 		ic.close();
 	}
 
-	public IndexCreator(List<File> files, String idxDirectory, String baseURI ) {
+	public TripleIndexCreator(List<File> files, String idxDirectory, String baseURI ) {
 		try {
-			analyzer = new KeywordAnalyzer();
+			analyzer = new SimpleAnalyzer(LUCENE_VERSION);
 			File indexDirectory = new File(idxDirectory);
 			indexDirectory.mkdir();
 			directory = new MMapDirectory(indexDirectory);
@@ -131,7 +133,7 @@ public class IndexCreator {
 				Document doc = new Document();
 				doc.add(new StringField(FIELD_NAME_SUBJECT, subject, Store.YES));
 				doc.add(new StringField(FIELD_NAME_PREDICATE, "http://www.w3.org/2004/02/skos/core#altLabel", Store.YES));
-				doc.add(new StringField(FIELD_NAME_OBJECT, object, Store.YES));
+				doc.add(new TextField(FIELD_NAME_OBJECT, object, Store.YES));
 				iwriter.addDocument(doc);
 			}
 		}
@@ -144,7 +146,7 @@ public class IndexCreator {
 		log.debug(subject+" "+ predicate + " " +object);
 		doc.add(new StringField(FIELD_NAME_SUBJECT, subject, Store.YES));
 		doc.add(new StringField(FIELD_NAME_PREDICATE, predicate, Store.YES));
-		doc.add(new StringField(FIELD_NAME_OBJECT, object, Store.YES));
+		doc.add(new TextField(FIELD_NAME_OBJECT, object, Store.YES));
 		iwriter.addDocument(doc);
 	}
 
