@@ -7,7 +7,7 @@ AGDISTIS - Agnostic Named Entity Disambiguation. This projects aimes at deliveri
 We deployed AGDISTIS as a RESTful service reachable via the following command:
 
 ```shell
-curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'&type='agdistis'" http://139.18.2.164:8080/AGDISTIS
+curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://139.18.2.164:8080/AGDISTIS
 ```
 or
 ```shell
