@@ -16,6 +16,11 @@ curl --data-urlencode "text@test.txt" -d type=agdistis http://139.18.2.164:8080/
 AGDISTIS also provides also a Wrapper for DBpedia Spotlight. Just change the "type" to "spotlight" instead of "agdistis"
 Please note that every entity you need disambiguated must be recognized beforehand.
 
+## Knowledge Base
+
+The important data for runnning AGDISTIS is stored in a Lucene 4.5.1 Index that can be found
+<a href="http://139.18.2.164/rusbeck/index_dbpedia_39_en.7z">here</a>.
+
 ## Run your own webservice
 
 For running AGDISTIS on your machine go to the root directory and of AGDISTIS and execute
