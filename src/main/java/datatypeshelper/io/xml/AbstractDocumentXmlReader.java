@@ -75,12 +75,15 @@ public abstract class AbstractDocumentXmlReader implements XMLParserObserver {
             namedEntities.clear();
         } else if (tagString.equals(CorpusXmlTagHelper.TEXT_PART_TAG_NAME)) {
             textBuffer.append(data);
+            data = "";
         } else if (tagString.equals(CorpusXmlTagHelper.NAMED_ENTITY_IN_TEXT_TAG_NAME)
                 || tagString.equals(CorpusXmlTagHelper.SIGNED_NAMED_ENTITY_IN_TEXT_TAG_NAME)) {
             if (currentNamedEntity != null) {
                 currentNamedEntity.setLength(data.length());
                 namedEntities.add(currentNamedEntity);
                 textBuffer.append(data);
+                currentNamedEntity = null;
+                data = "";
             }
         } else if (tagString.equals(CorpusXmlTagHelper.DOCUMENT_CATEGORIES_TAG_NAME)) {
             currentDocument.addProperty(new DocumentMultipleCategories(
@@ -88,6 +91,7 @@ public abstract class AbstractDocumentXmlReader implements XMLParserObserver {
             categories.clear();
         } else if (tagString.equals(CorpusXmlTagHelper.DOCUMENT_CATEGORIES_SINGLE_CATEGORY_TAG_NAME)) {
             categories.add(data);
+            data = "";
         } else {
             if (currentDocument != null) {
                 Class<? extends ParseableDocumentProperty> propertyClazz = CorpusXmlTagHelper
@@ -96,6 +100,7 @@ public abstract class AbstractDocumentXmlReader implements XMLParserObserver {
                     try {
                         ParseableDocumentProperty property = propertyClazz.newInstance();
                         property.parseValue(data);
+                        data = "";
                         currentDocument.addProperty(property);
                     } catch (Exception e) {
                         LOGGER.error("Couldn't parse property "

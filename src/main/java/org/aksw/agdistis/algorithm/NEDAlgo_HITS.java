@@ -37,7 +37,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 
 	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
 		this.nodeType = nodeType;
-		this.edgeType = nodeType;
+		this.edgeType = edgeType;
 		this.cu = new CandidateUtil(indexDirectory);
 		this.index = cu.getIndex();
 		this.graph = new DirectedSparseGraph[1];
@@ -140,11 +140,10 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 			cu.insertCandidatesIntoText(graph, document, threshholdTrigram);
 
 			// 1) let spread activation/ breadth first searc run
-			log.debug("\trun BFS");
-
+			log.info("\tGraph size before BFS: " + graph.getVertexCount());
 			BreadthFirstSearch bfs = new BreadthFirstSearch(index);
 			bfs.run(maxDepth, graph, edgeType, nodeType);
-
+			log.info("\tGraph size after BFS: " + graph.getVertexCount());
 			// double lambda = 0.2;
 			// double spreadActivationThreshold = 0.01;
 			// SpreadActivation sa = new SpreadActivation();

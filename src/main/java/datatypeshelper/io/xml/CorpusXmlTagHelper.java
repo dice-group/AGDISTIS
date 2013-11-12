@@ -20,8 +20,10 @@ import datatypeshelper.utils.doc.ner.SignedNamedEntityInText;
 class CorpusXmlTagHelper {
 
     private static List<Class<? extends ParseableDocumentProperty>> registeredProperties = Arrays
-            .asList((Class<? extends ParseableDocumentProperty>) DocumentName.class, DocumentText.class,
-                    DocumentCategory.class, DocumentScore.class);
+            .asList((Class<? extends ParseableDocumentProperty>) DocumentName.class,
+                    (Class<? extends ParseableDocumentProperty>) DocumentText.class,
+                    (Class<? extends ParseableDocumentProperty>) DocumentCategory.class,
+                    (Class<? extends ParseableDocumentProperty>) DocumentScore.class );
 
     public static final String XML_FILE_HEAD = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static final String CORPUS_TAG_NAME = "corpus";

@@ -110,12 +110,14 @@ public class CandidateUtil {
 	}
 
 	public String redirect(String candidateURL) {
+		if(candidateURL==null){
+			return candidateURL;
+		}
 		List<Triple> redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
 		if (redirect.size() == 1) {
 			return redirect.get(0).getObject();
 		} else if (redirect.size() > 1) {
-			// TODO explore that bug
-			log.warn("More than one transitive redirect " + candidateURL);
+			log.error("Candidate: " + candidateURL +" redirect.get(0).getObject(): "+ redirect.get(0).getObject() );
 			return candidateURL;
 		} else {
 			return candidateURL;
