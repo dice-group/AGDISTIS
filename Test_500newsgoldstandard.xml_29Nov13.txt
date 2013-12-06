@@ -1,4 +1,0 @@
-input: datasets/500newsgoldstandard.xml
-NED f1: 0.21104294478527608	0.0
-input: datasets/500newsgoldstandard.xml
-NED f1: 0.12515964240102173	0.0

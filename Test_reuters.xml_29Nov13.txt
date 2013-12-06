@@ -1,4 +1,0 @@
-input: datasets/reuters.xml
-NED f1: 0.19854721549636806	0.0
-input: datasets/reuters.xml
-NED f1: 0.1036662452591656	0.0
