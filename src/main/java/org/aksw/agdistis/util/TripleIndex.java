@@ -70,7 +70,8 @@ public class TripleIndex {
 			}
 			if (object != null) {
 				Query q = null;
-				if (predicate.equals("http://www.w3.org/2000/01/rdf-schema#label") || predicate.equals("http://www.w3.org/2004/02/skos/core#altLabel")) {
+				if ("http://www.w3.org/2000/01/rdf-schema#label".equals(predicate)
+                        || "http://www.w3.org/2004/02/skos/core#altLabel".equals(predicate)) {
 					Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_44);
 					// TODO hack
 					// QueryParser parser = new QueryParser(Version.LUCENE_44,
