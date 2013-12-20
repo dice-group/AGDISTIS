@@ -1,4 +1,4 @@
-package com.unister.semweb.topicmodeling.utils.doc;
+package datatypeshelper.utils.doc;
 
 /**
  * Class DocumentId
