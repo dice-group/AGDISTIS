@@ -10,6 +10,7 @@ import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -71,16 +72,21 @@ public class TripleIndex {
 				Query q = null;
 				if (predicate.equals("http://www.w3.org/2000/01/rdf-schema#label") || predicate.equals("http://www.w3.org/2004/02/skos/core#altLabel")) {
 					Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_44);
-					QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT, analyzer);
+					// TODO hack
+					// QueryParser parser = new QueryParser(Version.LUCENE_44,
+					// FIELD_NAME_OBJECT, analyzer);
+					MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_44, new String[] { "object_literal", "object_uri" }, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.OR);
 					q = parser.parse(QueryParser.escape(object));
 				} else {
-					q = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
+					q = new TermQuery(new Term("object_literal", object));
+					bq.add(q, BooleanClause.Occur.MUST);
+					q = new TermQuery(new Term("object_uri", object));
 				}
 				bq.add(q, BooleanClause.Occur.MUST);
 			}
 			// bq.setMinimumNumberShouldMatch(2);
-//			System.out.println(bq);
+			// System.out.println(bq);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(numberOfDocsRetrievedFromIndex, true);
 			isearcher.search(bq, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -89,10 +95,17 @@ public class TripleIndex {
 				Document hitDoc = isearcher.doc(hits[i].doc);
 				String s = hitDoc.get(FIELD_NAME_SUBJECT);
 				String p = hitDoc.get(FIELD_NAME_PREDICATE);
-				String o = hitDoc.get(FIELD_NAME_OBJECT);
+				// TODO reverse hack
+				String o = null;
+				if (hitDoc.get("object_uri") != null) {
+					o = hitDoc.get("object_uri");
+				}
+				if (hitDoc.get("object_literal") != null) {
+					o = hitDoc.get("object_literal");
+				}
 				Triple triple = new Triple(s, p, o);
 				triples.add(triple);
-//				System.out.println(triple);
+				// System.out.println(triple);
 			}
 			log.debug("\t finished asking index...");
 			// cache.put(subject+predicate+object, triples);

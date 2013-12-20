@@ -18,13 +18,14 @@ public class TextDisambiguation {
 
 	public static void main(String[] args) throws IOException {
 		String languageTag = "en"; // de
-		File dataDirectory = new File("/data/r.usbeck/index_dbpedia_39_en"); // "/Users/ricardousbeck";
+		File dataDirectory = new File("/data/r.usbeck/index"); // "/Users/ricardousbeck";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
-		for (String TestFile : new String[] { "datasets/reuters.xml", "datasets/500newsgoldstandard.xml" }) {
+		for (String TestFile : new String[] { "datasets/reuters.xml" }) {
 			// "german_corpus_new.xml"
-			// "datasets/test.xml", "datasets/AIDACorpus.xml"
+			// "datasets/test.xml", "datasets/reuters.xml",
+			// "datasets/500newsgoldstandard.xml"
 
 			CorpusXmlReader reader = new CorpusXmlReader(new File(TestFile));
 			Corpus corpus = reader.getCorpus();
@@ -34,12 +35,12 @@ public class TextDisambiguation {
 			// DisambiguationAlgorithm algo = new NEDAIDADisambiguator();
 			// DisambiguationAlgorithm algo = new NEDSpotlightPoster();
 
-			for (int maxDepth = 1; maxDepth <= 3; ++maxDepth) {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("Test_" + TestFile.replace("datasets/", "") + "_" + maxDepth + "_12Nov13.txt", true));
+			for (int maxDepth = 2; maxDepth <= 2; ++maxDepth) {
+				BufferedWriter bw = new BufferedWriter(new FileWriter("MichaTest_" + TestFile.replace("datasets/", "") + "_" + maxDepth + "_19Dez2013.txt", true));
 				bw.write("input: " + TestFile + "\n");
 
 				algo.setMaxDepth(maxDepth);
-				for (double threshholdTrigram = 1; threshholdTrigram > 0.0; threshholdTrigram -= 0.01) {
+				for (double threshholdTrigram = 1; threshholdTrigram > 0.5; threshholdTrigram -= 0.01) {
 					algo.setThreshholdTrigram(threshholdTrigram);
 
 					Evaluator ev = new Evaluator(languageTag, corpus, algo);

@@ -77,8 +77,7 @@ public class Evaluator {
 				}
 				documentId++;
 			} catch (Exception e) {
-				log.error("Cound not process doc: " + documentId);
-				log.error(e.getLocalizedMessage());
+				log.error("Cound not process doc: " + documentId,e);
 			}
 		}
 		double precision = tp / (tp + fp);

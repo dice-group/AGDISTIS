@@ -9,3 +9,4 @@ bin/
 AIDA-YAGO2-dataset.tsv
 *.jar
 lib/aida.jar
+*.txt
