@@ -9,17 +9,21 @@ public class Node implements Comparable<Node> {
     private double activation;
     private String candidateURI;
     private int level;
-    private double HubWeight;
-    private double AuthorityWeight;
-	private HashSet<Node> predecessors;
-	private HashSet<Node> successors;
+    private double hubWeightForCalculation = 1;
+    private double authorityWeightForCalculation = 1;
+    private double unnormalizedHubWeight;
+    private double unnormalizedAuthorityWeight;
+    private double hubWeight;
+    private double authorityWeight;
+    private HashSet<Node> predecessors;
+    private HashSet<Node> successors;
 
     public Node(String uri, double activation, int level) {
         this.candidateURI = uri;
         this.activation = activation;
         this.level = level;
-        this.HubWeight = 1;
-        this.AuthorityWeight = 1;
+        this.hubWeight = 1;
+        this.authorityWeight = 1;
         ids = new HashSet<Integer>();
         this.successors = new HashSet<Node>();
         this.predecessors = new HashSet<Node>();
@@ -30,7 +34,7 @@ public class Node implements Comparable<Node> {
         DecimalFormat df = new DecimalFormat("#.####");
         return candidateURI.replace("http://dbpedia.org/resource/", "") + ":" + String.valueOf(df.format(activation))
                 + " H: "
-                + String.valueOf(df.format(HubWeight)) + " A: " + String.valueOf(df.format(AuthorityWeight));
+                + String.valueOf(df.format(hubWeight)) + " A: " + String.valueOf(df.format(authorityWeight));
     }
 
     @Override
@@ -95,20 +99,20 @@ public class Node implements Comparable<Node> {
     }
 
     public double getHubWeight() {
-        return HubWeight;
+        return hubWeight;
     }
 
     public void setAuthorityWeight(double x) {
-        this.AuthorityWeight = x;
+        this.authorityWeight = x;
 
     }
 
     public double getAuthorityWeight() {
-        return AuthorityWeight;
+        return authorityWeight;
     }
 
     public void setHubWeight(double y) {
-        this.HubWeight = y;
+        this.hubWeight = y;
 
     }
 
@@ -116,31 +120,59 @@ public class Node implements Comparable<Node> {
         return ids.toArray(new Integer[ids.size()]);
     }
 
-	public HashSet<Node> getSuccessors() {
-		return successors;
-	}
+    public HashSet<Node> getSuccessors() {
+        return successors;
+    }
 
-	public HashSet<Node> getPredecessors() {
-		return predecessors;
-	}
+    public HashSet<Node> getPredecessors() {
+        return predecessors;
+    }
 
-	public void addPredecessor(Node first) {
-		predecessors.add(first);
-		
-	}
+    public void addPredecessor(Node first) {
+        predecessors.add(first);
+    }
 
-	public void addSuccesor(Node second) {
-		successors.add(second);
-		
-	}
+    public void addSuccesor(Node second) {
+        successors.add(second);
+    }
 
-	public void removeSuccesor(Node right) {
-		successors.remove(right);
-		
-	}
+    public void removeSuccesor(Node right) {
+        successors.remove(right);
+    }
 
-	public void removePredecessor(Node left) {
-		predecessors.remove(left);
-		
-	}
+    public void removePredecessor(Node left) {
+        predecessors.remove(left);
+    }
+
+    public double getHubWeightForCalculation() {
+        return hubWeightForCalculation;
+    }
+
+    public void setHubWeightForCalculation(double hubWeightForCalculation) {
+        this.hubWeightForCalculation = hubWeightForCalculation;
+    }
+
+    public double getAuthorityWeightForCalculation() {
+        return authorityWeightForCalculation;
+    }
+
+    public void setAuthorityWeightForCalculation(double authorityWeightForCalculation) {
+        this.authorityWeightForCalculation = authorityWeightForCalculation;
+    }
+
+    public double getUnnormalizedHubWeight() {
+        return unnormalizedHubWeight;
+    }
+
+    public void setUnnormalizedHubWeight(double unnormalizedHubWeight) {
+        this.unnormalizedHubWeight = unnormalizedHubWeight;
+    }
+
+    public double getUnnormalizedAuthorityWeight() {
+        return unnormalizedAuthorityWeight;
+    }
+
+    public void setUnnormalizedAuthorityWeight(double unnormalizedAuthorityWeight) {
+        this.unnormalizedAuthorityWeight = unnormalizedAuthorityWeight;
+    }
 }
