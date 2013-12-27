@@ -22,8 +22,9 @@ public class TextDisambiguation {
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
-		for (String TestFile : new String[] { "datasets/reuters.xml" }) {
-			// "german_corpus_new.xml"
+		for (String TestFile : new String[] {"datasets/AIDACorpus.xml" }) {
+			//"datasets/AIDACorpus.xml" 
+			// "german_corpus_new.xml"reuters
 			// "datasets/test.xml", "datasets/reuters.xml",
 			// "datasets/500newsgoldstandard.xml"
 
@@ -35,8 +36,8 @@ public class TextDisambiguation {
 			// DisambiguationAlgorithm algo = new NEDAIDADisambiguator();
 			// DisambiguationAlgorithm algo = new NEDSpotlightPoster();
 
-			for (int maxDepth = 2; maxDepth <= 2; ++maxDepth) {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("MichaTest_" + TestFile.replace("datasets/", "") + "_" + maxDepth + "_19Dez2013.txt", true));
+			for (int maxDepth = 1; maxDepth <= 3; ++maxDepth) {
+				BufferedWriter bw = new BufferedWriter(new FileWriter("MichaTest_" + TestFile.replace("datasets/", "") + "_" + maxDepth + "_20Dez2013.txt", true));
 				bw.write("input: " + TestFile + "\n");
 
 				algo.setMaxDepth(maxDepth);
