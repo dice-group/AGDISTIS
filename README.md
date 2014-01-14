@@ -35,3 +35,7 @@ The easiest way of running AGDISTIS from source is to have a look at the Java Cl
 
 
 We hope you will enjoy using AGDISTIS!
+
+## Annotation Tool
+
+The used annotation tool can be downloaded from <a href="https://github.com/RicardoUsbeck/QRTool">here</a>.
