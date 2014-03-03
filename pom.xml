@@ -4,7 +4,7 @@
 	<groupId>org.aksw</groupId>
 	<artifactId>AGDISTIS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<!-- BUILD -->
 	<build>
 		<plugins>
@@ -21,6 +21,19 @@
 				<version>2.1.1</version>
 				<configuration>
 					<attachClasses>true</attachClasses>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.aksw.agdistis.experiment.TextDisambiguation</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 				</configuration>
 			</plugin>
 			<plugin>

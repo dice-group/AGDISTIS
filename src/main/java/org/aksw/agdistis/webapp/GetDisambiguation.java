@@ -7,8 +7,10 @@ import java.util.HashMap;
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
+import org.aksw.agdistis.util.DBPedia;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.openrdf.repository.RepositoryException;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -23,12 +25,24 @@ import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
-	private DisambiguationAlgorithm agdistis;
+	private NEDAlgo_HITS agdistis;
 	private DisambiguationAlgorithm spotlight;
+	private DBPedia dbpedia;
+
+	public GetDisambiguation(String dataDirectory) {
+		File data = new File(dataDirectory);
+		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
+		try {
+			dbpedia = new DBPedia("http://dbpedia.org/sparql");
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+		agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
+	}
 
 	public GetDisambiguation() {
-		String languageTag = "en"; // de
-		File dataDirectory = new File("/home/rusbeck/AGDISTIS/index_dbpedia_39_en");///data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+		File dataDirectory = new File("/home/rusbeck/AGDISTIS/index_dbpedia_39_en");// /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -38,12 +52,12 @@ public class GetDisambiguation extends ServerResource {
 
 	@SuppressWarnings("unchecked")
 	@Post
-	public String postText(Representation entity) {  
+	public String postText(Representation entity) {
 		log.info("Start working on Request for AGDISTIS");
-        // Parse the given representation and retrieve data
-        Form form = new Form(entity);  
-        String text = form.getFirstValue("text");  
-        String type = form.getFirstValue("type");  
+		// Parse the given representation and retrieve data
+		Form form = new Form(entity);
+		String text = form.getFirstValue("text");
+		String type = form.getFirstValue("type");
 		log.info("text: " + text);
 		log.info("type: " + type);
 		JSONArray arr = new org.json.simple.JSONArray();
@@ -79,7 +93,7 @@ public class GetDisambiguation extends ServerResource {
 		StringBuilder sb = new StringBuilder();
 		startpos = preAnnotatedText.indexOf("<entity>", startpos);
 		while (startpos >= 0) {
-			sb.append(preAnnotatedText.substring(endpos,startpos));
+			sb.append(preAnnotatedText.substring(endpos, startpos));
 			startpos += 8;
 			endpos = preAnnotatedText.indexOf("</entity>", startpos);
 			int newStartPos = sb.length();
@@ -108,4 +122,53 @@ public class GetDisambiguation extends ServerResource {
 		}
 		return results;
 	}
+
+	public HashMap<NamedEntityInText, String> processDocument(String subject, String predicate, String object, String preAnnotatedText) {
+		Document d = textToDocument(preAnnotatedText);
+		String domain = getDomain(predicate);
+		String range = getRange(predicate);
+//		System.out.println("domain: " + domain + " range: " + range);
+		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+
+		for (NamedEntityInText namedEntity : namedEntities) {
+			if (namedEntity.getNamedEntityUri().equals(subject)) {
+				namedEntity.setDomain(domain);
+			}
+			if (namedEntity.getNamedEntityUri().equals(object)) {
+				namedEntity.setDomain(range);
+			}
+		}
+		agdistis.run(d);
+
+		namedEntities = d.getProperty(NamedEntitiesInText.class);
+		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = agdistis.findResult(namedEntity);
+			results.put(namedEntity, disambiguatedURL);
+		}
+		return results;
+	}
+
+	private String getRange(String predicate) {
+		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#range> ?o.}";
+		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
+		if (!i.isEmpty())
+			return i.get(0).get(0);
+		else
+			return null;
+	}
+
+	private String getDomain(String predicate) {
+		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#domain> ?o.}";
+		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
+		if (!i.isEmpty())
+			return i.get(0).get(0);
+		else
+			return null;
+	}
+
+	public void close() {
+		agdistis.close();
+	}
+
 }

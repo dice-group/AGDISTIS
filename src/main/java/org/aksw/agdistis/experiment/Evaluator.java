@@ -75,6 +75,7 @@ public class Evaluator {
 				} else {
 					log.error("Text is empty!");
 				}
+				System.gc();
 				documentId++;
 			} catch (Exception e) {
 				log.error("Cound not process doc: " + documentId);

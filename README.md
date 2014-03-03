@@ -2,6 +2,8 @@
 
 AGDISTIS - Agnostic Named Entity Disambiguation. This projects aimes at delivering a framework for disambiguating a priori annotated named entities. More information about the project can be found here: http://aksw.org/projects/AGDISTIS
 
+Supplementary material can be found in the documents folder.
+
 ## Web Service
 
 We deployed AGDISTIS as a RESTful service reachable via the following command:

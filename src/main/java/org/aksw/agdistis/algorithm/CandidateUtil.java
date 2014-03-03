@@ -151,11 +151,14 @@ public class CandidateUtil {
 			String surfaceForm = c.getObject();
 			// rule of thumb: no year numbers in candidates
 			if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
+				//REX: Range similarity for (s,o) and predicate range
+				if(!fitsRangeOfPredicate(candidateURL, knowledgeBase,entity)){
+					continue;
+				}
 				// trigram similarity
 				if (trigramForURLLabel(surfaceForm, label) < threshholdTrigram) {
 					continue;
 				}
-//				System.out.println(label + " -> " + surfaceForm + " : " + candidateURL);
 				// iff it is a disambiguation resource, skip it
 				if (isDisambiguationResource(candidateURL)) {
 					continue;
@@ -218,7 +221,25 @@ public class CandidateUtil {
 	private double trigramForURLLabel(String surfaceForm, String label) {
 		return n.getDistance(surfaceForm, label);
 	}
+	private boolean fitsRangeOfPredicate(String candidateURL, String knowledgeBase, NamedEntityInText entity) {
+		if(entity.getDomain()==null)
+			return true;
+		HashSet<String> whiteList = new HashSet<String>();
+			whiteList.add(entity.getDomain());
+			
 
+		List<Triple> tmp = index.search(candidateURL, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", null);
+		if (tmp.isEmpty())
+			return true;
+		for (Triple triple : tmp) {
+			if (!triple.getObject().contains("wordnet") && !triple.getObject().contains("wikicategory"))
+				log.debug("\ttype: " + triple.getObject());
+			if (whiteList.contains(triple.getObject())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {
 		HashSet<String> whiteList = new HashSet<String>();
 		if ("http://dbpedia.org/resource/".equals(knowledgeBase)) {

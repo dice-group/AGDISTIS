@@ -8,4 +8,7 @@ bin/
 .DS_Store
 AIDA-YAGO2-dataset.tsv
 *.jar
+*.txt
+*.xml
+*.ttl
 lib/aida.jar

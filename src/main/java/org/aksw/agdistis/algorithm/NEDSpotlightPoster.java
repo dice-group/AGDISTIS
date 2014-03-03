@@ -67,7 +67,7 @@ public class NEDSpotlightPoster implements DisambiguationAlgorithm {
 		// System.out.println(urlParameters);
 		String request = "http://spotlight.dbpedia.org/rest/disambiguate";
 		// String request = "http://localhost:2222/rest/disambiguate";
-		// String request =
+//		 String request ="http://200.131.219.34:8080/dbpedia-spotlight-de/rest/disambiguate";
 		// "http://200.131.219.34:8080/dbpedia-spotlight-de/rest/disambiguate";
 		// String request = "http://de.dbpedia.org/spotlight/rest/disambiguate";
 		// String request =
