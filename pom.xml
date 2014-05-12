@@ -138,13 +138,13 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			 <version>${slf4j.version}</version> 
+			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- slf4j: Logging Binding -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			 <version>${slf4j.version}</version> 
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -189,11 +189,11 @@
 			<version>4.4.0</version>
 		</dependency>
 		<dependency>
-	<groupId>org.apache.lucene</groupId>
-	<artifactId>lucene-spellchecker</artifactId>
-	<version>3.6.2</version>
-</dependency>
-            
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-spellchecker</artifactId>
+			<version>3.6.2</version>
+		</dependency>
+
 		<!-- validating URI -->
 		<dependency>
 			<groupId>commons-validator</groupId>
@@ -311,6 +311,10 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.carrotsearch</groupId>
+			<artifactId>hppc</artifactId>
+			<version>0.5.3</version>
+		</dependency>
 	</dependencies>
 </project>

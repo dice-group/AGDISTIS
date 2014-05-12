@@ -12,3 +12,4 @@ AIDA-YAGO2-dataset.tsv
 *.xml
 *.ttl
 lib/aida.jar
+*.txt

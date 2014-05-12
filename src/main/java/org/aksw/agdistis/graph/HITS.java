@@ -37,32 +37,35 @@ public class HITS {
                 g.removeEdge(edge);
             }
         }
+        // x - authority weight
+        // y - hub weight
+        Node n;
         for (int iter = 0; iter < k; iter++) {
             for (Object o : g.getVertices()) {
-                Node m = (Node) o;
+                n = (Node) o;
                 double x = 0;
-                for (Object inc : g.getPredecessors(m)) {
+                for (Object inc : g.getPredecessors(n)) {
                     x += ((Node) inc).getHubWeight();
                 }
                 double y = 0;
-                for (Object inc : g.getSuccessors(m)) {
+                for (Object inc : g.getSuccessors(n)) {
                     y += ((Node) inc).getAuthorityWeight();
                 }
-                m.setAuthorityWeight(x);
-                m.setHubWeight(y);
+                n.setUnnormalizedAuthorityWeight(x * n.getAuthorityWeightForCalculation());
+                n.setUnnormalizedHubWeight(y * n.getHubWeightForCalculation());
             }
             // build normalization
             double sumX = 0;
             double sumY = 0;
-            for (Object m : g.getVertices()) {
-                Node mm = (Node) m;
-                sumX += mm.getAuthorityWeight();
-                sumY += mm.getHubWeight();
+            for (Object o : g.getVertices()) {
+                n = (Node) o;
+                sumX += n.getUnnormalizedAuthorityWeight();
+                sumY += n.getUnnormalizedHubWeight();
             }
-            for (Object m : g.getVertices()) {
-                Node mm = (Node) m;
-                mm.setAuthorityWeight(mm.getAuthorityWeight() / sumX);
-                mm.setHubWeight(mm.getHubWeight() / sumY);
+            for (Object o : g.getVertices()) {
+                n = (Node) o;
+                n.setAuthorityWeight(n.getUnnormalizedAuthorityWeight() / sumX);
+                n.setHubWeight(n.getUnnormalizedHubWeight() / sumY);
             }
         }
     }
