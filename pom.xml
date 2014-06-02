@@ -94,7 +94,7 @@
 	</pluginRepositories>
 	<!-- PROPERTIES -->
 	<properties>
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
@@ -105,11 +105,23 @@
 		<maven>${maven.version}</maven>
 	</prerequisites>
 	<repositories>
+        <repository>
+            <id>maven.aksw.snapshots</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+            <snapshots/>
+        </repository>
 		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.org</url>
 		</repository>
+
+		<!--<repository>-->
+			<!--<id>aduna</id>-->
+			<!--<name>Aduna Software</name>-->
+			<!--<url>http://repo.aduna-software.org/maven2/releases/</url>-->
+		<!--</repository>-->
 		<repository>
 			<id>Apache Repo Central</id>
 			<name>Apache Repository</name>
@@ -145,26 +157,27 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- Jena -->
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
-			<version>2.11.1</version>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
 		</dependency>
 
 		<!-- Sesame -->
 		<dependency>
+
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-runtime</artifactId>
-			<version>2.8.0-beta1</version>
+			<version>2.7.0-beta1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<version>r09</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-turtle</artifactId>
-			<version>2.8.0-beta1</version>
+			<version>2.7.0-beta1</version>
 		</dependency>
 		<!-- for parsing SGML annotated Reuters dataset -->
 		<dependency>
@@ -184,8 +197,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-suggest</artifactId>
-			<version>4.8.0</version>
+			<artifactId>lucene-spellchecker</artifactId>
+			<version>3.6.2</version>
 		</dependency>
 
 		<!-- validating URI -->
@@ -199,6 +212,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.2</version>
 		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+        </dependency>
 		<!-- Jung Graph -->
 		<dependency>
 			<groupId>net.sf.jung</groupId>
@@ -211,13 +229,13 @@
 			</dependency> <dependency> <groupId>de.bluekiwi</groupId> <artifactId>uber-topicmodeling.io</artifactId> 
 			<version>0.0.2-SNAPSHOT</version> <scope>system</scope> <systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath> 
 			</dependency> -->
-		<dependency>
-			<groupId>de.bluekiwi</groupId>
-			<artifactId>aida</artifactId>
-			<version>0.0.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/aida.jar</systemPath>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>de.bluekiwi</groupId>-->
+			<!--<artifactId>aida</artifactId>-->
+			<!--<version>0.0.1</version>-->
+			<!--<scope>system</scope>-->
+			<!--<systemPath>${project.basedir}/lib/aida.jar</systemPath>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -274,7 +292,7 @@
 			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.7.3</version>
+			<version>1.7.2</version>
 		</dependency>
 		<!-- JSON -->
 		<dependency>
@@ -293,6 +311,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
 		<!-- Brics Automatons -->
 		<dependency>
 			<groupId>dk.brics.automaton</groupId>

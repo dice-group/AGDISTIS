@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
+//import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
 import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

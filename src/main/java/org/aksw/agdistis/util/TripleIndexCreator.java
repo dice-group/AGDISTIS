@@ -49,26 +49,26 @@ public class TripleIndexCreator {
 	 *            "http://dbpedia.org/resource/"
 	 * 
 	 * @param languageTag
-	 *            en or de
+	 *            en, de or zh
 	 * @param dataDirectory
 	 *            parent directory of index and dump file directory. E.g.,
 	 *            /data/r.usbeck ---> /data/r.usbeck/index/.., --->
 	 *            /data/r.usbeck/dbpedia_[LANGUAGE]
 	 */
 	public static void main(String args[]) {
-		String knowledgeBase = "http://yago-knowledge.org/resource/";//"http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String languageTag = "en";
-		String indexDirectory = "/data/r.usbeck/index_yago";
-		String dataDirectory = "/data/r.usbeck/yago";//"/Users/ricardousbeck/dbpedia_en";//"/data/r.usbeck/dbpedia_39_data";
+		String knowledgeBase = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		String languageTag = "zh";
+		String indexDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\zh_index";//"/data/r.usbeck/index_yago";
+		String dataDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\zh";//"/data/r.usbeck/yago";//"/Users/ricardousbeck/dbpedia_en";//"/data/r.usbeck/dbpedia_39_data";
 		List<File> tmp = new ArrayList<File>();
 		if ("http://dbpedia.org/resource/".equals(knowledgeBase)) {
 			tmp.add(new File(dataDirectory + "/instance_types_" + languageTag + ".ttl"));
 			tmp.add(new File(dataDirectory + "/mappingbased_properties_" + languageTag + ".ttl"));
 			tmp.add(new File(dataDirectory + "/specific_mappingbased_properties_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/disambiguations_" + languageTag + ".ttl"));
+			//tmp.add(new File(dataDirectory + "/disambiguations_" + languageTag + ".ttl"));
 			tmp.add(new File(dataDirectory + "/labels_" + languageTag + ".ttl"));
 			tmp.add(new File(dataDirectory + "/redirects_transitive_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/" + languageTag + "_surface_forms.tsv"));
+			//tmp.add(new File(dataDirectory + "/" + languageTag + "_surface_forms.tsv"));
 
 		} else {
 			tmp.add(new File(dataDirectory + "/yagoTypes.ttl"));
