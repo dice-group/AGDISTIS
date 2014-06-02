@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
-import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
+//import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.slf4j.Logger;
