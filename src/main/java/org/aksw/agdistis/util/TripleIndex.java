@@ -44,7 +44,7 @@ public class TripleIndex {
 			isearcher = new IndexSearcher(ireader);
 			// cache = new HashMap<String, List<Triple>>();
 		} catch (IOException e) {
-			log.error(e.getLocalizedMessage());
+			log.error(e.getLocalizedMessage(),e);
 		}
 	}
 

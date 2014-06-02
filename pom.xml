@@ -94,34 +94,36 @@
 	</pluginRepositories>
 	<!-- PROPERTIES -->
 	<properties>
+		<autosparql.version>1.0-SNAPSHOT</autosparql.version>
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
 		<mavenVersion>4.0</mavenVersion>
+				<jena.version>2.11.1</jena.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
 	</prerequisites>
 	<repositories>
-        <repository>
-            <id>maven.aksw.snapshots</id>
-            <name>University Leipzig, AKSW Maven2 Repository</name>
-            <url>http://maven.aksw.org/archiva/repository/snapshots</url>
-            <snapshots/>
-        </repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
+			<snapshots />
+		</repository>
 		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.org</url>
 		</repository>
 
-		<!--<repository>-->
-			<!--<id>aduna</id>-->
-			<!--<name>Aduna Software</name>-->
-			<!--<url>http://repo.aduna-software.org/maven2/releases/</url>-->
-		<!--</repository>-->
+		<!--<repository> -->
+		<!--<id>aduna</id> -->
+		<!--<name>Aduna Software</name> -->
+		<!--<url>http://repo.aduna-software.org/maven2/releases/</url> -->
+		<!--</repository> -->
 		<repository>
 			<id>Apache Repo Central</id>
 			<name>Apache Repository</name>
@@ -212,11 +214,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.2</version>
 		</dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-        </dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
 		<!-- Jung Graph -->
 		<dependency>
 			<groupId>net.sf.jung</groupId>
@@ -229,13 +231,13 @@
 			</dependency> <dependency> <groupId>de.bluekiwi</groupId> <artifactId>uber-topicmodeling.io</artifactId> 
 			<version>0.0.2-SNAPSHOT</version> <scope>system</scope> <systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath> 
 			</dependency> -->
-		<!--<dependency>-->
-			<!--<groupId>de.bluekiwi</groupId>-->
-			<!--<artifactId>aida</artifactId>-->
-			<!--<version>0.0.1</version>-->
-			<!--<scope>system</scope>-->
-			<!--<systemPath>${project.basedir}/lib/aida.jar</systemPath>-->
-		<!--</dependency>-->
+		<!--<dependency> -->
+		<!--<groupId>de.bluekiwi</groupId> -->
+		<!--<artifactId>aida</artifactId> -->
+		<!--<version>0.0.1</version> -->
+		<!--<scope>system</scope> -->
+		<!--<systemPath>${project.basedir}/lib/aida.jar</systemPath> -->
+		<!--</dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -311,11 +313,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
-        </dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 		<!-- Brics Automatons -->
 		<dependency>
 			<groupId>dk.brics.automaton</groupId>
@@ -332,6 +334,17 @@
 			<groupId>com.carrotsearch</groupId>
 			<artifactId>hppc</artifactId>
 			<version>0.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.autosparql</groupId>
+			<artifactId>commons</artifactId>
+			<version>${autosparql.version}</version>
+		</dependency>
+		<!-- Sparql -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>${jena.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -14,7 +14,7 @@ public class RexWebappTest {
 		String predicate = "http://dbpedia.org/ontology/team";
 		String preAnnotatedText = "<entity>" + subject + "</entity><entity>" + object + "</entity>.";
 
-		GetDisambiguation algo = new GetDisambiguation("/Users/ricardousbeck/index_dbpedia_en_39");
+		GetDisambiguation algo = new GetDisambiguation("/data/r.usbeck/index_dbpedia_39_en");
 
 		HashMap<NamedEntityInText, String> results = algo.processDocument(subject, predicate, object, preAnnotatedText);
 		for (NamedEntityInText namedEntity : results.keySet()) {

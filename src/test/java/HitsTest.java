@@ -60,7 +60,7 @@ public class HitsTest {
         algo.runHits(g, k);
         for (Object m : g.getVertices()) {
             Node mm = (Node) m;
-            System.out.println(mm.getCandidateURI() + " x: " + mm.getAuthorityWeight() + " y: " + mm.getHubWeight());
+//            System.out.println(mm.getCandidateURI() + " x: " + mm.getAuthorityWeight() + " y: " + mm.getHubWeight());
         }
 
     }
