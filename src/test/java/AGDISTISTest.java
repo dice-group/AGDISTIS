@@ -15,7 +15,7 @@ import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class AGDISTISTest {
 	String languageTag = "en"; // de
-	File dataDirectory = new File("/data/r.usbeck/index_dbpedia_39_en"); // "/home/rusbeck/AGDISTIS/";
+	File dataDirectory = new File("E:\\project\\gsoc2014\\dbpedia3.9\\index_dbpedia_39_en\\"); // "/home/rusbeck/AGDISTIS/";
 	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
