@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
@@ -72,7 +72,7 @@ public class TripleIndex {
 			if (object != null) {
 //                TermQuery tq = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
 //                bq.add(tq, BooleanClause.Occur.MUST);
-                StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
+                WhitespaceAnalyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_44);
                 QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT, analyzer);
                 Query q = parser.parse(object);
                 bq.add(q, BooleanClause.Occur.MUST);

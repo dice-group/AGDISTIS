@@ -57,17 +57,17 @@ public class TripleIndexCreator {
 	 */
 	public static void main(String args[]) {
 		String knowledgeBase = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String languageTag = "en";
-		String indexDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\tmp";//"/data/r.usbeck/index_yago";
-		String dataDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\en";//"/data/r.usbeck/yago";//"/Users/ricardousbeck/dbpedia_en";//"/data/r.usbeck/dbpedia_39_data";
+		String languageTag = "zh";
+		String indexDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\zh_index";//"/data/r.usbeck/index_yago";
+		String dataDirectory = "E:\\project\\gsoc2014\\dbpedia3.9\\zh";//"/data/r.usbeck/yago";//"/Users/ricardousbeck/dbpedia_en";//"/data/r.usbeck/dbpedia_39_data";
 		List<File> tmp = new ArrayList<File>();
 		if ("http://dbpedia.org/resource/".equals(knowledgeBase)) {
-			//tmp.add(new File(dataDirectory + "/instance_types_" + languageTag + ".ttl"));
-			//tmp.add(new File(dataDirectory + "/mappingbased_properties_" + languageTag + ".ttl"));
-			//tmp.add(new File(dataDirectory + "/specific_mappingbased_properties_" + languageTag + ".ttl"));
+			tmp.add(new File(dataDirectory + "/instance_types_" + languageTag + ".ttl"));
+			tmp.add(new File(dataDirectory + "/mappingbased_properties_" + languageTag + ".ttl"));
+			tmp.add(new File(dataDirectory + "/specific_mappingbased_properties_" + languageTag + ".ttl"));
 			//tmp.add(new File(dataDirectory + "/disambiguations_" + languageTag + ".ttl"));
 			tmp.add(new File(dataDirectory + "/labels_" + languageTag + ".ttl"));
-			//tmp.add(new File(dataDirectory + "/redirects_transitive_" + languageTag + ".ttl"));
+			tmp.add(new File(dataDirectory + "/redirects_transitive_" + languageTag + ".ttl"));
 			//tmp.add(new File(dataDirectory + "/" + languageTag + "_surface_forms.tsv"));
 
 		} else {
