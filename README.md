@@ -18,11 +18,15 @@ curl --data-urlencode "text@test.txt" -d type=agdistis http://139.18.2.164:8080/
 AGDISTIS also provides also a Wrapper for DBpedia Spotlight. Just change the "type" to "spotlight" instead of "agdistis"
 Please note that every entity you need disambiguated must be recognized beforehand.
 
-Since July 2014 we also provide a chinese endpoint:
+Since <b>July 2014</b> we also provide a Chinese endpoint:
 ```shell
 curl --data-urlencode "text='The <entity>shanghai</entity> in <entity>北京市</entity>.'" -d type='agdistis' http://139.18.2.164:8080/AGDISTIS_ZH
 ```
 
+and a German endpoint: 
+```shell
+curl --data-urlencode "text='Die Stadt <entity>Dresden</entity> liegt in <entity>Sachsen</entity>.'" -d type='agdistis' http://139.18.2.164:8080/AGDISTIS_DE
+```
 
 ## Knowledge Base
 
