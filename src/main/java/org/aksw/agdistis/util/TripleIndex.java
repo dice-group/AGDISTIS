@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
@@ -69,22 +70,29 @@ public class TripleIndex {
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
 			if (object != null) {
-				Query q = null;
-				if ("http://www.w3.org/2000/01/rdf-schema#label".equals(predicate)
-                        || "http://www.w3.org/2004/02/skos/core#altLabel".equals(predicate)) {
-					Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_44);
-					// TODO hack
-					// QueryParser parser = new QueryParser(Version.LUCENE_44,
-					// FIELD_NAME_OBJECT, analyzer);
-					MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_44, new String[] { "object_literal", "object_uri" }, analyzer);
-					parser.setDefaultOperator(QueryParser.Operator.OR);
-					q = parser.parse(QueryParser.escape(object));
-				} else {
-					q = new TermQuery(new Term("object_literal", object));
-					bq.add(q, BooleanClause.Occur.MUST);
-					q = new TermQuery(new Term("object_uri", object));
-				}
-				bq.add(q, BooleanClause.Occur.MUST);
+//                TermQuery tq = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
+//                bq.add(tq, BooleanClause.Occur.MUST);
+                WhitespaceAnalyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_44);
+                QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT, analyzer);
+                Query q = parser.parse(object);
+                bq.add(q, BooleanClause.Occur.MUST);
+
+//				Query q = null;
+//				if ("http://www.w3.org/2000/01/rdf-schema#label".equals(predicate)
+//                        || "http://www.w3.org/2004/02/skos/core#altLabel".equals(predicate)) {
+//					Analyzer analyzer = new SimpleAnalyzer(Version.LUCENE_44);
+//					// TODO hack
+//					// QueryParser parser = new QueryParser(Version.LUCENE_44,
+//					// FIELD_NAME_OBJECT, analyzer);
+//					MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_44, new String[] { "object_literal", "object_uri" }, analyzer);
+//					parser.setDefaultOperator(QueryParser.Operator.OR);
+//					q = parser.parse(QueryParser.escape(object));
+//				} else {
+//					q = new TermQuery(new Term("object_literal", object));
+//					bq.add(q, BooleanClause.Occur.MUST);
+//					q = new TermQuery(new Term("object_uri", object));
+//				}
+//				bq.add(q, BooleanClause.Occur.MUST);
 			}
 			// bq.setMinimumNumberShouldMatch(2);
 			// System.out.println(bq);
@@ -97,7 +105,9 @@ public class TripleIndex {
 				String s = hitDoc.get(FIELD_NAME_SUBJECT);
 				String p = hitDoc.get(FIELD_NAME_PREDICATE);
 				// TODO reverse hack
-				String o = null;
+				//String o = null;
+                String o = hitDoc.get(FIELD_NAME_OBJECT);
+
 				if (hitDoc.get("object_uri") != null) {
 					o = hitDoc.get("object_uri");
 				}

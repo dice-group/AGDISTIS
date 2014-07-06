@@ -20,7 +20,7 @@
 				that these strategies pay off academically , ''
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/American_Civil_Liberties_Union">ACLU</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/American_Civil_Liberties_Union">ACLU</NamedEntityInText>
 			<SimpleTextPart> attorney </SimpleTextPart>
 			<NamedEntityInText uri="rln:Sarah_Rogers">Sarah Rogers
 			</NamedEntityInText>
@@ -35,7 +35,7 @@
 				''
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/American_Civil_Liberties_Union">ACLU</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/American_Civil_Liberties_Union">ACLU</NamedEntityInText>
 			<SimpleTextPart> lawyer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Catherine_Crump">Catherine Crump
 			</NamedEntityInText>
@@ -101,7 +101,7 @@
 			<SimpleTextPart>`` We put in eight more along with security around
 				the door , '' he tells
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Action_News">Action News
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Action_News">Action News
 			</NamedEntityInText>
 			<SimpleTextPart> reporter </SimpleTextPart>
 			<NamedEntityInText uri="rln:Ryan_Simms">Ryan Simms
@@ -112,7 +112,7 @@
 	<Document id="8">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Yang even had his daughter take </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Sheldon_Adelson">Adelson</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Sheldon_Adelson">Adelson</NamedEntityInText>
 			<SimpleTextPart> 's wife , </SimpleTextPart>
 			<NamedEntityInText uri="rln:Miriam_Adelson">Miriam</NamedEntityInText>
 			<SimpleTextPart> , shopping when she was in Beijing .
@@ -147,7 +147,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Russia 's ITAR-Tass news agency quoted
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Aeroflot">Aeroflot</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Aeroflot">Aeroflot</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Irina_Dannenberg">Irina Dannenberg
 			</NamedEntityInText>
@@ -170,7 +170,7 @@
 	<Document id="13">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The commander told me that after </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Al-Shabaab">Al Shabaab
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Al-Shabaab">Al Shabaab
 			</NamedEntityInText>
 			<SimpleTextPart> withdrew from </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mogadishu">Mogadishu
@@ -186,7 +186,7 @@
 				friends , Justin Thomas beat fellow University of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/University_of_Alabama">Alabama</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/University_of_Alabama">Alabama</NamedEntityInText>
 			<SimpleTextPart> player </SimpleTextPart>
 			<NamedEntityInText uri="rln:Bobby_Wyatt">Bobby Wyatt
 			</NamedEntityInText>
@@ -274,7 +274,7 @@
 	<Document id="21">
 		<TextWithNamedEntities>
 			<SimpleTextPart>It 's interesting to note that </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Amazon.com">Amazon</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Amazon.com">Amazon</NamedEntityInText>
 			<SimpleTextPart> founder </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jeff_Bezos">Jeff Bezos
 			</NamedEntityInText>
@@ -289,7 +289,7 @@
 			<SimpleTextPart>Blue Origin , a Kent , Wash.-based start-up , is
 				backed by
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Amazon.com">Amazon</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Amazon.com">Amazon</NamedEntityInText>
 			<SimpleTextPart> founder </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jeff_Bezos">Jeff Bezos
 			</NamedEntityInText>
@@ -299,7 +299,7 @@
 	<Document id="23">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The People Should Decide , backed by </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Ambassador_Bridge">Ambassador Bridge
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Ambassador_Bridge">Ambassador Bridge
 			</NamedEntityInText>
 			<SimpleTextPart> owner </SimpleTextPart>
 			<NamedEntityInText uri="rln:Manuel_Moroun">Matty Maroun
@@ -328,7 +328,7 @@
 				diplomat carried them outside and dumped them on the sidewalk ,
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Amnesty_International">Amnesty International</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Amnesty_International">Amnesty International</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Sharon_Singh">Sharon Singh
 			</NamedEntityInText>
@@ -342,7 +342,7 @@
 				, and the Czech Republic 's
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Andrea_Hlav%C3%A1%C4%8Dkov%C3%A1">Andrea Hlavackova</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Andrea_Hlav%C3%A1%C4%8Dkov%C3%A1">Andrea Hlavackova</NamedEntityInText>
 			<SimpleTextPart> defeated </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bethanie_Mattek-Sands">Bethanie Mattek-Sands
 			</NamedEntityInText>
@@ -379,7 +379,7 @@
 	<Document id="29">
 		<TextWithNamedEntities>
 			<SimpleTextPart>No. 5 </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Angelique_Kerber">Angelique Kerber
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Angelique_Kerber">Angelique Kerber
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:T%C3%ADmea_Babos">Timea Babos
@@ -405,7 +405,7 @@
 	<Document id="31">
 		<TextWithNamedEntities>
 			<SimpleTextPart>That included 330,000 </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Appalachian_Power">Appalachian Power
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Appalachian_Power">Appalachian Power
 			</NamedEntityInText>
 			<SimpleTextPart> customers in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:West_Virginia">West Virginia
@@ -418,7 +418,7 @@
 			<SimpleTextPart>CHARLESTON , W. Va. -- After the June 29 `` super
 				derecho , '' a record 573,000
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Appalachian_Power">Appalachian Power
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Appalachian_Power">Appalachian Power
 			</NamedEntityInText>
 			<SimpleTextPart> customers in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:West_Virginia">West Virginia
@@ -430,7 +430,7 @@
 	<Document id="33">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The co-founder of </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Steve_Jobs">Apple Inc.
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Steve_Jobs">Apple Inc.
 			</NamedEntityInText>
 			<SimpleTextPart> died in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:October">October</NamedEntityInText>
@@ -442,7 +442,7 @@
 			<SimpleTextPart>`` I see risk here for both sides ; I think it 's at
 				least worth one more chance , '' Koh said , while asking that
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Tim_Cook">Tim Cook</NamedEntityInText>
 			<SimpleTextPart> and Samsung boss Kwon Oh-hyun personally connect to
@@ -453,7 +453,7 @@
 	<Document id="35">
 		<TextWithNamedEntities>
 			<SimpleTextPart>An Oct. 5 , 2011 , photo shows </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
 			<SimpleTextPart> founder </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Steve_Jobs">Steve Jobs
 			</NamedEntityInText>
@@ -462,7 +462,7 @@
 	</Document>
 	<Document id="36">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Apple_Inc.">Apple</NamedEntityInText>
 			<SimpleTextPart> lawyer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Bill_Lee">Bill Lee</NamedEntityInText>
 			<SimpleTextPart> went after Yang , noting that none of the inventors
@@ -479,7 +479,7 @@
 				equally as rewarding , according to former
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Argentina_national_football_team">Argentina</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Argentina_national_football_team">Argentina</NamedEntityInText>
 			<SimpleTextPart> captain </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Agust%C3%ADn_Pichot">Agustin Pichot
 			</NamedEntityInText>
@@ -489,7 +489,7 @@
 	<Document id="38">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Previous article </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arizona_Cardinals">Arizona Cardinals
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arizona_Cardinals">Arizona Cardinals
 			</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Larry_Fitzgerald">Larry Fitzgerald
@@ -501,7 +501,7 @@
 	</Document>
 	<Document id="39">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Martin_Dempsey">Army Gen. Martin Dempsey
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Martin_Dempsey">Army Gen. Martin Dempsey
 			</NamedEntityInText>
 			<SimpleTextPart> , chairman of the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Joint_Chiefs_of_Staff">Joint Chiefs
@@ -515,7 +515,7 @@
 	</Document>
 	<Document id="40">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Martin_Dempsey">Army Gen. Martin Dempsey
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Martin_Dempsey">Army Gen. Martin Dempsey
 			</NamedEntityInText>
 			<SimpleTextPart> , chairman of the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Joint_Chiefs_of_Staff">Joint Chiefs
@@ -531,7 +531,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Speaking alongside Panetta at the briefing ,
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Martin_Dempsey">Army General Martin E.
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Martin_Dempsey">Army General Martin E.
 				Dempsey
 			</NamedEntityInText>
 			<SimpleTextPart> , chairman of the </SimpleTextPart>
@@ -544,7 +544,7 @@
 	</Document>
 	<Document id="42">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arthur_Caplan">Arthur Caplan
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arthur_Caplan">Arthur Caplan
 			</NamedEntityInText>
 			<SimpleTextPart> , the director of the </SimpleTextPart>
 			<NamedEntityInText
@@ -572,7 +572,7 @@
 	</Document>
 	<Document id="44">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:David_Runk">David Runk
@@ -583,7 +583,7 @@
 	</Document>
 	<Document id="45">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jeff_Barnard">Jeff Barnard
@@ -593,7 +593,7 @@
 	</Document>
 	<Document id="46">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Julie_Pace">Julie Pace
@@ -603,7 +603,7 @@
 	</Document>
 	<Document id="47">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Kasie_Hunt">Kasie Hunt
@@ -614,7 +614,7 @@
 	</Document>
 	<Document id="48">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Sameer_N._Yacoub">Sameer N. Yacoub
@@ -624,7 +624,7 @@
 	</Document>
 	<Document id="49">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writer </SimpleTextPart>
 			<NamedEntityInText uri="rln:Steve_Peoples">Steve Peoples
@@ -634,7 +634,7 @@
 	</Document>
 	<Document id="50">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writers </SimpleTextPart>
 			<NamedEntityInText uri="rln:Asif_Shahzad">Asif Shahzad
@@ -646,7 +646,7 @@
 	</Document>
 	<Document id="51">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writers </SimpleTextPart>
 			<NamedEntityInText uri="rln:Eric_Tucker">Eric Tucker
@@ -659,7 +659,7 @@
 	</Document>
 	<Document id="52">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writers </SimpleTextPart>
 			<NamedEntityInText uri="rln:Frank_Bajak">Frank Bajak
@@ -672,7 +672,7 @@
 	</Document>
 	<Document id="53">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writers </SimpleTextPart>
 			<NamedEntityInText uri="rln:Gonzalo_Solano">Gonzalo Solano
@@ -685,7 +685,7 @@
 	</Document>
 	<Document id="54">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Associated_Press">Associated Press
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Associated_Press">Associated Press
 			</NamedEntityInText>
 			<SimpleTextPart> writers </SimpleTextPart>
 			<NamedEntityInText uri="rln:Seth_Borenstein">Seth Borenstein
@@ -698,7 +698,7 @@
 	<Document id="55">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The Champions , who live in the </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Atlanta">Atlanta</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Atlanta">Atlanta</NamedEntityInText>
 			<SimpleTextPart> suburb of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Decatur,_Georgia">Decatur</NamedEntityInText>
 			<SimpleTextPart> , Ga. , in their lawsuit claim university officials
@@ -712,7 +712,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>But if you ask </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Bay_Area_Laboratory_Co-operative">BALCO</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Bay_Area_Laboratory_Co-operative">BALCO</NamedEntityInText>
 			<SimpleTextPart> founder </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Victor_Conte">Victor Conte
 			</NamedEntityInText>
@@ -724,7 +724,7 @@
 	<Document id="57">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Apo Ville is lead by Former </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/BIMP-EAGA">BIMP-EAGA Mountain Bike
+			<NamedEntityInText uri="http:/dbpedia.org/resource/BIMP-EAGA">BIMP-EAGA Mountain Bike
 			</NamedEntityInText>
 			<SimpleTextPart> champion </SimpleTextPart>
 			<NamedEntityInText uri="rln:Hilario_Ladra">Hilario Ladra
@@ -737,7 +737,7 @@
 	<Document id="58">
 		<TextWithNamedEntities>
 			<SimpleTextPart>He was passed by </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/BMC_Racing_Team">BMC</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/BMC_Racing_Team">BMC</NamedEntityInText>
 			<SimpleTextPart> teammate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Tejay_van_Garderen">Van Garderen
 			</NamedEntityInText>
@@ -749,7 +749,7 @@
 	<Document id="59">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Substitute </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Baf%C3%A9timbi_Gomis">Bafetimbi Gomis
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Baf%C3%A9timbi_Gomis">Bafetimbi Gomis
 			</NamedEntityInText>
 			<SimpleTextPart> led </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:France_national_football_team">France</NamedEntityInText>
@@ -761,7 +761,7 @@
 	</Document>
 	<Document id="60">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Bob_Baffert">Baffert</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Bob_Baffert">Baffert</NamedEntityInText>
 			<SimpleTextPart> won the </SimpleTextPart>
 			<NamedEntityInText uri="rln:Haskell_Invitational_Stakes">Haskell</NamedEntityInText>
 			<SimpleTextPart> with Coil last year , and with Lookin At Lucky in
@@ -775,7 +775,7 @@
 				twice and drove in four runs , Omar Quintanilla also went deep , and
 				the
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Baltimore_Orioles">Baltimore Orioles
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Baltimore_Orioles">Baltimore Orioles
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Josh_Beckett">Josh Beckett
@@ -789,7 +789,7 @@
 			<SimpleTextPart>Mark Reynolds homered twice and drove in four runs ,
 				Omar Quintanilla also went deep , and
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Baltimore_Orioles">Baltimore
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Baltimore_Orioles">Baltimore
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Josh_Beckett">Josh Beckett
@@ -802,7 +802,7 @@
 			<SimpleTextPart>-LRB- AP Photo\/Nick Wass -RRB- Mark Reynolds homered
 				twice and drove in four runs , Omar Quintanilla also went deep , and
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Baltimore_Orioles">Baltimore
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Baltimore_Orioles">Baltimore
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Josh_Beckett">Josh Beckett
@@ -815,7 +815,7 @@
 			<SimpleTextPart>Video showed someone walking or running away from the
 				fire ,
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Bangor,_Iowa">Bangor</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Bangor,_Iowa">Bangor</NamedEntityInText>
 			<SimpleTextPart> police </SimpleTextPart>
 			<NamedEntityInText uri="rln:Paul_Edwards">Sgt. Paul Edwards
 			</NamedEntityInText>
@@ -824,7 +824,7 @@
 	</Document>
 	<Document id="65">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Bangor,_Iowa">Bangor</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Bangor,_Iowa">Bangor</NamedEntityInText>
 			<SimpleTextPart> police </SimpleTextPart>
 			<NamedEntityInText uri="rln:Paul_Edwards">Sgt. Paul Edwards
 			</NamedEntityInText>
@@ -881,7 +881,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>US and British regulators have already fined
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Barclays">Barclays</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Barclays">Barclays</NamedEntityInText>
 			<SimpleTextPart> , based in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Great_Britain">Britain</NamedEntityInText>
 			<SimpleTextPart> , US$ 453 million for submitting false information
@@ -895,7 +895,7 @@
 			<SimpleTextPart>`` The worst of the -LRB- housing -RRB- crisis is
 				behind us , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Barclays">Barclays</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Barclays">Barclays</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Alan_Rifkin">Alan Rifkin
 			</NamedEntityInText>
@@ -907,7 +907,7 @@
 	<Document id="71">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/San_Francisco_%E2%80%93_Oakland_Bay_Bridge">Bay Bridge</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/San_Francisco_%E2%80%93_Oakland_Bay_Bridge">Bay Bridge</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Bart_Ney">Bart Ney</NamedEntityInText>
 			<SimpleTextPart> and Caltrans chief bridge engineer Brian Maroney
@@ -1040,7 +1040,7 @@
 				construction sector '' `` We chose to partner with NSC because it is
 				one of the world 's largest and most innovative steel companies , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/BlueScope_Steel">Bluescope
+			<NamedEntityInText uri="http:/dbpedia.org/resource/BlueScope_Steel">Bluescope
 			</NamedEntityInText>
 			<SimpleTextPart> chief executive </SimpleTextPart>
 			<NamedEntityInText uri="rln:Paul_O%E2%80%99Malley">Paul O’Malley
@@ -1161,7 +1161,7 @@
 				team ownership in late July to express their dissatisfaction with
 				manager
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Bobby_Valentine">Bobby Valentine
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Bobby_Valentine">Bobby Valentine
 			</NamedEntityInText>
 			<SimpleTextPart> , according to </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Yahoo!">Yahoo</NamedEntityInText>
@@ -1172,7 +1172,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Pretorius was named `` medical commander '' in
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boeremag">Boeremag</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boeremag">Boeremag</NamedEntityInText>
 			<SimpleTextPart> leader </SimpleTextPart>
 			<NamedEntityInText uri="rln:Mike_du_Toit">Mike du Toit
 			</NamedEntityInText>
@@ -1186,7 +1186,7 @@
 			<SimpleTextPart>`` Anecdotal studies say free Wi-Fi may have an
 				overall negative effect on airport revenue , '' explains
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boingo_Wireless">Boingo Wireless
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boingo_Wireless">Boingo Wireless
 			</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Christian_Gunning">Christian Gunning
@@ -1209,7 +1209,7 @@
 	</Document>
 	<Document id="94">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Bologna">Bologna</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Bologna">Bologna</NamedEntityInText>
 			<SimpleTextPart> president </SimpleTextPart>
 			<NamedEntityInText uri="rln:Claudio_Sabatini">Claudio Sabatini
 			</NamedEntityInText>
@@ -1233,7 +1233,7 @@
 	</Document>
 	<Document id="96">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston Red Sox
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston Red Sox
 			</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bobby_Valentine">Bobby Valentine
@@ -1246,7 +1246,7 @@
 	</Document>
 	<Document id="97">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston Red Sox
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston Red Sox
 			</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bobby_Valentine">Bobby Valentine
@@ -1262,7 +1262,7 @@
 			<SimpleTextPart>Pesky died just more than a week after his final
 				visit to Fenway , on Aug. 5 when
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
 			<SimpleTextPart> beat the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Minnesota_Twins">Minnesota
 			</NamedEntityInText>
@@ -1271,7 +1271,7 @@
 	</Document>
 	<Document id="99">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bobby_Valentine">Bobby Valentine
 			</NamedEntityInText>
@@ -1284,7 +1284,7 @@
 			<SimpleTextPart>No longer are the Yankees baseball 's `` Evil Empire
 				, '' as
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
 			<SimpleTextPart> president </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Larry_Lucchino">Larry Lucchino
 			</NamedEntityInText>
@@ -1298,7 +1298,7 @@
 			<SimpleTextPart>NOTES : A moment of silence was observed before the
 				game for former
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Boston_Red_Sox">Boston</NamedEntityInText>
 			<SimpleTextPart> star </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Johnny_Pesky">Johnny Pesky
 			</NamedEntityInText>
@@ -1308,7 +1308,7 @@
 	<Document id="102">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Six-time Pro </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Pro_Bowl">Bowl</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Pro_Bowl">Bowl</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Chad_Johnson_(cornerback)">Chad Johnson
 			</NamedEntityInText>
@@ -1322,7 +1322,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>FLAGSTAFF , Ariz. -- No sooner had six-time Pro
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Pro_Bowl">Bowl</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Pro_Bowl">Bowl</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Larry_Fitzgerald">Larry Fitzgerald
 			</NamedEntityInText>
@@ -1338,7 +1338,7 @@
 			<SimpleTextPart>`` My guess is that most people on Team Jolie would
 				not be focusing on the fact that
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Brad_Pitt">Brad Pitt
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Brad_Pitt">Brad Pitt
 			</NamedEntityInText>
 			<SimpleTextPart> left </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jennifer_Aniston">Jennifer Aniston
@@ -1406,7 +1406,7 @@
 	</Document>
 	<Document id="109">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Nancy_Brinker">Brinker</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Nancy_Brinker">Brinker</NamedEntityInText>
 			<SimpleTextPart> praised </SimpleTextPart>
 			<NamedEntityInText uri="rln:Thompson">Thompson</NamedEntityInText>
 			<SimpleTextPart> 's work in expanding Komen 's influence in
@@ -1416,7 +1416,7 @@
 	</Document>
 	<Document id="110">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/British_Airways">British Airways
+			<NamedEntityInText uri="http:/dbpedia.org/resource/British_Airways">British Airways
 			</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Michele_Kropf">Michele Kropf
@@ -1468,7 +1468,7 @@
 	<Document id="114">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Kenny Smith did n't blame </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chicago_Bulls">Bulls</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chicago_Bulls">Bulls</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Tom_Thibodeau">Tom Thibodeau
 			</NamedEntityInText>
@@ -1502,7 +1502,7 @@
 	<Document id="117">
 		<TextWithNamedEntities>
 			<SimpleTextPart>That 's good , because </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/CBS_Sports">CBS Sports
+			<NamedEntityInText uri="http:/dbpedia.org/resource/CBS_Sports">CBS Sports
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Boomer_Esiason">Boomer Esiason
@@ -1515,7 +1515,7 @@
 	<Document id="118">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The next call went to </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/CBS">CBS</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/CBS">CBS</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Leslie_Moonves">Leslie Moonves
 			</NamedEntityInText>
@@ -1529,7 +1529,7 @@
 			<SimpleTextPart>`` As a matter of long-standing corporate policy ,
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Corrections_Corporation_of_America">CCA</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Corrections_Corporation_of_America">CCA</NamedEntityInText>
 			<SimpleTextPart> does not lobby on issues that would determine the
 				basis for an individual 's detention or incarceration , '' CCA
 				spokesman
@@ -1557,7 +1557,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Angered by the FBI 's success , </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Central_Intelligence_Agency">CIA</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Central_Intelligence_Agency">CIA</NamedEntityInText>
 			<SimpleTextPart> director </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:George_Tenet">George Tenet
 			</NamedEntityInText>
@@ -1572,7 +1572,7 @@
 			<SimpleTextPart>Samsung recently launched Samsung Music Hub here in
 				the U.S. Again ,
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/CNET">CNET</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/CNET">CNET</NamedEntityInText>
 			<SimpleTextPart> editor </SimpleTextPart>
 			<NamedEntityInText uri="rln:Lynn_La">Lynn La</NamedEntityInText>
 			<SimpleTextPart> and I both tested the app on our own before coming
@@ -1583,7 +1583,7 @@
 	<Document id="123">
 		<TextWithNamedEntities>
 			<SimpleTextPart>But , </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/CNN">CNN</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/CNN">CNN</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jonathan_Klein_(CNN)">Jon Klein
 			</NamedEntityInText>
@@ -1595,7 +1595,7 @@
 	<Document id="124">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/China_National_Offshore_Oil_Corporation">CNOOC</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/China_National_Offshore_Oil_Corporation">CNOOC</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Wang_Yilin">Wang Yilin
 			</NamedEntityInText>
@@ -1623,7 +1623,7 @@
 	</Document>
 	<Document id="126">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/California">California
+			<NamedEntityInText uri="http:/dbpedia.org/resource/California">California
 			</NamedEntityInText>
 			<SimpleTextPart> state </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Leland_Yee">Sen. Leland Yee
@@ -1654,7 +1654,7 @@
 				moving forward , '' said GM of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/General_Motors_Canada">Canada</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/General_Motors_Canada">Canada</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Adria_MacKenzie">Adria MacKenzie
 			</NamedEntityInText>
@@ -1710,7 +1710,7 @@
 	<Document id="132">
 		<TextWithNamedEntities>
 			<SimpleTextPart>That chip might be courtesy of </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arizona_Cardinals">Cardinals
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arizona_Cardinals">Cardinals
 			</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Ken_Whisenhunt">Ken Whisenhunt
@@ -1723,7 +1723,7 @@
 	<Document id="133">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Instead the </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arizona_Cardinals">Cardinals
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arizona_Cardinals">Cardinals
 			</NamedEntityInText>
 			<SimpleTextPart> left </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Daytona_Beach,_Florida">Daytona</NamedEntityInText>
@@ -1747,7 +1747,7 @@
 	</Document>
 	<Document id="135">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Carolina_Panthers">Carolina</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Carolina_Panthers">Carolina</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="rln:Steve_Smith_(wide_receiver,_born_1979)">Steve Smith
 			</NamedEntityInText>
@@ -1773,7 +1773,7 @@
 	<Document id="137">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Carroll_College_(Montana)">Carroll College</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Carroll_College_(Montana)">Carroll College</NamedEntityInText>
 			<SimpleTextPart> head coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mike_Van_Diest">Mike Van Diest
 			</NamedEntityInText>
@@ -1795,7 +1795,7 @@
 	</Document>
 	<Document id="139">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Cecile_Richards">Cecile Richards
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Cecile_Richards">Cecile Richards
 			</NamedEntityInText>
 			<SimpleTextPart> , president of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Planned_Parenthood">Planned Parenthood
@@ -1871,7 +1871,7 @@
 	</Document>
 	<Document id="145">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Charles_Aznavour">Charles Aznavour
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Charles_Aznavour">Charles Aznavour
 			</NamedEntityInText>
 			<SimpleTextPart> arrived in </SimpleTextPart>
 			<NamedEntityInText uri="rln:Georgia_(country)">Georgia</NamedEntityInText>
@@ -1885,7 +1885,7 @@
 			<SimpleTextPart>`` The team went to the Olympics and we were n't sure
 				what would happen , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Charles_Elachi">Charles Elachi
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Charles_Elachi">Charles Elachi
 			</NamedEntityInText>
 			<SimpleTextPart> , director of the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jet_Propulsion_Laboratory">Jet Propulsion Laboratory
@@ -1900,7 +1900,7 @@
 				enough on solving technical challenges and pulling hardware together
 				, '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Charles_Elachi">Charles Elachi
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Charles_Elachi">Charles Elachi
 			</NamedEntityInText>
 			<SimpleTextPart> , director of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jet_Propulsion_Laboratory">NASA</NamedEntityInText>
@@ -1950,7 +1950,7 @@
 	</Document>
 	<Document id="151">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chelsea_F.C.">Chelsea</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chelsea_F.C.">Chelsea</NamedEntityInText>
 			<SimpleTextPart> captain </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:John_Terry">John Terry
 			</NamedEntityInText>
@@ -1962,7 +1962,7 @@
 	</Document>
 	<Document id="152">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chelsea_F.C.">Chelsea</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chelsea_F.C.">Chelsea</NamedEntityInText>
 			<SimpleTextPart> won the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:FA_Cup">FA Cup</NamedEntityInText>
 			<SimpleTextPart> .</SimpleTextPart>
@@ -1981,7 +1981,7 @@
 	</Document>
 	<Document id="154">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chevron_Corporation">Chevron</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chevron_Corporation">Chevron</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Justin_Higgs">Justin Higgs
 			</NamedEntityInText>
@@ -1991,7 +1991,7 @@
 	</Document>
 	<Document id="155">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chicago_White_Sox">Chicago White Sox
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chicago_White_Sox">Chicago White Sox
 			</NamedEntityInText>
 			<SimpleTextPart> third baseman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Kevin_Youkilis">Kevin Youkilis
@@ -2005,7 +2005,7 @@
 			<SimpleTextPart>Motorola announced in June that it would move its
 				headquarters from the
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chicago">Chicago</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chicago">Chicago</NamedEntityInText>
 			<SimpleTextPart> suburb of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Libertyville,_Illinois">Libertyville
 			</NamedEntityInText>
@@ -2017,7 +2017,7 @@
 			<SimpleTextPart>The arrests at the islands two days earlier led to
 				the latest flare-up between Japan and
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/China">China</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/China">China</NamedEntityInText>
 			<SimpleTextPart> , both of which claim sovereignty over the
 				uninhabited islands , which China calls
 			</SimpleTextPart>
@@ -2028,7 +2028,7 @@
 	<Document id="158">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Kao and Ho were both members of the </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/China_Times">China Times
+			<NamedEntityInText uri="http:/dbpedia.org/resource/China_Times">China Times
 			</NamedEntityInText>
 			<SimpleTextPart> ' investigative reporting team , which included
 				former China Times reporter
@@ -2105,7 +2105,7 @@
 	<Document id="164">
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` They ca n't strike , '' said </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Chrysler">Chrysler</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Chrysler">Chrysler</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jodi_Tinson">Jodi Tinson
 			</NamedEntityInText>
@@ -2130,7 +2130,7 @@
 			<SimpleTextPart>While the Security Council united behind Ban 's
 				proposals , Russia 's
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Vitaly_Churkin">Churkin</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Vitaly_Churkin">Churkin</NamedEntityInText>
 			<SimpleTextPart> criticized the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:United_States">U.S.</NamedEntityInText>
 			<SimpleTextPart> and its European allies who opposed an extension of
@@ -2142,7 +2142,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>State Senate Democratic Leader Eric Kearney of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Eric_Kearney">Cincinnati
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Eric_Kearney">Cincinnati
 			</NamedEntityInText>
 			<SimpleTextPart> criticized </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jon_A._Husted">Husted</NamedEntityInText>
@@ -2191,7 +2191,7 @@
 			<SimpleTextPart>`` We ended up using a timeout because some guys on
 				the field thought that we needed to get the timeout called , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Cleveland_Browns">Cleveland
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Cleveland_Browns">Cleveland
 			</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Romeo_Crennel">Romeo Crennel
@@ -2203,7 +2203,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` I know there 's a business side of it , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Cleveland_Indians">Cleveland
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Cleveland_Indians">Cleveland
 			</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Eric_Wedge">Eric Wedge
@@ -2264,7 +2264,7 @@
 	<Document id="177">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Coconino_National_Forest">Coconino National Forest</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Coconino_National_Forest">Coconino National Forest</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Brady_Smith">Brady Smith
 			</NamedEntityInText>
@@ -2293,14 +2293,14 @@
 				uri="http://rdflivenews.aksw.org/resource/Colorado_College_Tigers">Colorado</NamedEntityInText>
 			<SimpleTextPart> defeated </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/page/Nebraska_Cornhuskers_football">Nebraska</NamedEntityInText>
+				uri="http:/dbpedia.org/page/Nebraska_Cornhuskers_football">Nebraska</NamedEntityInText>
 			<SimpleTextPart> the following year and won the Big 12 title .
 			</SimpleTextPart>
 		</TextWithNamedEntities>
 	</Document>
 	<Document id="180">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Colville_tribe">Colville Tribe
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Colville_tribe">Colville Tribe
 			</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Cathy_Moses">Cathy Moses
@@ -2329,7 +2329,7 @@
 				, wife of disgraced
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Communist_Party_of_China">Communist Party</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Communist_Party_of_China">Communist Party</NamedEntityInText>
 			<SimpleTextPart> leader </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bo_Xilai">Bo Xilai</NamedEntityInText>
 			<SimpleTextPart> , a friend of her family told CNN .</SimpleTextPart>
@@ -2350,7 +2350,7 @@
 	</Document>
 	<Document id="184">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Control_Yuan">Control Yuan
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Control_Yuan">Control Yuan
 			</NamedEntityInText>
 			<SimpleTextPart> member </SimpleTextPart>
 			<NamedEntityInText uri="rln:Yang_Mei-ling">Yang</NamedEntityInText>
@@ -2427,7 +2427,7 @@
 			<SimpleTextPart>While we 're at it , can we wait a little longer
 				before we canonize
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Dallas_Cowboys">Cowboys</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Dallas_Cowboys">Cowboys</NamedEntityInText>
 			<SimpleTextPart> quarterback </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Tony_Romo">Tony Romo
 			</NamedEntityInText>
@@ -2469,7 +2469,7 @@
 			<SimpleTextPart>`` As far as I 'm concerned , the security officer
 				here is a hero , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Washington,_D.C.">D.C.</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Washington,_D.C.">D.C.</NamedEntityInText>
 			<SimpleTextPart> police </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Cathy_L._Lanier">Chief Cathy Lanier
 			</NamedEntityInText>
@@ -2483,7 +2483,7 @@
 				to the internet , '' said
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Denver_International_Airport">DIA</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Denver_International_Airport">DIA</NamedEntityInText>
 			<SimpleTextPart> spokesperson </SimpleTextPart>
 			<NamedEntityInText uri="rln:Laura_Coale">Laura Coale
 			</NamedEntityInText>
@@ -2497,7 +2497,7 @@
 				, said
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jan_Mendoza">Jan Mendoza
 			</NamedEntityInText>
@@ -2507,7 +2507,7 @@
 	<Document id="196">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jan_Mendoza">Jan Mendoza
 			</NamedEntityInText>
@@ -2521,7 +2521,7 @@
 			<SimpleTextPart>The crash happened before 7:30 a.m. , said
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Department_of_Motor_Vehicles">DMV</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jan_Mendoza">Jan Mendoza
 			</NamedEntityInText>
@@ -2535,7 +2535,7 @@
 				outside
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Department_of_Public_Safety">DPS</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Department_of_Public_Safety">DPS</NamedEntityInText>
 			<SimpleTextPart> headquarters in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Tucson,_Arizona">Tucson</NamedEntityInText>
 			<SimpleTextPart> for more than an hour on July 11 .</SimpleTextPart>
@@ -2554,7 +2554,7 @@
 	</Document>
 	<Document id="200">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Dan_Rooney">Dan Rooney
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Dan_Rooney">Dan Rooney
 			</NamedEntityInText>
 			<SimpleTextPart> , chairman of the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Pittsburgh_Steelers">Pittsburgh Steelers
@@ -2580,7 +2580,7 @@
 	<Document id="202">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Industry consultant </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Daniel_Yergin">Daniel Yergin
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Daniel_Yergin">Daniel Yergin
 			</NamedEntityInText>
 			<SimpleTextPart> , chairman of </SimpleTextPart>
 			<NamedEntityInText uri="rln:IHS_Cambridge_Energy_Research_Associates">IHS Cambridge Energy
@@ -2708,7 +2708,7 @@
 	</Document>
 	<Document id="211">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Davie,_Florida">Davie</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Davie,_Florida">Davie</NamedEntityInText>
 			<SimpleTextPart> police </SimpleTextPart>
 			<NamedEntityInText uri="rln:Dale_Engle">Capt. Dale Engle
 			</NamedEntityInText>
@@ -2753,7 +2753,7 @@
 				Australian
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Australian_Defence_Force">Defense Force</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Australian_Defence_Force">Defense Force</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Angus_Houston">Angus Houston
 			</NamedEntityInText>
@@ -2818,7 +2818,7 @@
 			<SimpleTextPart>AURORA , Colo. -LRB- AP -RRB- - Two people were
 				killed and 15 injured at an apartment building fire in the
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Denver">Denver</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Denver">Denver</NamedEntityInText>
 			<SimpleTextPart> suburb of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Aurora,_Colorado">Aurora</NamedEntityInText>
 			<SimpleTextPart> that left many people to be rescued from the upper
@@ -2831,7 +2831,7 @@
 			<SimpleTextPart>Twenty-four-year-old James Holmes is accused of
 				opening fire in a crowded theater in the
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Denver">Denver</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Denver">Denver</NamedEntityInText>
 			<SimpleTextPart> suburb of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Aurora,_Colorado">Aurora</NamedEntityInText>
 			<SimpleTextPart> , killing 12 people and injuring 58 others .
@@ -2857,7 +2857,7 @@
 	</Document>
 	<Document id="222">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/The_Detroit_News">Detroit News
+			<NamedEntityInText uri="http:/dbpedia.org/resource/The_Detroit_News">Detroit News
 			</NamedEntityInText>
 			<SimpleTextPart> reporter </SimpleTextPart>
 			<NamedEntityInText uri="rln:David_Shepardson">David Shepardson
@@ -2966,7 +2966,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Hall said he could not disclose the number of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Dish_Network">Dish Network
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Dish_Network">Dish Network
 			</NamedEntityInText>
 			<SimpleTextPart> customers in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Maine">Maine</NamedEntityInText>
@@ -2976,7 +2976,7 @@
 	<Document id="230">
 		<TextWithNamedEntities>
 			<SimpleTextPart>WGME had warned </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Dish_Network">Dish</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Dish_Network">Dish</NamedEntityInText>
 			<SimpleTextPart> customers in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Maine">Maine</NamedEntityInText>
 			<SimpleTextPart> they could lose WGME if a new agreement or extension
@@ -2988,7 +2988,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` It 's a little different , that 's for sure , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Los_Angeles_Dodgers">Dodgers</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Los_Angeles_Dodgers">Dodgers</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Don_Mattingly">Don Mattingly
 			</NamedEntityInText>
@@ -2998,7 +2998,7 @@
 	<Document id="232">
 		<TextWithNamedEntities>
 			<SimpleTextPart>DAVIE , Fla. -- </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Miami_Dolphins">Dolphins</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Miami_Dolphins">Dolphins</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="rln:Chad_Johnson_(wide_receiver)">Chad Johnson
 			</NamedEntityInText>
@@ -3012,7 +3012,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>But former Bengals QB Boomer Esiason and ex-Miami
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Miami_Dolphins">Dolphins</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Miami_Dolphins">Dolphins</NamedEntityInText>
 			<SimpleTextPart> star </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Dan_Marino">Dan Marino
 			</NamedEntityInText>
@@ -3048,7 +3048,7 @@
 	<Document id="236">
 		<TextWithNamedEntities>
 			<SimpleTextPart>KNOXVILLE , Iowa -LRB- AP -RRB- -- </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Donny_Schatz">Donny Schatz
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Donny_Schatz">Donny Schatz
 			</NamedEntityInText>
 			<SimpleTextPart> won the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Knoxville_Nationals">Knoxville Nationals
@@ -3158,7 +3158,7 @@
 	<Document id="245">
 		<TextWithNamedEntities>
 			<SimpleTextPart>When Obama and </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arne_Duncan">Duncan</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arne_Duncan">Duncan</NamedEntityInText>
 			<SimpleTextPart> arrived in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Washington,_D.C.">Washington
 			</NamedEntityInText>
@@ -3172,7 +3172,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>But Steven Smith , 29 , a customer at a
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Dunkin%27_Donuts">Dunkin' Donuts
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Dunkin%27_Donuts">Dunkin' Donuts
 			</NamedEntityInText>
 			<SimpleTextPart> in downtown </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Boston">Boston</NamedEntityInText>
@@ -3184,7 +3184,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` We sold out all those races last year , '' says
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/ESPN_(United_States)">ESPN</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/ESPN_(United_States)">ESPN</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Andy_Hall">Andy Hall
 			</NamedEntityInText>
@@ -3194,7 +3194,7 @@
 	<Document id="248">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Then , according to </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/ESPN_(United_States)">ESPN</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/ESPN_(United_States)">ESPN</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Dave_Nagle">Dave Nagle
 			</NamedEntityInText>
@@ -3238,7 +3238,7 @@
 				a soft economy ,
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Edison_Electric_Institute">Edison Electric Institute</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Edison_Electric_Institute">Edison Electric Institute</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jim_Owen">Jim Owen</NamedEntityInText>
 			<SimpleTextPart> says .</SimpleTextPart>
@@ -3248,7 +3248,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>She 'll earn a daily rate of $ 350 , </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Department_for_Education">Education Department</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Department_for_Education">Education Department</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Liza_Cordeiro">Liza Cordeiro
 			</NamedEntityInText>
@@ -3257,7 +3257,7 @@
 	</Document>
 	<Document id="253">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Arne_Duncan">Education Secretary Arne
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Arne_Duncan">Education Secretary Arne
 				Duncan
 			</NamedEntityInText>
 			<SimpleTextPart> praised </SimpleTextPart>
@@ -3272,7 +3272,7 @@
 				peer review , '' said American Council on
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/American_Council_on_Education">Education</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/American_Council_on_Education">Education</NamedEntityInText>
 			<SimpleTextPart> president </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Molly_Corbett_Broad">Molly Corbett Broad
 			</NamedEntityInText>
@@ -3294,7 +3294,7 @@
 	</Document>
 	<Document id="256">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Stephen_Elop">Elop</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Stephen_Elop">Elop</NamedEntityInText>
 			<SimpleTextPart> said </SimpleTextPart>
 			<NamedEntityInText uri="rln:Nokia">Nokia</NamedEntityInText>
 			<SimpleTextPart> will also launch its next Windows Phone 8 devices
@@ -3374,7 +3374,7 @@
 			<SimpleTextPart>Recently appointed French coach Sabri Lamouchi
 				included brothers Kolo and Yaya Toure from
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Premier_League">English Premier League
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Premier_League">English Premier League
 			</NamedEntityInText>
 			<SimpleTextPart> champions </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Manchester_City_F.C.">Manchester City
@@ -3413,7 +3413,7 @@
 	<Document id="265">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Environmental_Defense_Fund">Environmental Defense</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Environmental_Defense_Fund">Environmental Defense</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Spreck_Rosekrans">Spreck Rosekrans
 			</NamedEntityInText>
@@ -3485,7 +3485,7 @@
 				the new shop can help Hong Kongers show their friendly natures to
 				each other , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Eslite_Bookstore">Eslite</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Eslite_Bookstore">Eslite</NamedEntityInText>
 			<SimpleTextPart> founder </SimpleTextPart>
 			<NamedEntityInText uri="rln:Robert_Wu">Robert Wu
 			</NamedEntityInText>
@@ -3498,7 +3498,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` We are monitoring the situation , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/European_Commission">European Commission
+			<NamedEntityInText uri="http:/dbpedia.org/resource/European_Commission">European Commission
 			</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Mina_Andreeva">Mina Andreeva
@@ -3532,7 +3532,7 @@
 	</Document>
 	<Document id="274">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Evercore_Partners">Evercore Partners
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Evercore_Partners">Evercore Partners
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Douglas_Arthur">Douglas Arthur
@@ -3548,7 +3548,7 @@
 				Faumuina , 51 , of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/%CA%BBEwa_Beach,_Hawaii">Ewa Beach</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/%CA%BBEwa_Beach,_Hawaii">Ewa Beach</NamedEntityInText>
 			<SimpleTextPart> died in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Aiea,_Hawaii">Aiea</NamedEntityInText>
 			<SimpleTextPart> .</SimpleTextPart>
@@ -3556,7 +3556,7 @@
 	</Document>
 	<Document id="276">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Executive_Yuan">Executive Yuan
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Executive_Yuan">Executive Yuan
 			</NamedEntityInText>
 			<SimpleTextPart> spokesperson </SimpleTextPart>
 			<NamedEntityInText uri="rln:Hu_Yu-wei">Hu</NamedEntityInText>
@@ -3568,7 +3568,7 @@
 	<Document id="277">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Federal_Communications_Commission">FCC</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Federal_Communications_Commission">FCC</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Julius_Genachowski">Julius Genachowski
 			</NamedEntityInText>
@@ -3582,7 +3582,7 @@
 	<Document id="278">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Federal_Communications_Commission">FCC</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Federal_Communications_Commission">FCC</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Julius_Genachowski">Julius Genachowski
 			</NamedEntityInText>
@@ -3595,7 +3595,7 @@
 	<Document id="279">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Hall of </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jerry_Rice">Jerry Rice
 			</NamedEntityInText>
@@ -3609,7 +3609,7 @@
 			<SimpleTextPart>The tight end has 696 career receptions , second in
 				team history behind only Hall of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Michael_Irvin">Michael Irvin
 			</NamedEntityInText>
@@ -3621,7 +3621,7 @@
 			<SimpleTextPart>Witten , a seven-time Pro Bowler , has 696 career
 				receptions , second in team history behind only Hall of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hall_of_fame">Fame</NamedEntityInText>
 			<SimpleTextPart> receiver </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Michael_Irvin">Michael Irvin
 			</NamedEntityInText>
@@ -3631,7 +3631,7 @@
 	<Document id="282">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Fayetteville,_West_Virginia">Fayetteville</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Fayetteville,_West_Virginia">Fayetteville</NamedEntityInText>
 			<SimpleTextPart> attorney </SimpleTextPart>
 			<NamedEntityInText uri="rln:Tom_Rist">Tom Rist</NamedEntityInText>
 			<SimpleTextPart> said Thursday he believes his clients are owed about
@@ -3646,7 +3646,7 @@
 				yet to receive a response from
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Federal_Highway_Administration">Federal Highway Administration</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Federal_Highway_Administration">Federal Highway Administration</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Victor_Mendez">Victor Mendez
 			</NamedEntityInText>
@@ -3660,7 +3660,7 @@
 				yet to receive a response from
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Federal_Highway_Administration">Federal Highway Administration</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Federal_Highway_Administration">Federal Highway Administration</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Victor_Mendez">Victor Mendez
 			</NamedEntityInText>
@@ -3669,7 +3669,7 @@
 	</Document>
 	<Document id="285">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Roger_Federer">Federer</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Roger_Federer">Federer</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bernard_Tomic">Bernard Tomic
 			</NamedEntityInText>
@@ -3681,7 +3681,7 @@
 	<Document id="286">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
 			<SimpleTextPart> pitched the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Seattle_Mariners">Seattle Mariners
 			</NamedEntityInText>
@@ -3695,7 +3695,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>-LRB- AP Photo\/Ted S. Warren -RRB- </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
 			<SimpleTextPart> pitched the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Seattle_Mariners">Seattle Mariners
 			</NamedEntityInText>
@@ -3708,7 +3708,7 @@
 	<Document id="288">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
 			<SimpleTextPart> pitched the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Seattle_Mariners">Seattle Mariners
 			</NamedEntityInText>
@@ -3724,7 +3724,7 @@
 			<NamedEntityInText uri="dbpr:Seattle_Mariners">Seattle</NamedEntityInText>
 			<SimpleTextPart> , Washington , </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Felix Hernandez</NamedEntityInText>
 			<SimpleTextPart> pitched Seattle 's first perfect game and the 23rd
 				in majors history as the Mariners edged Tampa Bay .
 			</SimpleTextPart>
@@ -3745,7 +3745,7 @@
 	<Document id="291">
 		<TextWithNamedEntities>
 			<SimpleTextPart>South Africa 's sports minister </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Fikile_Mbalula">Fikile Mbalula
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Fikile_Mbalula">Fikile Mbalula
 			</NamedEntityInText>
 			<SimpleTextPart> praised </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Caster_Semenya">Semenya</NamedEntityInText>
@@ -3763,7 +3763,7 @@
 				-LRB- CEPD -RRB- chairman Chen Po-chih -LRB- 陳博志 -RRB- , former
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Financial_Supervisory_Commission_(Republic_of_China)">Financial Supervisory Commission</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Financial_Supervisory_Commission_(Republic_of_China)">Financial Supervisory Commission</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Hu_Sheng-cheng">Hu</NamedEntityInText>
 			<SimpleTextPart> Sheng-cheng -LRB- 胡勝正 -RRB- , former finance
@@ -3815,7 +3815,7 @@
 	</Document>
 	<Document id="296">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Foley,_Alabama">Foley</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Foley,_Alabama">Foley</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Todd_Watson">Todd Watson
 			</NamedEntityInText>
@@ -3846,7 +3846,7 @@
 				'' Ministry of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Ministry_of_Foreign_Affairs_(Republic_of_China)">Foreign Affairs</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Ministry_of_Foreign_Affairs_(Republic_of_China)">Foreign Affairs</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Steve_Hsia">Steve Hsia
 			</NamedEntityInText>
@@ -3858,7 +3858,7 @@
 	<Document id="299">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Major_League_Baseball">Former Major League</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Major_League_Baseball">Former Major League</NamedEntityInText>
 			<SimpleTextPart> first baseman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Rico_Brogna">Rico Brogna
 			</NamedEntityInText>
@@ -3871,7 +3871,7 @@
 	<Document id="300">
 		<TextWithNamedEntities>
 			<SimpleTextPart>ATLANTA -- </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Marshall_University">Former Marshall University
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Marshall_University">Former Marshall University
 			</NamedEntityInText>
 			<SimpleTextPart> football coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jim_Donnan">Jim Donnan
@@ -3900,7 +3900,7 @@
 			<SimpleTextPart>`` We think Scott is a very talented broadcaster who
 				would be a great asset to any broadcast or cable sports network , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Fox">Fox</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Fox">Fox</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Dan_Bell">Dan Bell</NamedEntityInText>
 			<SimpleTextPart> said Sunday .</SimpleTextPart>
@@ -3921,7 +3921,7 @@
 	<Document id="304">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Former Tour de </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
 			<SimpleTextPart> winner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Alberto_Contador">Alberto Contador
 			</NamedEntityInText>
@@ -3936,7 +3936,7 @@
 			<SimpleTextPart>Dutch rider Lars Boom won the Eneco Tour after Sunday
 				's final stage as former Tour de
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
 			<SimpleTextPart> winner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Alberto_Contador">Alberto Contador
 			</NamedEntityInText>
@@ -3948,7 +3948,7 @@
 	<Document id="306">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Seven-time Tour de </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Tour_de_France">France</NamedEntityInText>
 			<SimpleTextPart> winner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Lance_Armstrong">Lance Armstrong
 			</NamedEntityInText>
@@ -3963,7 +3963,7 @@
 			<SimpleTextPart>The last time two riders from the same nation
 				finished first and second in the Tour was in 1984 , when
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Laurent_Fignon">Frenchman Laurent Fignon
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Laurent_Fignon">Frenchman Laurent Fignon
 			</NamedEntityInText>
 			<SimpleTextPart> defeated </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bernard_Hinault">Bernard Hinault
@@ -3989,7 +3989,7 @@
 	</Document>
 	<Document id="309">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/General_Motors">GM</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/General_Motors">GM</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jim_Cain">Jim Cain</NamedEntityInText>
 			<SimpleTextPart> said the purchase of the shares Wednesday at $ 20.35
@@ -4003,7 +4003,7 @@
 				Corvette timeline , we 're setting up that will have real Corvettes
 				and real Corvette engines , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/General_Motors">GM</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/General_Motors">GM</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Tom_Wilkinson">Tom Wilkinson
 			</NamedEntityInText>
@@ -4014,7 +4014,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Washington -- </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
 			<SimpleTextPart> presidential candidate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mitt_Romney">Mitt Romney
 			</NamedEntityInText>
@@ -4028,7 +4028,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>WASHINGTON -- </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
 			<SimpleTextPart> presidential candidate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mitt_Romney">Mitt Romney
 			</NamedEntityInText>
@@ -4044,7 +4044,7 @@
 				thrilled by
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
 			<SimpleTextPart> presidential candidate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mitt_Romney">Mitt Romney
 			</NamedEntityInText>
@@ -4059,7 +4059,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Ryan and </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
 			<SimpleTextPart> presidential candidate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mitt_Romney">Mitt Romney
 			</NamedEntityInText>
@@ -4076,7 +4076,7 @@
 				through
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_(United_States)">GOP</NamedEntityInText>
 			<SimpleTextPart> state </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:John_Adams">Rep. John Adams
 			</NamedEntityInText>
@@ -4137,7 +4137,7 @@
 	</Document>
 	<Document id="320">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Gander_Mountain">Gander Mountain
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Gander_Mountain">Gander Mountain
 			</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Jeff_Myers">Jeff Myers
@@ -4179,7 +4179,7 @@
 				including
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/The_Charleston_Gazette">Gazette</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/The_Charleston_Gazette">Gazette</NamedEntityInText>
 			<SimpleTextPart> reporter </SimpleTextPart>
 			<NamedEntityInText uri="rln:Rick_Steelhammer">Rick Steelhammer
 			</NamedEntityInText>
@@ -4204,7 +4204,7 @@
 				and human development , '' said
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/George_Mason_University">George Mason University</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/George_Mason_University">George Mason University</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Dan_Walsch">Dan Walsch
 			</NamedEntityInText>
@@ -4215,7 +4215,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>In 2007 , </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/George_Washington_Colonials">George Washington</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/George_Washington_Colonials">George Washington</NamedEntityInText>
 			<SimpleTextPart> defeated </SimpleTextPart>
 			<NamedEntityInText uri="rln:Hurricane_Redskins">Hurricane
 			</NamedEntityInText>
@@ -4237,7 +4237,7 @@
 	</Document>
 	<Document id="327">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/New_York_Giants">Giants</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/New_York_Giants">Giants</NamedEntityInText>
 			<SimpleTextPart> first baseman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Brandon_Belt">Brandon Belt
 			</NamedEntityInText>
@@ -4250,7 +4250,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` There 's not a whole lot to say , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/New_York_Giants">Giants</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/New_York_Giants">Giants</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bruce_Bochy">Bruce Bochy
 			</NamedEntityInText>
@@ -4288,7 +4288,7 @@
 			<SimpleTextPart>`` It 's a diplomatic game for Sergei Lavrov , ''
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Russia_in_Global_Affairs">Russia in Global Affairs</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Russia_in_Global_Affairs">Russia in Global Affairs</NamedEntityInText>
 			<SimpleTextPart> editor </SimpleTextPart>
 			<NamedEntityInText uri="rln:Fyodor_Lukyanov">Fyodor Lukyanov
 			</NamedEntityInText>
@@ -4300,7 +4300,7 @@
 			<SimpleTextPart>As the second season of the Starz drama Boss opens
 				-LRB- Friday , 9 ET\/PT -RRB- , Kane -LRB-
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Golden_Globe_Award">Golden Globe
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Golden_Globe_Award">Golden Globe
 			</NamedEntityInText>
 			<SimpleTextPart> winner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Kelsey_Grammer">Kelsey Grammer
@@ -4316,7 +4316,7 @@
 			<SimpleTextPart>Compared with leading manufacturers , HTC needs to
 				address several challenges before it makes a turnaround ,
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Goldman_Sachs">Goldman Sachs
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Goldman_Sachs">Goldman Sachs
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Robert_Yen">Robert Yen
@@ -4326,7 +4326,7 @@
 	</Document>
 	<Document id="334">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Gio_Gonzalez">Gonzalez</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Gio_Gonzalez">Gonzalez</NamedEntityInText>
 			<SimpleTextPart> returned to the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:San_Francisco_Bay_Area">Bay Area</NamedEntityInText>
 			<SimpleTextPart> for the first time since the Oakland Athletics
@@ -4338,7 +4338,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Vaughn Anthony , a recording artist and brother of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Grammy_Award">Grammy</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Grammy_Award">Grammy</NamedEntityInText>
 			<SimpleTextPart> winner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:John_Legend">John Legend
 			</NamedEntityInText>
@@ -4377,7 +4377,7 @@
 	</Document>
 	<Document id="338">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Christine_Gregoire">Gregoire</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Christine_Gregoire">Gregoire</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Cory_Curtis">Cory Curtis
 			</NamedEntityInText>
@@ -4388,7 +4388,7 @@
 	</Document>
 	<Document id="339">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Robert_Guerrero">Guerrero</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Robert_Guerrero">Guerrero</NamedEntityInText>
 			<SimpleTextPart> 's wife , </SimpleTextPart>
 			<NamedEntityInText uri="rln:Casey_Guerrero">Casey</NamedEntityInText>
 			<SimpleTextPart> , who beat leukemia thanks to a bone marrow
@@ -4417,7 +4417,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` Matt Martin threw one hell of a game today , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hampden_Academy">Hampden</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hampden_Academy">Hampden</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="rln:McLean_Poulin">McLean Poulin
 			</NamedEntityInText>
@@ -4465,7 +4465,7 @@
 			<SimpleTextPart>Toffler then set up a meeting between Dhani and
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Harmonix_Music_Systems">Harmonix</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Harmonix_Music_Systems">Harmonix</NamedEntityInText>
 			<SimpleTextPart> co-founder </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Alex_Rigopulos">Alex Rigopulos
 			</NamedEntityInText>
@@ -4491,7 +4491,7 @@
 				of the Division of Vital Statistics at the National Center for
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/National_Center_for_Health_Statistics">Health Statistics</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/National_Center_for_Health_Statistics">Health Statistics</NamedEntityInText>
 			<SimpleTextPart> , part of the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Centers_for_Disease_Control_and_Prevention">Centers</NamedEntityInText>
 			<SimpleTextPart> for Disease Control and Prevention , said their
@@ -4529,7 +4529,7 @@
 	</Document>
 	<Document id="350">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hearst_Corporation">Hearst Corp.
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hearst_Corporation">Hearst Corp.
 			</NamedEntityInText>
 			<SimpleTextPart> chief executive </SimpleTextPart>
 			<NamedEntityInText uri="rln:Frank_Bennack_Jr">Frank Bennack Jr
@@ -4560,7 +4560,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>Jimmie Johnson finished a distant third , replacing
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hendrick_Motorsports">Hendrick Motorsports
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hendrick_Motorsports">Hendrick Motorsports
 			</NamedEntityInText>
 			<SimpleTextPart> teammate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Dale_Earnhardt,_Jr.">Dale Earnhardt Jr.
@@ -4573,7 +4573,7 @@
 	<Document id="353">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Hernandez</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/F%C3%A9lix_Hern%C3%A1ndez">Hernandez</NamedEntityInText>
 			<SimpleTextPart> pitched the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Seattle_Mariners">Seattle Mariners
 			</NamedEntityInText>
@@ -4586,7 +4586,7 @@
 	<Document id="354">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The captive then says that </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hezbollah">Hezbollah
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hezbollah">Hezbollah
 			</NamedEntityInText>
 			<SimpleTextPart> leader </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Hassan_Nasrallah">Sheik Hassan Nasrallah
@@ -4645,7 +4645,7 @@
 				will be in districts where
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Hillary_Rodham_Clinton">Hillary Clinton</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Hillary_Rodham_Clinton">Hillary Clinton</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Barack_Obama">Obama</NamedEntityInText>
 			<SimpleTextPart> during the 2008 Democratic presidential primaries .
@@ -4696,7 +4696,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>In 2009 , US Department of </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/United_States_Department_of_Homeland_Security">Homeland Security</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/United_States_Department_of_Homeland_Security">Homeland Security</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Daryl_Johnson">Daryl Johnson
 			</NamedEntityInText>
@@ -4756,7 +4756,7 @@
 			<SimpleTextPart>`` We want to take as much precaution as we can , ''
 				said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hoover,_Alabama">Hoover</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hoover,_Alabama">Hoover</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="rln:Josh_Niblett">Josh Niblett
 			</NamedEntityInText>
@@ -4780,7 +4780,7 @@
 	<Document id="369">
 		<TextWithNamedEntities>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/National_Taiwan_University_Hospital">Hospital</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/National_Taiwan_University_Hospital">Hospital</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Tan_Ching-ting">Tan</NamedEntityInText>
 			<SimpleTextPart> Ching-ting -LRB- 譚慶鼎 -RRB- said the hospital would
@@ -4807,7 +4807,7 @@
 				wireless vendor , to cover the costs of the Wi-Fi system , ''
 				explains
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Houston_Airport">Houston Airports
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Houston_Airport">Houston Airports
 			</NamedEntityInText>
 			<SimpleTextPart> spokesperson </SimpleTextPart>
 			<NamedEntityInText uri="rln:Marlene_McClinton">Marlene McClinton
@@ -4832,7 +4832,7 @@
 	</Document>
 	<Document id="373">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Hu_Jintao">Hu</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Hu_Jintao">Hu</NamedEntityInText>
 			<SimpleTextPart> praised </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Chang_Sung-taek">Jang</NamedEntityInText>
 			<SimpleTextPart> for his `` huge amount of work for the friendly
@@ -4865,7 +4865,7 @@
 	</Document>
 	<Document id="376">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/ILVA">ILVA</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/ILVA">ILVA</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Bruno_Ferrante">Bruno Ferrante
 			</NamedEntityInText>
@@ -4891,7 +4891,7 @@
 	<Document id="378">
 		<TextWithNamedEntities>
 			<SimpleTextPart>-LRB- NECN -RRB- - </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Illinois">Illinois</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Illinois">Illinois</NamedEntityInText>
 			<SimpleTextPart> congressman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Jesse_Jackson,_Jr.">Jesse Jackson Jr.
 			</NamedEntityInText>
@@ -4903,7 +4903,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` Navy Pier is today 's Ellis Island , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Illinois">Illinois</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Illinois">Illinois</NamedEntityInText>
 			<SimpleTextPart> congressman </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Luis_Guti%C3%A9rrez">Luis Gutierrez
 			</NamedEntityInText>
@@ -4913,7 +4913,7 @@
 	<Document id="380">
 		<TextWithNamedEntities>
 			<SimpleTextPart>And check out </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Virtual_world">In-Game</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Virtual_world">In-Game</NamedEntityInText>
 			<SimpleTextPart> editor </SimpleTextPart>
 			<NamedEntityInText uri="rln:Todd_Kenreck">Todd Kenreck
 			</NamedEntityInText>
@@ -4926,7 +4926,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` It was catch-up baseball from the get-go , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Cleveland_Indians">Indians</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Cleveland_Indians">Indians</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Manny_Acta">Manny Acta
 			</NamedEntityInText>
@@ -4939,7 +4939,7 @@
 				then-West
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/West_Indies_cricket_team">Indies</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/West_Indies_cricket_team">Indies</NamedEntityInText>
 			<SimpleTextPart> captain </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Chris_Gayle">Gayle</NamedEntityInText>
 			<SimpleTextPart> in a charity match in 2009 , having earlier hit him
@@ -4953,7 +4953,7 @@
 				at the same time they continue to ignore the legal commitments to
 				the children of East Jerusalem , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Ir_Amim">Ir Amim</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Ir_Amim">Ir Amim</NamedEntityInText>
 			<SimpleTextPart> director </SimpleTextPart>
 			<NamedEntityInText uri="rln:Yehudith_Oppenheimer">Yehudith Oppenheimer
 			</NamedEntityInText>
@@ -5007,7 +5007,7 @@
 				full day , Taiwan 's Yen-Hsun Lu eliminated Poland 's Lukasz Kubot
 				6-3 , 6-0 , Andreas Seppi of
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Andreas_Seppi">Italy</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Andreas_Seppi">Italy</NamedEntityInText>
 			<SimpleTextPart> beat the </SimpleTextPart>
 			<NamedEntityInText uri="rln:Robin_Hasse">Netherlands
 			</NamedEntityInText>
@@ -5075,7 +5075,7 @@
 				Federation of Trade Unions waved Chinese flags and chanted slogans
 				such as `` Down with
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Japan">Japan</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Japan">Japan</NamedEntityInText>
 			<SimpleTextPart>ese militarism '' and `` Get out of our Diaoyu
 				Islands '' , the Chinese name for what Japan calls
 			</SimpleTextPart>
@@ -5110,7 +5110,7 @@
 	<Document id="395">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The Investor : </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Jeff_Crowe">Jeff Crowe
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Jeff_Crowe">Jeff Crowe
 			</NamedEntityInText>
 			<SimpleTextPart> , general partner , </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Norwest_Venture_Partners">Norwest Venture Partners
@@ -5167,7 +5167,7 @@
 				6-3 , 6-0 , Andreas Seppi of Italy beat the Netherlands ' Robin
 				Hasse 6-4 , 6-4 , qualifier
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Jesse_Levine">Jesse Levine
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Jesse_Levine">Jesse Levine
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Donald_Young_%28tennis%29">Donald Young
@@ -5209,7 +5209,7 @@
 			<SimpleTextPart>`` We have no alternative but to ask him to return
 				his EU mandate , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Jobbik">Jobbik</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Jobbik">Jobbik</NamedEntityInText>
 			<SimpleTextPart> president </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:G%C3%A1bor_Vona">Gabor Vona
 			</NamedEntityInText>
@@ -5262,7 +5262,7 @@
 				Israel 's Shahar Peer 6-3 , 6-3 and Sweden 's
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Johanna_Larsson_%28tennis%29">Johanna Larsson</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Johanna_Larsson_%28tennis%29">Johanna Larsson</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Casey_Dellacqua">Australia
 			</NamedEntityInText>
@@ -5350,7 +5350,7 @@
 	</Document>
 	<Document id="413">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Thomas_David_Jones">Jones</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Thomas_David_Jones">Jones</NamedEntityInText>
 			<SimpleTextPart> is a former </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:NASA">NASA</NamedEntityInText>
 			<SimpleTextPart> astronaut and he would like to see more surface
@@ -5417,7 +5417,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>In response to the lawsuit , </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/United_States_Department_of_Justice">Justice Department</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/United_States_Department_of_Justice">Justice Department</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Tracy_Schmaler">Tracy Schmaler
 			</NamedEntityInText>
@@ -5453,7 +5453,7 @@
 	<Document id="421">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Weaver told </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/KHOU_%28TV%29">KHOU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/KHOU_%28TV%29">KHOU</NamedEntityInText>
 			<SimpleTextPart> reporter </SimpleTextPart>
 			<NamedEntityInText uri="rln:Drew_Karedes">Drew Karedes
 			</NamedEntityInText>
@@ -5491,7 +5491,7 @@
 	<Document id="424">
 		<TextWithNamedEntities>
 			<SimpleTextPart>-- </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Kansas_City_Chiefs">Kansas City Chiefs
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Kansas_City_Chiefs">Kansas City Chiefs
 			</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Herman_Edwards">Herm Edwards
@@ -5542,7 +5542,7 @@
 	</Document>
 	<Document id="428">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Kayla_Harrison">Kayla</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Kayla_Harrison">Kayla</NamedEntityInText>
 			<SimpleTextPart> , who lives in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Marblehead,_Massachusetts">Marblehead
 			</NamedEntityInText>
@@ -5584,7 +5584,7 @@
 			<SimpleTextPart>Meanwhile , sales in the U.S. will look good compared
 				with Europe 's , according to
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Kelley_Blue_Book">Kelley Blue Book
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Kelley_Blue_Book">Kelley Blue Book
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Alec_Gutierrez">Alec Gutierrez
@@ -5614,7 +5614,7 @@
 			<SimpleTextPart> , chairman of the Republican Party of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_of_Kentucky">Kentucky</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_of_Kentucky">Kentucky</NamedEntityInText>
 			<SimpleTextPart> , both attended the first annual Legacy Dinner
 				Republican Party of Kentucky chairman Darrell Brock addressed the
 				crowd at the first annual College Republican Legacy Dinner On Monday
@@ -5628,7 +5628,7 @@
 			<SimpleTextPart>The keynote address was given by Republican Party of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Republican_Party_of_Kentucky">Kentucky</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Republican_Party_of_Kentucky">Kentucky</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Darrell_Brock_Jr.">Darrell Brock
 			</NamedEntityInText>
@@ -5642,7 +5642,7 @@
 	<Document id="435">
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` Everyone from -LRB- </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Kentucky_Wildcats">Kentucky</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Kentucky_Wildcats">Kentucky</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:John_Calipari">John</NamedEntityInText>
 			<SimpleTextPart> -RRB- Calipari to -LRB- Duke coach -RRB- Mike
@@ -5715,7 +5715,7 @@
 				house and laugh , '' judges said while hearing the public interest
 				lawsuit filed by Vinayak Shirsat from the
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Kurla">Kurla</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Kurla">Kurla</NamedEntityInText>
 			<SimpleTextPart> suburb of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Mumbai">Mumbai</NamedEntityInText>
 			<SimpleTextPart> .</SimpleTextPart>
@@ -5724,7 +5724,7 @@
 	<Document id="442">
 		<TextWithNamedEntities>
 			<SimpleTextPart>But when </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Yayoi_Kusama">Kusama</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Yayoi_Kusama">Kusama</NamedEntityInText>
 			<SimpleTextPart> arrived in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:New_York">New York</NamedEntityInText>
 			<SimpleTextPart> in 1958 , the fad was `` action painting , ''
@@ -5762,7 +5762,7 @@
 			<SimpleTextPart>All seasonal workers will be on the job by the end of
 				October or the beginning of November , said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/L.L.Bean">L.L. Bean
+			<NamedEntityInText uri="http:/dbpedia.org/resource/L.L.Bean">L.L. Bean
 			</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Carolyn_Beem">Carolyn Beem
@@ -5775,7 +5775,7 @@
 			<SimpleTextPart>`` I think we have some guys in the back of this room
 				that are similar built , similar cut guys , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Les_Miles">Les Miles
 			</NamedEntityInText>
@@ -5784,7 +5784,7 @@
 	</Document>
 	<Document id="447">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Les_Miles">Les Miles
 			</NamedEntityInText>
@@ -5797,7 +5797,7 @@
 	<Document id="448">
 		<TextWithNamedEntities>
 			<SimpleTextPart>That was Friday night after </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/LSU_Tigers">LSU</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Les_Miles">Les Miles
 			</NamedEntityInText>
@@ -5827,7 +5827,7 @@
 				of the Zuni Interagency Hotshots from New Mexico , U.S. Bureau of
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Bureau_of_Land_Management">Land Management</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Bureau_of_Land_Management">Land Management</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Michael_Campbell">Michael Campbell
 			</NamedEntityInText>
@@ -5851,7 +5851,7 @@
 			<SimpleTextPart>FLAGSTAFF , Ariz. -- No sooner had six-time Pro Bowl
 				receiver
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Larry_Fitzgerald">Larry Fitzgerald
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Larry_Fitzgerald">Larry Fitzgerald
 			</NamedEntityInText>
 			<SimpleTextPart> arrived in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Uganda">Uganda</NamedEntityInText>
@@ -5865,7 +5865,7 @@
 	<Document id="453">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Dutch rider </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Lars_Boom">Lars Boom
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Lars_Boom">Lars Boom
 			</NamedEntityInText>
 			<SimpleTextPart> won the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Eneco_Tour">Eneco Tour
@@ -5944,7 +5944,7 @@
 				the
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Ireland,_West_Virginia">Lewis County</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Ireland,_West_Virginia">Lewis County</NamedEntityInText>
 			<SimpleTextPart> town of </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Lewis_County,_West_Virginia">Ireland</NamedEntityInText>
 			<SimpleTextPart> during the 1995 Irish Spring Festival .
@@ -5954,7 +5954,7 @@
 	<Document id="460">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Word had just come that </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Eric_Liddell">Liddell</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Eric_Liddell">Liddell</NamedEntityInText>
 			<SimpleTextPart> died in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:February">February</NamedEntityInText>
 			<SimpleTextPart> .</SimpleTextPart>
@@ -5964,7 +5964,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>The Flyers flirted with an offer sheet for
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Tampa_Bay_Lightning">Lightning
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Tampa_Bay_Lightning">Lightning
 			</NamedEntityInText>
 			<SimpleTextPart> star </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Steven_Stamkos">Steven Stamkos
@@ -6034,7 +6034,7 @@
 			<SimpleTextPart>`` What I 've witnessed in the last couple of weeks
 				has been both uplifting and energizing , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/London_Olympics">London Games
+			<NamedEntityInText uri="http:/dbpedia.org/resource/London_Olympics">London Games
 			</NamedEntityInText>
 			<SimpleTextPart> chief </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Sebastian_Coe">Sebastian Coe
@@ -6044,7 +6044,7 @@
 	</Document>
 	<Document id="467">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Lonmin">Lonmin PLC
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Lonmin">Lonmin PLC
 			</NamedEntityInText>
 			<SimpleTextPart> chairman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Roger_Phillimore">Roger Phillimore
@@ -6059,7 +6059,7 @@
 			<SimpleTextPart>The new ownership group includes Kevin and Brian
 				O'Malley , the sons of former
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Los_Angeles_Dodgers">Los Angeles Dodgers
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Los_Angeles_Dodgers">Los Angeles Dodgers
 			</NamedEntityInText>
 			<SimpleTextPart> owner </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Peter_O'Malley">Peter O'Malley
@@ -6070,7 +6070,7 @@
 	<Document id="469">
 		<TextWithNamedEntities>
 			<SimpleTextPart>When </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Los_Angeles_Lakers">Los Angeles Lakers
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Los_Angeles_Lakers">Los Angeles Lakers
 			</NamedEntityInText>
 			<SimpleTextPart> player </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Kobe_Bryant">Kobe Bryant
@@ -6140,7 +6140,7 @@
 				who may not want to rent a vehicle and deal with parking , '' said
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Miami_International_Airport">MIA</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Miami_International_Airport">MIA</NamedEntityInText>
 			<SimpleTextPart> spokesperson </SimpleTextPart>
 			<NamedEntityInText uri="rln:Marc_Henderson">Marc Henderson
 			</NamedEntityInText>
@@ -6150,7 +6150,7 @@
 	<Document id="474">
 		<TextWithNamedEntities>
 			<SimpleTextPart>Top quotes : Fox and </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/MLB_Network">MLB Network
+			<NamedEntityInText uri="http:/dbpedia.org/resource/MLB_Network">MLB Network
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Harold_Reynolds">Harold Reynolds
@@ -6167,7 +6167,7 @@
 				will join Ernie Johnson and former
 			</SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Major_League_Baseball">MLB</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Major_League_Baseball">MLB</NamedEntityInText>
 			<SimpleTextPart> pitcher </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:John_Smoltz">John Smoltz
 			</NamedEntityInText>
@@ -6179,7 +6179,7 @@
 			<SimpleTextPart>You all saw him in the spring ; he had a hard time
 				throwing at times , '' said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Marshall_University">MU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Marshall_University">MU</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Doc_Holliday_(American_football)">Doc Holliday
 			</NamedEntityInText>
@@ -6189,7 +6189,7 @@
 	<Document id="477">
 		<TextWithNamedEntities>
 			<SimpleTextPart>He 'll be all right , '' said </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Marshall_University">MU</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Marshall_University">MU</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Doc_Holliday_%28American_football%29">Doc Holliday
 			</NamedEntityInText>
@@ -6201,7 +6201,7 @@
 			<SimpleTextPart>The Saints ' big-play defense lived up to its
 				reputation in the nick of time , thwarting
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Most_Valuable_Player">MVP</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Most_Valuable_Player">MVP</NamedEntityInText>
 			<SimpleTextPart> quarterback </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Peyton_Manning">Peyton Manning
 			</NamedEntityInText>
@@ -6217,7 +6217,7 @@
 				curious opening goal saw Sami Khedira knock the ball over his own
 				line for the opener in first-half injury time following Real
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Real_Madrid_C.F.">Madrid</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Real_Madrid_C.F.">Madrid</NamedEntityInText>
 			<SimpleTextPart> teammate </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:%C3%81ngel_di_Mar%C3%ADa">Angel Di Maria
 			</NamedEntityInText>
@@ -6229,7 +6229,7 @@
 			<SimpleTextPart>Seavey was arrested Wednesday upon her release from
 				Spring Harbor Hospital in Westbrook , said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Maine_State_Police">Maine State Police
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Maine_State_Police">Maine State Police
 			</NamedEntityInText>
 			<SimpleTextPart> spokesman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Steve_McCausland">Steve McCausland
@@ -6241,7 +6241,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>For our </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/New_England_Cable_News">Maine</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/New_England_Cable_News">Maine</NamedEntityInText>
 			<SimpleTextPart> reporter </SimpleTextPart>
 			<NamedEntityInText uri="rln:Marnie_Maclean">Marnie Maclean
 			</NamedEntityInText>
@@ -6255,7 +6255,7 @@
 			<SimpleTextPart>BIRMINGHAM , England -LRB- AP -RRB- -- Yaya Toure ,
 				Carlos Tevez and Samir Nasri scored second-half goals , and
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Manchester_City_F.C.">Manchester City
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Manchester_City_F.C.">Manchester City
 			</NamedEntityInText>
 			<SimpleTextPart> beat </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Chelsea_F.C.">Chelsea</NamedEntityInText>
@@ -6286,7 +6286,7 @@
 				increases , the importance of their inherent natural hazard exposure
 				will have wider and deeper global implications , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Maplecroft">Maplecroft
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Maplecroft">Maplecroft
 			</NamedEntityInText>
 			<SimpleTextPart> analyst </SimpleTextPart>
 			<NamedEntityInText uri="rln:Helen_Hodge">Helen Hodge
@@ -6297,7 +6297,7 @@
 	<Document id="485">
 		<TextWithNamedEntities>
 			<SimpleTextPart>The 51-year-old </SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Diego_Maradona">Maradona</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Diego_Maradona">Maradona</NamedEntityInText>
 			<SimpleTextPart> arrived in </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Beijing">Beijing</NamedEntityInText>
 			<SimpleTextPart> on Monday for an eight-day charity tour and the
@@ -6322,7 +6322,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` -LRB- Beavan -RRB- did a nice job coming back , ''
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Seattle_Mariners">Mariners</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Seattle_Mariners">Mariners</NamedEntityInText>
 			<SimpleTextPart> manager </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Eric_Wedge">Eric Wedge
 			</NamedEntityInText>
@@ -6360,7 +6360,7 @@
 		<TextWithNamedEntities>
 			<SimpleTextPart>`` It was an open match , '' </SimpleTextPart>
 			<NamedEntityInText
-				uri="http://dbpedia.org/resource/Olympique_de_Marseille">Marseille</NamedEntityInText>
+				uri="http:/dbpedia.org/resource/Olympique_de_Marseille">Marseille</NamedEntityInText>
 			<SimpleTextPart> coach </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Élie_Baup">Elie Baup
 			</NamedEntityInText>
@@ -6369,7 +6369,7 @@
 	</Document>
 	<Document id="491">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Maruti_Suzuki">Maruti</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Maruti_Suzuki">Maruti</NamedEntityInText>
 			<SimpleTextPart> chief executive </SimpleTextPart>
 			<NamedEntityInText uri="rln:Shinzo_Nakanishi">Shinzo Nakanishi
 			</NamedEntityInText>
@@ -6424,7 +6424,7 @@
 	</Document>
 	<Document id="495">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Tyrann_Mathieu">Mathieu</NamedEntityInText>
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Tyrann_Mathieu">Mathieu</NamedEntityInText>
 			<SimpleTextPart> won the </SimpleTextPart>
 			<NamedEntityInText uri="dbpr:Chuck_Bednarik_Award">Bednarik</NamedEntityInText>
 			<SimpleTextPart> Award as national defensive player of the year last
@@ -6446,7 +6446,7 @@
 	</Document>
 	<Document id="497">
 		<TextWithNamedEntities>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Mayo_Clinic">Mayo Clinic
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Mayo_Clinic">Mayo Clinic
 			</NamedEntityInText>
 			<SimpleTextPart> spokeswoman </SimpleTextPart>
 			<NamedEntityInText uri="rln:Traci_Klein">Traci Klein
@@ -6499,7 +6499,7 @@
 				have ended any potential ethics investigation into him or his staff
 				, said
 			</SimpleTextPart>
-			<NamedEntityInText uri="http://dbpedia.org/resource/Melanie_Sloan">Melanie Sloan
+			<NamedEntityInText uri="http:/dbpedia.org/resource/Melanie_Sloan">Melanie Sloan
 			</NamedEntityInText>
 			<SimpleTextPart> , executive director of </SimpleTextPart>
 			<NamedEntityInText
