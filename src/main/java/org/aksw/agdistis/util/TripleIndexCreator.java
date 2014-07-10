@@ -87,7 +87,7 @@ public class TripleIndexCreator {
             tmp.add(new File(dataDirectory + "/mappingbased_properties_" + languageTag + ".ttl"));
             tmp.add(new File(dataDirectory + "/specific_mappingbased_properties_" + languageTag + ".ttl"));
             tmp.add(new File(dataDirectory + "/disambiguations_" + languageTag + ".ttl"));
-            tmp.add(new File(dataDirectory + "/long_abstracts_" + languageTag + ".ttl"));
+//            tmp.add(new File(dataDirectory + "/long_abstracts_" + languageTag + ".ttl"));
             tmp.add(new File(dataDirectory + "/" + languageTag + "_surface_forms.tsv"));
         } else {
             tmp.add(new File(dataDirectory + "/yagoTypes.ttl"));

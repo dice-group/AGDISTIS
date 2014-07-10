@@ -4,7 +4,7 @@
 	<groupId>org.aksw</groupId>
 	<artifactId>AGDISTIS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<!-- BUILD -->
 	<build>
 		<plugins>
@@ -95,7 +95,7 @@
 	<!-- PROPERTIES -->
 	<properties>
 		<autosparql.version>1.0-SNAPSHOT</autosparql.version>
-		<java.version>1.7</java.version>
+		<java.version>1.6</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>

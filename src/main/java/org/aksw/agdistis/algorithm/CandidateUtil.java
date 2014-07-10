@@ -57,7 +57,7 @@ public class CandidateUtil {
 			String label = text.substring(entity.getStartPos(), entity.getEndPos());
 			log.info("\tLabel: " + label);
 			long start = System.currentTimeMillis();
-			label = heuristicExpansion(heuristicExpansion, label);
+//			label = heuristicExpansion(heuristicExpansion, label);
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, false);
 			log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
 		}
