@@ -31,11 +31,11 @@ curl --data-urlencode "text='Die Stadt <entity>Dresden</entity> liegt in <entity
 ## Knowledge Base
 
 The important data for runnning AGDISTIS is stored in a Lucene 4.5.1 Index that can be found
-<a href="http://139.18.2.164/rusbeck/index_dbpedia_39_en.7z">here</a>.
+<a href="http://139.18.2.164/rusbeck/agdistis/indexdbpedia_en.7z">here</a>.
 
 ## Run your own webservice
 
-First, download the english DBpedia index from <a href="http://139.18.2.164/rusbeck/indexdbpedia_en.7z">here</a> and decompress it.
+First, download the english DBpedia index from <a href="http://139.18.2.164/rusbeck/agdistis/indexdbpedia_en.7z">here</a> and decompress it.
 Second, edit the path to the index in the following <a href="https://github.com/AKSW/AGDISTIS/blob/master/src/main/java/org/aksw/agdistis/webapp/GetDisambiguation.java">file</a>.
 Third, for running AGDISTIS on your machine go to the root directory of AGDISTIS and execute
 
