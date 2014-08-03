@@ -19,83 +19,84 @@ public class AGDISTISTest {
 	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
-	@Test
-	public void testUmlaute() throws InterruptedException, IOException {
-		String osumi = "Masaaki Ōsumi";
-		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
-		String japan = "Japan";
-		String japanURL = "http://dbpedia.org/resource/Japan";
+//	@Test
+//	public void testUmlaute() throws InterruptedException, IOException {
+//		String osumi = "Masaaki Ōsumi";
+//		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
+//		String japan = "Japan";
+//		String japanURL = "http://dbpedia.org/resource/Japan";
+//
+//		HashMap<String, String> correct = new HashMap<String, String>();
+//		correct.put(osumi, osumiURL);
+//		correct.put(japan, japanURL);
+//
+//		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
+//
+//		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
+//		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+//		agdistis.run(d);
+//		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+//		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+//		for (NamedEntityInText namedEntity : namedEntities) {
+//			String disambiguatedURL = agdistis.findResult(namedEntity);
+//			results.put(namedEntity, disambiguatedURL);
+//		}
+//
+//		for (NamedEntityInText namedEntity : results.keySet()) {
+//			String disambiguatedURL = results.get(namedEntity);
+//			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
+//			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+//		}
+//
+//	}
 
-		HashMap<String, String> correct = new HashMap<String, String>();
-		correct.put(osumi, osumiURL);
-		correct.put(japan, japanURL);
-
-		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
-
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
-		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
-		agdistis.run(d);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
-		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = agdistis.findResult(namedEntity);
-			results.put(namedEntity, disambiguatedURL);
-		}
-
-		for (NamedEntityInText namedEntity : results.keySet()) {
-			String disambiguatedURL = results.get(namedEntity);
-			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
-			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
-		}
-
-	}
-
-	@Test
-	public void testMinimalExample() throws InterruptedException, IOException {
-		// String osumi = "Masaaki Ōsumi";
-		String obama = "Barack Obama";
-		String obamaURL = "http://dbpedia.org/resource/Barack_Obama";
-		String merkel = "Angela Merkel";
-		String merkelURL = "http://dbpedia.org/resource/Angela_Merkel";
-		String city = "Berlin";
-		String cityURL = "http://dbpedia.org/resource/Berlin";
-
-		HashMap<String, String> correct = new HashMap<String, String>();
-		correct.put(obama, obamaURL);
-		correct.put(merkel, merkelURL);
-		correct.put(city, cityURL);
-
-		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
-
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(  dataDirectory, nodeType, edgeType);
-		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
-		agdistis.run(d);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
-		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = agdistis.findResult(namedEntity);
-			results.put(namedEntity, disambiguatedURL);
-		}
-		for (NamedEntityInText namedEntity : results.keySet()) {
-			String disambiguatedURL = results.get(namedEntity);
-			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
-			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
-		}
-	}
+//	@Test
+//	public void testMinimalExample() throws InterruptedException, IOException {
+//		// String osumi = "Masaaki Ōsumi";
+//		String obama = "Dan Browns";
+//		String obamaURL = "http://dbpedia.org/resource/Dan_Browns";
+////		String merkel = "Angela Merkel";
+////		String merkelURL = "http://dbpedia.org/resource/Angela_Merkel";
+////		String city = "Berlin";
+////		String cityURL = "http://dbpedia.org/resource/Berlin";
+//
+//		HashMap<String, String> correct = new HashMap<String, String>();
+//		correct.put(obama, obamaURL);
+////		correct.put(merkel, merkelURL);
+////		correct.put(city, cityURL);
+//
+//		//String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
+//        String preAnnotatedText = "Give me all books written by <entity> Dan Browns </entity>.";
+//
+//		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(  dataDirectory, nodeType, edgeType);
+//		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+//		agdistis.run(d);
+//		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+//		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+//		for (NamedEntityInText namedEntity : namedEntities) {
+//			String disambiguatedURL = agdistis.findResult(namedEntity);
+//			results.put(namedEntity, disambiguatedURL);
+//		}
+//		for (NamedEntityInText namedEntity : results.keySet()) {
+//			String disambiguatedURL = results.get(namedEntity);
+//			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
+//			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+//		}
+//	}
 
     @Test
     public void testMinimalChineseExample() throws InterruptedException, IOException {
-        dataDirectory = new File("E:\\project\\gsoc2014\\dbpedia3.9\\zh_index\\");
+        dataDirectory = new File("E:\\project\\gsoc2014\\dbpedia3.9\\zh_index_1\\");
 
-        String obama = "奥巴马";
-        String obamaURL = "http://dbpedia.org/resource/贝拉克·奥巴马";
+        String entity = "丹·布朗";
+        String entityURL = "http://dbpedia.org/resource/丹·布朗";
         nodeType = "http://dbpedia.org/resource/";
         edgeType = "http://dbpedia.org/ontology/";
 
         HashMap<String, String> correct = new HashMap<String, String>();
-        correct.put(obama, obamaURL);
+        correct.put(entity, entityURL);
 
-        String preAnnotatedText = "<entity>" + obama + "</entity> 的妻子是谁.";
+        String preAnnotatedText = " 列出所有 <entity>" + entity + "</entity> 写的书.";
 
         DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(  dataDirectory, nodeType, edgeType);
         Document d = GetDisambiguation.textToDocument(preAnnotatedText);

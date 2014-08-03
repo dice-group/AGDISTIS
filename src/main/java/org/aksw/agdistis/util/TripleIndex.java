@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
@@ -30,7 +31,7 @@ public class TripleIndex {
 	public String FIELD_NAME_SUBJECT = "subject";
 	public String FIELD_NAME_PREDICATE = "predicate";
 	public String FIELD_NAME_OBJECT = "object";
-	private int numberOfDocsRetrievedFromIndex = 100;
+	private int numberOfDocsRetrievedFromIndex = 1000;
 
 	private Directory directory;
 	private IndexSearcher isearcher;
@@ -72,6 +73,7 @@ public class TripleIndex {
 			if (object != null) {
 //                TermQuery tq = new TermQuery(new Term(FIELD_NAME_OBJECT, object));
 //                bq.add(tq, BooleanClause.Occur.MUST);
+//                Analyzer analyzer=new SmartChineseAnalyzer(Version.LUCENE_44);
                 WhitespaceAnalyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_44);
                 QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT, analyzer);
                 Query q = parser.parse(object);
