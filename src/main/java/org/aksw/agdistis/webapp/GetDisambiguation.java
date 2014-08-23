@@ -42,7 +42,7 @@ public class GetDisambiguation extends ServerResource {
 	}
 
 	public GetDisambiguation() {
-		File dataDirectory = new File("E:\\project\\gsoc2014\\dbpedia3.9\\zh_index");// /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+		File dataDirectory = new File("..\\dbpedia3.9\\zh_index");// /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
 		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
