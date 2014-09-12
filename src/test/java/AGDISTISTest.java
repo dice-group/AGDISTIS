@@ -20,8 +20,8 @@ public class AGDISTISTest {
 
 	@Test
 	public void testUmlaute() throws InterruptedException, IOException {
-		String osumi = "Masaaki Ōsumi";
-		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
+		String osumi = "Masaaki Ōsawa";
+		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsawa";
 		String japan = "Japan";
 		String japanURL = "http://dbpedia.org/resource/Japan";
 
