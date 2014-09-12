@@ -2,7 +2,7 @@ package org.aksw.agdistis.algorithm;
 
 import java.util.Comparator;
 
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 
 /**
  * Comparator for sorting Named Entities according to their length

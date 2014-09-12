@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -36,10 +37,12 @@ public class TripleIndex {
     private Directory directory;
     private IndexSearcher isearcher;
     private DirectoryReader ireader;
+	private UrlValidator urlValidator;
 
     // private HashMap<String, List<Triple>> cache;
 
     public TripleIndex(File indexDirectory) {
+    	this.urlValidator = new UrlValidator();
         try {
             directory = new MMapDirectory(indexDirectory);
             ireader = DirectoryReader.open(directory);
@@ -76,7 +79,7 @@ public class TripleIndex {
             }
             if (object != null) {
                 Query q = null;
-                if (URLHelper.isURL(object)) {
+                if (urlValidator.isValid(object)) {
                     q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
                 } else {
                     Analyzer analyzer = new LiteralAnalyzer(Version.LUCENE_44);

@@ -93,11 +93,6 @@
 			<name>Apache Repository</name>
 			<url>http://repo.maven.apache.org/maven2</url>
 		</repository>
-		<repository>
-			<id>eclipse</id>
-			<name>Eclipse Maven Repository</name>
-			<url>http://maven.eclipse.org/nexus/content/groups/maven-central</url>
-		</repository>
 	</repositories>
 	<dependencies>
 		<!-- ~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -256,8 +251,8 @@
 			<version>1.2</version>
 			<scope>provided</scope>
 		</dependency>
+	<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 		<dependency>
-			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.7.2</version>
@@ -273,7 +268,6 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-
 		<!-- Brics Automatons -->
 		<dependency>
 			<groupId>dk.brics.automaton</groupId>
@@ -284,12 +278,6 @@
 			<groupId>com.carrotsearch</groupId>
 			<artifactId>hppc</artifactId>
 			<version>0.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.dllearner</groupId>
-			<artifactId>autosparql</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<type>war</type>
 		</dependency>
 	</dependencies>
 </project>

@@ -1,7 +1,7 @@
 package org.aksw.agdistis.algorithm;
 
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 
 public interface DisambiguationAlgorithm {
 

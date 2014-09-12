@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.NamedEntitiesInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
@@ -14,10 +17,6 @@ import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.DocumentText;
-import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class CandidateUtil {
@@ -47,8 +46,8 @@ public class CandidateUtil {
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document, double threshholdTrigram) {
-		NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
-		String text = document.getProperty(DocumentText.class).getText();
+		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
+		String text = document.DocumentText().getText();
 		HashMap<String, Node> nodes = new HashMap<String, Node>();
 
 		// start with longest Named Entities

@@ -1,10 +1,9 @@
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
-
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class RexWebappTest {
 	@Test

@@ -6,6 +6,10 @@ import java.util.HashMap;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.DocumentText;
+import org.aksw.agdistis.datatypes.NamedEntitiesInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.util.DBPedia;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,11 +20,6 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.DocumentText;
-import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
 
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
@@ -106,14 +105,14 @@ public class GetDisambiguation extends ServerResource {
 		NamedEntitiesInText nes = new NamedEntitiesInText(list);
 		DocumentText text = new DocumentText(preAnnotatedText.replaceAll("<entity>", "").replaceAll("</entity>", ""));
 
-		document.addProperty(text);
-		document.addProperty(nes);
+		document.addTest(text);
+		document.addNamedEntitiesInText(nes);
 		return document;
 	}
 
 	private static HashMap<NamedEntityInText, String> results(Document document, DisambiguationAlgorithm algo) {
 		algo.run(document);
-		NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 		for (NamedEntityInText namedEntity : namedEntities) {
 			String disambiguatedURL = algo.findResult(namedEntity);
@@ -126,8 +125,7 @@ public class GetDisambiguation extends ServerResource {
 		Document d = textToDocument(preAnnotatedText);
 		String domain = getDomain(predicate);
 		String range = getRange(predicate);
-//		System.out.println("domain: " + domain + " range: " + range);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
 
 		for (NamedEntityInText namedEntity : namedEntities) {
 			if (namedEntity.getNamedEntityUri().equals(subject)) {
@@ -139,7 +137,7 @@ public class GetDisambiguation extends ServerResource {
 		}
 		agdistis.run(d);
 
-		namedEntities = d.getProperty(NamedEntitiesInText.class);
+		namedEntities = d.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 		for (NamedEntityInText namedEntity : namedEntities) {
 			String disambiguatedURL = agdistis.findResult(namedEntity);

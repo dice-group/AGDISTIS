@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.NamedEntitiesInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
@@ -15,9 +18,6 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -64,7 +64,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	public void runPostStep(Document document, double threshholdTrigram, int documentId) {
 		try {
 			algorithmicResult = new HashMap<Integer, String>();
-			NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+			NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 			// 2) let HITS run
 			HITS h = new HITS();
 			h.restrictEdges(restrictedEdges);
@@ -128,7 +128,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	 */
 	@Override
 	public void run(Document document) {
-		NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		algorithmicResult = new HashMap<Integer, String>();
 		DirectedSparseGraph<Node, String> graph = new DirectedSparseGraph<Node, String>();
 
