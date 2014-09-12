@@ -18,7 +18,7 @@ public class TripleIndexTest {
 
 	@Before
 	public void init() {
-		index = new TripleIndex(new File("/data/r.usbeck/index_dbpedia_39_en"));
+		index = new TripleIndex(new File("/data/r.usbeck/indexdbpedia_en/"));
 	}
 
 	@After
