@@ -47,18 +47,6 @@ public class TripleIndexCreator {
     private IndexWriter iwriter;
     private MMapDirectory directory;
 
-    /**
-     * @param knowledgeBase
-     *            "http://yago-knowledge.org/resource/" or
-     *            "http://dbpedia.org/resource/"
-     * 
-     * @param languageTag
-     *            en or de
-     * @param dataDirectory
-     *            parent directory of index and dump file directory. E.g.,
-     *            /data/r.usbeck ---> /data/r.usbeck/index/.., --->
-     *            /data/r.usbeck/dbpedia_[LANGUAGE]
-     */
     public static void main(String args[]) {
 //        if (args.length != 3) {
 //            System.err.println("Usage: TripleIndexCreator <index-directory> <data-directory> <language-tag>");

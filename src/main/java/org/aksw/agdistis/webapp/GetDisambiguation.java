@@ -24,12 +24,12 @@ import org.slf4j.LoggerFactory;
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
 	private NEDAlgo_HITS agdistis;
-	private DisambiguationAlgorithm spotlight;
 	private DBPedia dbpedia;
 
 	public GetDisambiguation(String dataDirectory) {
 		File data = new File(dataDirectory);
-		String nodeType = "http://de.dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		//TODO make this more convenient
+		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 		try {
 			dbpedia = new DBPedia("http://dbpedia.org/sparql");
@@ -40,12 +40,15 @@ public class GetDisambiguation extends ServerResource {
 	}
 
 	public GetDisambiguation() {
-		File dataDirectory = new File("/data/r.usbeck/indexdbpedia_de");// /home/rusbeck/AGDISTIS/ /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
-		String nodeType = "http://de.dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		File data = new File("/data/r.usbeck/indexdbpedia_en");
+		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
-
-		agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
-//		spotlight = new NEDSpotlightPoster();
+		try {
+			dbpedia = new DBPedia("http://dbpedia.org/sparql");
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+		agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,8 +66,6 @@ public class GetDisambiguation extends ServerResource {
 		Document d = textToDocument(text);
 		if (type.equals("agdistis")) {
 			results = results(d, agdistis);
-		} else if (type.equals("spotlight")) {
-			results = results(d, spotlight);
 		} else {
 			return "ERROR: wrong type";
 		}
