@@ -9,7 +9,6 @@ import java.util.HashSet;
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 //import org.aksw.agdistis.algorithm.NEDAIDADisambiguator;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
-import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ public class TextDisambiguation_NIFKORE50 {
 		HashSet<DisambiguationAlgorithm> algs = new HashSet<DisambiguationAlgorithm>();
 		algs.add(new NEDAlgo_HITS(dataDirectory, nodeType, edgeType));
 //		algs.add(new NEDAIDADisambiguator());
-		algs.add(new NEDSpotlightPoster());
+//		algs.add(new NEDSpotlightPoster());
 		for (DisambiguationAlgorithm algo : algs) {
 			if (algo instanceof NEDAlgo_HITS) {
 				for (int maxDepth = 1; maxDepth <= 3; ++maxDepth) {

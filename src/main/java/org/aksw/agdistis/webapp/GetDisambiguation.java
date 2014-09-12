@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
-import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
 import org.aksw.agdistis.util.DBPedia;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,7 +46,7 @@ public class GetDisambiguation extends ServerResource {
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
 		agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
-		spotlight = new NEDSpotlightPoster();
+//		spotlight = new NEDSpotlightPoster();
 	}
 
 	@SuppressWarnings("unchecked")
