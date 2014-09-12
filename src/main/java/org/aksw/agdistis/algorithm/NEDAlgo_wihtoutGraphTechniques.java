@@ -20,7 +20,7 @@ public class NEDAlgo_wihtoutGraphTechniques {
     private CandidateUtil cu;
 
     public NEDAlgo_wihtoutGraphTechniques(int numberOfDocuments, String languageTag, File indexDirectory, String knowledgeBase) {
-        cu = new CandidateUtil(indexDirectory);
+        cu = new CandidateUtil(indexDirectory,null);
     }
 
     public void run(Document document, double threshholdTrigram) {

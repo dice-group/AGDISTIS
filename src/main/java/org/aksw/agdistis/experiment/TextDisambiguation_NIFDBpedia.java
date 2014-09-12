@@ -10,11 +10,7 @@ import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.hpl.jena.rdf.model.RDFReader;
-
-import datatypeshelper.io.CorpusReader;
 import datatypeshelper.io.DBpediaSpotlightNIFReader;
-import datatypeshelper.io.xml.CorpusXmlReader;
 import datatypeshelper.utils.corpus.Corpus;
 
 public class TextDisambiguation_NIFDBpedia {

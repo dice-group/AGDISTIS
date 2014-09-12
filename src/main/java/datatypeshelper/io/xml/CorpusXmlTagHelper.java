@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections15.MapUtils;
 
 import datatypeshelper.utils.doc.Document;
 import datatypeshelper.utils.doc.DocumentCategory;
@@ -18,7 +18,6 @@ import datatypeshelper.utils.doc.ner.SignedNamedEntityInText;
 
 @SuppressWarnings("unchecked")
 class CorpusXmlTagHelper {
-
     private static List<Class<? extends ParseableDocumentProperty>> registeredProperties = Arrays
             .asList((Class<? extends ParseableDocumentProperty>) DocumentName.class,
                     (Class<? extends ParseableDocumentProperty>) DocumentText.class,

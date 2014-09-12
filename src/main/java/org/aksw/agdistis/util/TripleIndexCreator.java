@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -31,6 +30,8 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
+
+import com.hp.hpl.jena.util.FileUtils;
 
 public class TripleIndexCreator {
     private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreator.class);
@@ -120,7 +121,7 @@ public class TripleIndexCreator {
             iwriter = new IndexWriter(directory, config);
             iwriter.commit();
             for (File file : files) {
-                String type = FilenameUtils.getExtension(file.getName());
+                String type = FileUtils.getFilenameExt(file.getName());
                 if (type.equals(TTL))
                     indexTTLFile(file, baseURI);
                 if (type.equals(TSV))

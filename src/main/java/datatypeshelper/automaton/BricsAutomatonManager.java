@@ -15,7 +15,8 @@ public class BricsAutomatonManager extends AbstractMultiPatternAutomaton {
         }
     }
 
-    public void parseText(String text) {
+    @Override
+	public void parseText(String text) {
         int pos = 0;
         int textLength = text.length();
         if (textLength > 0) {

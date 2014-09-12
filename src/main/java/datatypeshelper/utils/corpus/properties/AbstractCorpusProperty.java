@@ -9,7 +9,8 @@ public abstract class AbstractCorpusProperty implements CorpusProperty {
         return getValue().hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuilder result = new StringBuilder();
         result.append(this.getClass().getSimpleName());
         result.append("=\"");

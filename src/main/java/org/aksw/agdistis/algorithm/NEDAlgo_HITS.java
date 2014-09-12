@@ -32,13 +32,13 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	private DirectedSparseGraph<Node, String>[] graph = null;
 	// needed for the experiment about which properties increase accuracy
 	private HashSet<String> restrictedEdges = null;
-	private double threshholdTrigram = 0.9;
+	private double threshholdTrigram = 0.82;
 	private int maxDepth = 2;
 
 	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
-		this.cu = new CandidateUtil(indexDirectory);
+		this.cu = new CandidateUtil(indexDirectory, nodeType);
 		this.index = cu.getIndex();
 		this.graph = new DirectedSparseGraph[1];
 	}
@@ -124,9 +124,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.aksw.agdistis.algorithm.DisambiguationAlgorithm#run(datatypeshelper
-	 * .utils.doc.Document, double, int)
+	 * @see org.aksw.agdistis.algorithm.DisambiguationAlgorithm#run(datatypeshelper .utils.doc.Document, double, int)
 	 */
 	@Override
 	public void run(Document document) {
@@ -207,10 +205,12 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 		return graph;
 	}
 
+	@Override
 	public void setThreshholdTrigram(double threshholdTrigram) {
 		this.threshholdTrigram = threshholdTrigram;
 	}
 
+	@Override
 	public void setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
 	}

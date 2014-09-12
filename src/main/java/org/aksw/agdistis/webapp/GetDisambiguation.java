@@ -31,7 +31,7 @@ public class GetDisambiguation extends ServerResource {
 
 	public GetDisambiguation(String dataDirectory) {
 		File data = new File(dataDirectory);
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		String nodeType = "http://de.dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 		try {
 			dbpedia = new DBPedia("http://dbpedia.org/sparql");
@@ -42,8 +42,8 @@ public class GetDisambiguation extends ServerResource {
 	}
 
 	public GetDisambiguation() {
-		File dataDirectory = new File("/home/rusbeck/englishAGDISTIS/indexdbpedia_en");// /home/rusbeck/AGDISTIS/ /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
+		File dataDirectory = new File("/data/r.usbeck/indexdbpedia_de");// /home/rusbeck/AGDISTIS/ /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
+		String nodeType = "http://de.dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
 		agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);

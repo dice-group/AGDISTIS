@@ -10,6 +10,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParserBase;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -81,7 +82,7 @@ public class TripleIndex {
                     Analyzer analyzer = new LiteralAnalyzer(Version.LUCENE_44);
                     QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT_LITERAL, analyzer);
                     parser.setDefaultOperator(QueryParser.Operator.OR);
-                    q = parser.parse(QueryParser.escape(object));
+                    q = parser.parse(QueryParserBase.escape(object));
                 }
                 bq.add(q, BooleanClause.Occur.MUST);
             }

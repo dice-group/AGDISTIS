@@ -95,30 +95,30 @@
 	<!-- PROPERTIES -->
 	<properties>
 		<autosparql.version>1.0-SNAPSHOT</autosparql.version>
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
 		<mavenVersion>4.0</mavenVersion>
-				<jena.version>2.11.1</jena.version>
+		<jena.version>2.11.1</jena.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
 	</prerequisites>
 	<repositories>
-    <repository>
-        <id>maven.aksw.internal</id>
-        <name>University Leipzig, AKSW Maven2 Repository</name>
-        <url>http://maven.aksw.org/archiva/repository/internal</url>
-    </repository>
+		<repository>
+			<id>maven.aksw.internal</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/internal</url>
+		</repository>
 
-    <repository>
-        <id>maven.aksw.snapshots</id>
-        <name>University Leipzig, AKSW Maven2 Repository</name>
-        <url>http://maven.aksw.org/archiva/repository/snapshots</url>
-    </repository>
-<repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
+		</repository>
+		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.org</url>
@@ -230,19 +230,14 @@
 			<artifactId>jung-graph-impl</artifactId>
 			<version>2.0.1</version>
 		</dependency>
-		<!-- local libs -->
-		<!-- <dependency> <groupId>de.bluekiwi</groupId> <artifactId>QRToolNED.datatypes</artifactId> 
-			<version>0.0.1</version> <scope>system</scope> <systemPath>${project.basedir}/lib/QRToolNED.datatypes-0.0.1.jar</systemPath> 
-			</dependency> <dependency> <groupId>de.bluekiwi</groupId> <artifactId>uber-topicmodeling.io</artifactId> 
-			<version>0.0.2-SNAPSHOT</version> <scope>system</scope> <systemPath>${project.basedir}/lib/uber-topicmodeling.io-0.0.2-SNAPSHOT.jar</systemPath> 
-			</dependency> -->
-		<!--<dependency> -->
-		<!--<groupId>de.bluekiwi</groupId> -->
-		<!--<artifactId>aida</artifactId> -->
-		<!--<version>0.0.1</version> -->
-		<!--<scope>system</scope> -->
-		<!--<systemPath>${project.basedir}/lib/aida.jar</systemPath> -->
-		<!--</dependency> -->
+		<!--Utils maybe not needed -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -340,12 +335,12 @@
 			<artifactId>hppc</artifactId>
 			<version>0.5.3</version>
 		</dependency>
-		 <dependency>
-      <groupId>org.dllearner</groupId>
-      <artifactId>autosparql</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>war</type>
-    </dependency><!-- Sparql -->
+		<dependency>
+			<groupId>org.dllearner</groupId>
+			<artifactId>autosparql</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency><!-- Sparql -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-arq</artifactId>

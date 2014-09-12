@@ -22,25 +22,27 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class CandidateUtil {
 	private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
-	private String nodeType = "http://dbpedia.org/resource/";
+	private String nodeType;
 	private TripleIndex index;
 	private NGramDistance n;
 
 	/**
 	 * @param knowledgeBase
-	 *            "http://yago-knowledge.org/resource/" or
-	 *            "http://dbpedia.org/resource/"
+	 *            "http://yago-knowledge.org/resource/" or "http://dbpedia.org/resource/"
 	 * 
 	 * @param languageTag
 	 *            en or de
 	 * @param dataDirectory
-	 *            parent directory of index and dump file directory. E.g.,
-	 *            /data/r.usbeck ---> /data/r.usbeck/index/.., --->
-	 *            /data/r.usbeck/dbpedia_[LANGUAGE]
+	 *            parent directory of index and dump file directory. E.g., /data/r.usbeck ---> /data/r.usbeck/index/.., ---> /data/r.usbeck/dbpedia_[LANGUAGE]
 	 */
-	public CandidateUtil(File indexDirectory) {
+	public CandidateUtil(File indexDirectory, String nodeType) {
 		index = new TripleIndex(indexDirectory);
 		n = new NGramDistance(3);
+		if (nodeType != null) {
+			this.nodeType = nodeType;
+		} else {
+			this.nodeType = "http://dbpedia.org/resource/";
+		}
 
 	}
 
@@ -57,7 +59,7 @@ public class CandidateUtil {
 			String label = text.substring(entity.getStartPos(), entity.getEndPos());
 			log.info("\tLabel: " + label);
 			long start = System.currentTimeMillis();
-//			label = heuristicExpansion(heuristicExpansion, label);
+			label = heuristicExpansion(heuristicExpansion, label);
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, false);
 			log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
 		}
@@ -72,12 +74,12 @@ public class CandidateUtil {
 				if (tmp.length() > key.length() && tmp != label) {
 					tmp = key;
 					expansion = true;
-					log.debug("Heuristik expansion: " + label + "-->" + key);
+					// log.debug("Heuristik expansion: " + label + "-->" + key);
 				}
 				if (tmp.length() < key.length() && tmp == label) {
 					tmp = key;
 					expansion = true;
-					log.debug("Heuristik expansion: " + label + "-->" + key);
+					// log.debug("Heuristik expansion: " + label + "-->" + key);
 				}
 			}
 		}
@@ -90,7 +92,7 @@ public class CandidateUtil {
 
 	public void addNodeToGraph(DirectedSparseGraph<Node, String> graph, HashMap<String, Node> nodes, NamedEntityInText entity, Triple c, String candidateURL) {
 		Node currentNode = new Node(candidateURL, 0, 0);
-		log.debug(currentNode.toString());
+		// log.debug(currentNode.toString());
 		// candidates are connected to a specific label in the text via their
 		// start position
 		if (!graph.addVertex(currentNode)) {
@@ -101,7 +103,7 @@ public class CandidateUtil {
 				log.error("This vertex couldn't be added because of an bug in Jung: " + candidateURL);
 			} else {
 				nodes.get(candidateURL).addId(st);
-				log.debug("\t\tCandidate has not been insert: " + c + " but inserted an additional labelId at that node.");
+				// log.debug("\t\tCandidate has not been insert: " + c + " but inserted an additional labelId at that node.");
 			}
 		} else {
 			currentNode.addId(entity.getStartPos());
@@ -110,14 +112,14 @@ public class CandidateUtil {
 	}
 
 	public String redirect(String candidateURL) {
-		if(candidateURL==null){
+		if (candidateURL == null) {
 			return candidateURL;
 		}
 		List<Triple> redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
 		if (redirect.size() == 1) {
 			return redirect.get(0).getObject();
 		} else if (redirect.size() > 1) {
-			log.error("Candidate: " + candidateURL +" redirect.get(0).getObject(): "+ redirect.get(0).getObject() );
+			log.error("Candidate: " + candidateURL + " redirect.get(0).getObject(): " + redirect.get(0).getObject());
 			return candidateURL;
 		} else {
 			return candidateURL;
@@ -151,8 +153,8 @@ public class CandidateUtil {
 			String surfaceForm = c.getObject();
 			// rule of thumb: no year numbers in candidates
 			if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
-				//REX: Range similarity for (s,o) and predicate range
-				if(!fitsRangeOfPredicate(candidateURL, knowledgeBase,entity)){
+				// REX: Range similarity for (s,o) and predicate range
+				if (!fitsRangeOfPredicate(candidateURL, knowledgeBase, entity)) {
 					continue;
 				}
 				// trigram similarity
@@ -182,9 +184,9 @@ public class CandidateUtil {
 		tmp.addAll(index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", label));
 		if (searchInSurfaceFormsToo)
 			tmp.addAll(index.search(null, "http://www.w3.org/2004/02/skos/core#altLabel", label));
-		for (Triple t : tmp) {
-			log.debug(label + " -> " + t.getObject());
-		}
+		// for (Triple t : tmp) {
+		// log.debug(label + " -> " + t.getObject());
+		// }
 		return tmp;
 	}
 
@@ -221,28 +223,29 @@ public class CandidateUtil {
 	private double trigramForURLLabel(String surfaceForm, String label) {
 		return n.getDistance(surfaceForm, label);
 	}
+
 	private boolean fitsRangeOfPredicate(String candidateURL, String knowledgeBase, NamedEntityInText entity) {
-		if(entity.getDomain()==null)
+		if (entity.getDomain() == null)
 			return true;
 		HashSet<String> whiteList = new HashSet<String>();
-			whiteList.add(entity.getDomain());
-			
+		whiteList.add(entity.getDomain());
 
 		List<Triple> tmp = index.search(candidateURL, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", null);
 		if (tmp.isEmpty())
 			return true;
 		for (Triple triple : tmp) {
 			if (!triple.getObject().contains("wordnet") && !triple.getObject().contains("wikicategory"))
-				log.debug("\ttype: " + triple.getObject());
-			if (whiteList.contains(triple.getObject())) {
-				return true;
-			}
+				// log.debug("\ttype: " + triple.getObject());
+				if (whiteList.contains(triple.getObject())) {
+					return true;
+				}
 		}
 		return false;
 	}
+
 	private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {
 		HashSet<String> whiteList = new HashSet<String>();
-		if ("http://dbpedia.org/resource/".equals(knowledgeBase)) {
+		if (knowledgeBase.contains("dbpedia.org")) {
 			whiteList.add("http://dbpedia.org/ontology/Place");
 			whiteList.add("http://dbpedia.org/ontology/Person");
 			whiteList.add("http://dbpedia.org/ontology/Organisation");
@@ -260,10 +263,10 @@ public class CandidateUtil {
 			return true;
 		for (Triple triple : tmp) {
 			if (!triple.getObject().contains("wordnet") && !triple.getObject().contains("wikicategory"))
-				log.debug("\ttype: " + triple.getObject());
-			if (whiteList.contains(triple.getObject())) {
-				return true;
-			}
+				// log.debug("\ttype: " + triple.getObject());
+				if (whiteList.contains(triple.getObject())) {
+					return true;
+				}
 		}
 		return false;
 	}

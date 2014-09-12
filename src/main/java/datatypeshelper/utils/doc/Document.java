@@ -96,7 +96,8 @@ public class Document implements Comparable<Document>, Serializable, Iterable<Do
         return result.toString();
     }
 
-    public Iterator<DocumentProperty> iterator() {
+    @Override
+	public Iterator<DocumentProperty> iterator() {
         return new DocumentPropertyIterator(this);
     }
 }

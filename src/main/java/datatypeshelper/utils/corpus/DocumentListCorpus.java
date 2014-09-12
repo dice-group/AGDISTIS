@@ -23,7 +23,8 @@ public class DocumentListCorpus<T extends List<Document>> extends AbstractCorpus
         corpus = listImplementation;
     }
 
-    public void addDocument(Document document)
+    @Override
+	public void addDocument(Document document)
     {
         // corpus.add(document.getDocumentId(), document);
         corpus.add(document);
@@ -55,7 +56,8 @@ public class DocumentListCorpus<T extends List<Document>> extends AbstractCorpus
         return getNumberOfDocuments();
     }
 
-    public Document getDocument(int documentId) {
+    @Override
+	public Document getDocument(int documentId) {
         return corpus.get(documentId);
     }
 

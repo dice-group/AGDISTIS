@@ -119,8 +119,8 @@ public class DbAdapter {
 
     public List<Label> getAllLabels() {
         // label.labelID, label.label
-        return jdbctemplate.query(SELECT_ALL_LABELS, new LabelRowMapper(2, 1, LabelRowMapper.NOT_IN_RESULT_SET,
-                LabelRowMapper.NOT_IN_RESULT_SET, LabelRowMapper.NOT_IN_RESULT_SET));
+        return jdbctemplate.query(SELECT_ALL_LABELS, new LabelRowMapper(2, 1, ConfigurableRowMapper.NOT_IN_RESULT_SET,
+                ConfigurableRowMapper.NOT_IN_RESULT_SET, ConfigurableRowMapper.NOT_IN_RESULT_SET));
     }
 
     public List<Candidate> getCandidatesForLabel(Integer labelId) {
@@ -188,7 +188,7 @@ public class DbAdapter {
 
     public List<Label> getNotIdentifiedEntities(int textId) {
         return jdbctemplate.query(SELECT_NOT_IDENTIFIED_NES_IN_TEXT, new Object[] { textId }, new LabelRowMapper(1,
-                LabelRowMapper.NOT_IN_RESULT_SET, 2, 3, LabelRowMapper.NOT_IN_RESULT_SET));
+                ConfigurableRowMapper.NOT_IN_RESULT_SET, 2, 3, ConfigurableRowMapper.NOT_IN_RESULT_SET));
     }
 
     public TextWithLabels getTextForUser(String userName) {
@@ -244,7 +244,7 @@ public class DbAdapter {
         List<Voting> votings = jdbctemplate.query(SELECT_POSITIV_VOTED_LABELS_IN_TEXT, new Object[] { textHasLabelId },
                 new VotingRowMapper(1, 2, 3, 4, 5));
         votings.addAll(jdbctemplate.query(SELECT_VOTED_LABELS_WHICH_ARE_NO_ENTITIES, new Object[] { textHasLabelId },
-                new VotingRowMapper(1, 2, VotingRowMapper.NOT_IN_RESULT_SET, VotingRowMapper.NOT_IN_RESULT_SET, 3)));
+                new VotingRowMapper(1, 2, ConfigurableRowMapper.NOT_IN_RESULT_SET, ConfigurableRowMapper.NOT_IN_RESULT_SET, 3)));
         votings.addAll(jdbctemplate.query(SELECT_VOTED_LABELS_WITH_UNKNOWN_CANDIDATE_IN_TEXT,
                 new Object[] { textHasLabelId },
                 new VotingRowMapper(1, 2, 3, 4, 5)));

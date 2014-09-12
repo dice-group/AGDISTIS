@@ -11,7 +11,8 @@ public abstract class AbstractArrayContainingDocumentProperty implements ArrayCo
         return getValueAsArray();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getClass().getSimpleName());
         builder.append("=\"");

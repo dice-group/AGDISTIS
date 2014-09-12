@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.hp.hpl.jena.util.FileUtils;
 
 import datatypeshelper.io.CorpusReader;
 import datatypeshelper.preprocessing.docsupplier.DocumentSupplier;
@@ -43,7 +44,7 @@ public class CorpusXmlReader extends AbstractDocumentXmlReader implements Corpus
         this.corpus = new DocumentListCorpus<List<Document>>(new ArrayList<Document>());
         String text;
         try {
-            text = FileUtils.readFileToString(file);
+            text = FileUtils.readWholeFileAsUTF8(file.getName());
         } catch (IOException e) {
             LOGGER.error("Couldn't read file.", e);
             return;
