@@ -49,17 +49,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>7.0.0.v20091005</version>
@@ -67,31 +56,8 @@
 					<scanIntervalSeconds>2</scanIntervalSeconds>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>github.numberformat</groupId>
-				<artifactId>blog-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
-				<configuration>
-					<gitUrl>https://github.com/numberformat/20110220</gitUrl>
-				</configuration>
-				<executions>
-					<execution>
-						<id>1</id>
-						<phase>site</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>numberformat-releases</id>
-			<url>https://raw.github.com/numberformat/20130213/master/repo</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<!-- PROPERTIES -->
 	<properties>
 		<autosparql.version>1.0-SNAPSHOT</autosparql.version>
@@ -112,7 +78,6 @@
 			<name>University Leipzig, AKSW Maven2 Repository</name>
 			<url>http://maven.aksw.org/archiva/repository/internal</url>
 		</repository>
-
 		<repository>
 			<id>maven.aksw.snapshots</id>
 			<name>University Leipzig, AKSW Maven2 Repository</name>
@@ -123,12 +88,6 @@
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.org</url>
 		</repository>
-
-		<!--<repository> -->
-		<!--<id>aduna</id> -->
-		<!--<name>Aduna Software</name> -->
-		<!--<url>http://repo.aduna-software.org/maven2/releases/</url> -->
-		<!--</repository> -->
 		<repository>
 			<id>Apache Repo Central</id>
 			<name>Apache Repository</name>
@@ -141,12 +100,14 @@
 		</repository>
 	</repositories>
 	<dependencies>
+		<!-- ~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Testing ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- ~~~~~~~~~~~~~~~~~~~ Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- slf4j: Logging API -->
 		<dependency>
@@ -162,13 +123,19 @@
 		</dependency>
 
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
-		<!-- Jena -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
-			<groupId>com.hp.hpl.jena</groupId>
-			<artifactId>jena</artifactId>
-			<version>2.6.4</version>
+			<groupId>net.sf.jung</groupId>
+			<artifactId>jung-graph-impl</artifactId>
+			<version>2.0.1</version>
 		</dependency>
-
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- Sparql -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>${jena.version}</version>
+		</dependency>
 		<!-- Sesame -->
 		<dependency>
 
@@ -209,6 +176,7 @@
 		</dependency>
 
 		<!-- validating URI -->
+		<!--Utils maybe not needed -->
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
@@ -224,33 +192,31 @@
 			<artifactId>commons-io</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<!-- Jung Graph -->
-		<dependency>
-			<groupId>net.sf.jung</groupId>
-			<artifactId>jung-graph-impl</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<!--Utils maybe not needed -->
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 			<version>4.0</version>
 		</dependency>
-
-
+		<!-- Mutable Pair -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<!--Utils maybe not needed -->
+
+
 		<dependency>
 			<groupId>net.sourceforge.collections</groupId>
 			<artifactId>collections-generic</artifactId>
 			<version>4.01</version>
 		</dependency>
-		<!-- REST interface <dependency> <groupId>org.restlet.jse</groupId> <artifactId>org.restlet.ext.simple</artifactId> 
-			<version>2.1.0</version> </dependency> <dependency> <groupId>org.restlet.jse</groupId> 
-			<artifactId>org.restlet</artifactId> <version>2.1.0</version> </dependency> -->
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet</artifactId>
@@ -307,28 +273,12 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<!-- Mutable Pair -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
-		</dependency>
+
 		<!-- Brics Automatons -->
 		<dependency>
 			<groupId>dk.brics.automaton</groupId>
 			<artifactId>automaton</artifactId>
 			<version>1.11-8</version>
-		</dependency>
-		<!-- Combopooleddatasource -->
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.carrotsearch</groupId>
@@ -340,11 +290,6 @@
 			<artifactId>autosparql</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<type>war</type>
-		</dependency><!-- Sparql -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
-			<version>${jena.version}</version>
 		</dependency>
 	</dependencies>
 </project>
