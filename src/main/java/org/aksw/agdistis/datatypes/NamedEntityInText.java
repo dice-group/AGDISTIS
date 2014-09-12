@@ -1,4 +1,4 @@
-package datatypeshelper.utils.doc.ner;
+package org.aksw.agdistis.datatypes;
 
 import java.io.Serializable;
 
