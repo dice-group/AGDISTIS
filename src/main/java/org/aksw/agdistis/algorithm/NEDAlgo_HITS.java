@@ -35,6 +35,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	private double threshholdTrigram = 0.82;
 	private int maxDepth = 2;
 
+	@SuppressWarnings("unchecked")
 	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;

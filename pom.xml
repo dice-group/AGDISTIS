@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.aksw</groupId>
 	<artifactId>AGDISTIS</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>war</packaging>
 	<!-- BUILD -->
 	<build>
@@ -60,29 +60,16 @@
 	</build>
 	<!-- PROPERTIES -->
 	<properties>
-		<autosparql.version>1.0-SNAPSHOT</autosparql.version>
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
 		<mavenVersion>4.0</mavenVersion>
-		<jena.version>2.11.1</jena.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
 	</prerequisites>
 	<repositories>
-		<repository>
-			<id>maven.aksw.internal</id>
-			<name>University Leipzig, AKSW Maven2 Repository</name>
-			<url>http://maven.aksw.org/archiva/repository/internal</url>
-		</repository>
-		<repository>
-			<id>maven.aksw.snapshots</id>
-			<name>University Leipzig, AKSW Maven2 Repository</name>
-			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
-		</repository>
 		<repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
@@ -116,7 +103,6 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- ~~~~~~~~~~~~~~~~~~~ Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
@@ -125,30 +111,19 @@
 			<version>2.0.1</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
-		<!-- Sparql -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ SPARQL ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
-			<version>${jena.version}</version>
-		</dependency>
-		<!-- Sesame -->
-		<dependency>
-
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-runtime</artifactId>
 			<version>2.7.0-beta1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r09</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-turtle</artifactId>
 			<version>2.7.0-beta1</version>
 		</dependency>
-		<!-- for parsing SGML annotated Reuters dataset -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ End SPARQL ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ Lucene for Indexing ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
@@ -164,103 +139,33 @@
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>4.4.0</version>
 		</dependency>
+		<!-- Used for N-Gram Similarity -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-spellchecker</artifactId>
 			<version>3.6.2</version>
 		</dependency>
-
-		<!-- validating URI -->
-		<!--Utils maybe not needed -->
-		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-			<version>1.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>4.0</version>
-		</dependency>
-		<!-- Mutable Pair -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
-		</dependency>
-		<!--Utils maybe not needed -->
-
-
-		<dependency>
-			<groupId>net.sourceforge.collections</groupId>
-			<artifactId>collections-generic</artifactId>
-			<version>4.01</version>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>2.1.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.simple</artifactId>
-			<version>2.1.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jee</groupId>
-			<artifactId>org.restlet.ext.servlet</artifactId>
-			<version>2.1.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_2.5_spec</artifactId>
-			<version>1.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- JSON -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Lucene for Indexing ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ JSON ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End JSON ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ Restlet for restful API ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
-			<groupId>com.carrotsearch</groupId>
-			<artifactId>hppc</artifactId>
-			<version>0.5.3</version>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>2.2.0</version>
 		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Restlet for restful API ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ Validating URIs ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Validating URIs ~~~~~~~~~~~~~~~~~~~~~~ -->
 	</dependencies>
 </project>
