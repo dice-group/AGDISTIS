@@ -38,7 +38,7 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	public NEDAlgo_HITS(String nodeType, String edgeType) {
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
-		this.cu = new CandidateUtil(nodeType);
+		this.cu = new CandidateUtil();
 		this.index = cu.getIndex();
 		this.graph = new DirectedSparseGraph[1];
 	}

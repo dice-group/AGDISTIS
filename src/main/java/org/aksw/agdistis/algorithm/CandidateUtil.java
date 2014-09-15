@@ -1,10 +1,14 @@
 package org.aksw.agdistis.algorithm;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
@@ -24,39 +28,42 @@ public class CandidateUtil {
 	private TripleIndex index;
 	private NGramDistance n;
 
-	/**
-	 * @param knowledgeBase
-	 *            "http://yago-knowledge.org/resource/" or "http://dbpedia.org/resource/"
-	 * 
-	 * @param languageTag
-	 *            en or de
-	 */
-	public CandidateUtil(String nodeType) {
-		index = new TripleIndex();
-		n = new NGramDistance(3);
-		if (nodeType != null) {
-			this.nodeType = nodeType;
-		} else {
-			this.nodeType = "http://dbpedia.org/resource/";
-		}
+	public CandidateUtil() {
+		try {
+			Properties prop = new Properties();
+			InputStream input = new FileInputStream("agdistis.properties");
+			prop.load(input);
 
+			String nodeType = prop.getProperty("nodeType");
+			String nGramDistance = prop.getProperty("ngramDistance");
+
+			this.index = new TripleIndex();
+			this.n = new NGramDistance(Integer.valueOf(nGramDistance));
+			this.nodeType = nodeType;
+		} catch (IOException e) {
+			log.error("Cannot create CandidateUtil. AGDISTIS will not work so.", e);
+		}
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document, double threshholdTrigram) {
 		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		String text = document.DocumentText().getText();
+
 		HashMap<String, Node> nodes = new HashMap<String, Node>();
 
-		// start with longest Named Entities
+		// used for heuristic label expansion start with longest Named Entities
 		Collections.sort(namedEntities.getNamedEntities(), new NamedEntityLengthComparator());
 		Collections.reverse(namedEntities.getNamedEntities());
 		HashSet<String> heuristicExpansion = new HashSet<String>();
 		for (NamedEntityInText entity : namedEntities) {
 			String label = text.substring(entity.getStartPos(), entity.getEndPos());
+
 			log.info("\tLabel: " + label);
 			long start = System.currentTimeMillis();
+
 			label = heuristicExpansion(heuristicExpansion, label);
-			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, false);
+			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label,false);
+
 			log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
 		}
 	}
@@ -70,12 +77,12 @@ public class CandidateUtil {
 				if (tmp.length() > key.length() && tmp != label) {
 					tmp = key;
 					expansion = true;
-					// log.debug("Heuristik expansion: " + label + "-->" + key);
+					log.debug("Heuristic expansion: " + label + "-->" + key);
 				}
 				if (tmp.length() < key.length() && tmp == label) {
 					tmp = key;
 					expansion = true;
-					// log.debug("Heuristik expansion: " + label + "-->" + key);
+					log.debug("Heuristic expansion: " + label + "-->" + key);
 				}
 			}
 		}
@@ -88,18 +95,15 @@ public class CandidateUtil {
 
 	public void addNodeToGraph(DirectedSparseGraph<Node, String> graph, HashMap<String, Node> nodes, NamedEntityInText entity, Triple c, String candidateURL) {
 		Node currentNode = new Node(candidateURL, 0, 0);
-		// log.debug(currentNode.toString());
+		log.debug(currentNode.toString());
 		// candidates are connected to a specific label in the text via their
 		// start position
 		if (!graph.addVertex(currentNode)) {
 			int st = entity.getStartPos();
 			if (nodes.get(candidateURL) == null) {
-				// no more jung is used so maybe this error does not occure
-				// anymore
 				log.error("This vertex couldn't be added because of an bug in Jung: " + candidateURL);
 			} else {
 				nodes.get(candidateURL).addId(st);
-				// log.debug("\t\tCandidate has not been insert: " + c + " but inserted an additional labelId at that node.");
 			}
 		} else {
 			currentNode.addId(entity.getStartPos());
@@ -122,7 +126,7 @@ public class CandidateUtil {
 		}
 	}
 
-	private void checkLabelCandidates(DirectedSparseGraph<Node, String> graph, double threshholdTrigram, HashMap<String, Node> nodes, NamedEntityInText entity, String label, String knowledgeBase, boolean searchInSurfaceForms) {
+	private void checkLabelCandidates(DirectedSparseGraph<Node, String> graph, double threshholdTrigram, HashMap<String, Node> nodes, NamedEntityInText entity, String label, boolean searchInSurfaceForms) {
 		label = cleanLabelsfromCorporationIdentifier(label);
 		label = label.trim();
 
@@ -150,7 +154,7 @@ public class CandidateUtil {
 			// rule of thumb: no year numbers in candidates
 			if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
 				// REX: Range similarity for (s,o) and predicate range
-				if (!fitsRangeOfPredicate(candidateURL, knowledgeBase, entity)) {
+				if (!fitsRangeOfPredicate(candidateURL, entity)) {
 					continue;
 				}
 				// trigram similarity
@@ -162,27 +166,23 @@ public class CandidateUtil {
 					continue;
 				}
 				// follow redirect
-				if (!nodeType.equals("http://yago-knowledge.org/resource/")) {
 					candidateURL = redirect(candidateURL);
-				}
-				if (fitsIntoDomain(candidateURL, knowledgeBase)) {
+				if (fitsIntoDomain(candidateURL)) {
 					addNodeToGraph(graph, nodes, entity, c, candidateURL);
 					added = true;
 				}
 			}
 		}
 		if (!added && !searchInSurfaceForms)
-			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, nodeType, true);
+			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, true);
 	}
 
 	private ArrayList<Triple> searchCandidatesByLabel(String label, boolean searchInSurfaceFormsToo) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		tmp.addAll(index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", label));
-		if (searchInSurfaceFormsToo)
+		if (searchInSurfaceFormsToo) {
 			tmp.addAll(index.search(null, "http://www.w3.org/2004/02/skos/core#altLabel", label));
-		// for (Triple t : tmp) {
-		// log.debug(label + " -> " + t.getObject());
-		// }
+		}
 		return tmp;
 	}
 
@@ -195,6 +195,7 @@ public class CandidateUtil {
 	}
 
 	private String cleanLabelsfromCorporationIdentifier(String label) {
+		//TODO put that in agdistis.properties as well
 		if (label.endsWith("corp")) {
 			label = label.substring(0, label.lastIndexOf("corp"));
 		} else if (label.endsWith("Corp")) {
@@ -220,7 +221,7 @@ public class CandidateUtil {
 		return n.getDistance(surfaceForm, label);
 	}
 
-	private boolean fitsRangeOfPredicate(String candidateURL, String knowledgeBase, NamedEntityInText entity) {
+	private boolean fitsRangeOfPredicate(String candidateURL, NamedEntityInText entity) {
 		if (entity.getDomain() == null)
 			return true;
 		HashSet<String> whiteList = new HashSet<String>();
@@ -239,9 +240,10 @@ public class CandidateUtil {
 		return false;
 	}
 
-	private boolean fitsIntoDomain(String candidateURL, String knowledgeBase) {
+	private boolean fitsIntoDomain(String candidateURL) {
+		//TODO put that in properties file as well
 		HashSet<String> whiteList = new HashSet<String>();
-		if (knowledgeBase.contains("dbpedia.org")) {
+		if (nodeType.contains("dbpedia.org")) {
 			whiteList.add("http://dbpedia.org/ontology/Place");
 			whiteList.add("http://dbpedia.org/ontology/Person");
 			whiteList.add("http://dbpedia.org/ontology/Organisation");
