@@ -30,7 +30,7 @@ public class BreadthFirstSearch {
 			Node currentNode = q.poll();
 			int level = currentNode.getLevel();
 			if (level < maxDepth) {
-				List<Triple> outgoingNodes = index.search(currentNode.getCandidateURI(),null,null);
+				List<Triple> outgoingNodes = index.search(currentNode.getCandidateURI(), null, null);
 				for (Triple targetNode : outgoingNodes) {
 					if (targetNode.getPredicate().startsWith(edgeType) && targetNode.getObject().startsWith(nodeType)) {
 						int levelNow = level + 1;

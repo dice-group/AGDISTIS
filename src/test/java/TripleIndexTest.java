@@ -1,6 +1,6 @@
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.aksw.agdistis.util.Triple;
@@ -18,12 +18,20 @@ public class TripleIndexTest {
 
 	@Before
 	public void init() {
-		index = new TripleIndex(new File("/data/r.usbeck/index_dbpedia_39_en"));
+		try {
+			index = new TripleIndex();
+		} catch (IOException e) {
+			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
+		}
 	}
 
 	@After
 	public void close() {
-		index.close();
+		try {
+			index.close();
+		} catch (IOException e) {
+			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
+		}
 	}
 
 	@Test
@@ -78,6 +86,7 @@ public class TripleIndexTest {
 			log.debug(t.toString());
 		}
 	}
+
 	@Test
 	public void testMultipleTermsPerField() {
 		String candidate = "New York";
@@ -93,7 +102,7 @@ public class TripleIndexTest {
 		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
 		List<Triple> label = index.search(candidateURL, "http://www.w3.org/2000/01/rdf-schema#label", null);
 		List<Triple> surfaceForms = index.search(candidateURL, "http://www.w3.org/2004/02/skos/core#altLabel", null);
-		log.debug(" * "+surfaceForms.size());
+		log.debug(" * " + surfaceForms.size());
 		NGramDistance n = new NGramDistance(3);
 		for (Triple t : surfaceForms) {
 			log.debug(label.get(0).getObject() + " " + t.getObject() + " : " + n.getDistance(label.get(0).getObject(), t.getObject()));

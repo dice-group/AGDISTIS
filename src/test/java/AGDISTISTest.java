@@ -1,27 +1,20 @@
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.NamedEntitiesInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
-
 public class AGDISTISTest {
-	String languageTag = "en"; // de
-	File dataDirectory = new File("/data/r.usbeck/index_dbpedia_39_en"); // "/home/rusbeck/AGDISTIS/";
-	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
 	@Test
 	public void testUmlaute() throws InterruptedException, IOException {
-		String osumi = "Masaaki Ōsumi";
+		String osumi = "Masaaki_Ōsumi";
 		String osumiURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
 		String japan = "Japan";
 		String japanURL = "http://dbpedia.org/resource/Japan";
@@ -32,10 +25,10 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 		for (NamedEntityInText namedEntity : namedEntities) {
 			String disambiguatedURL = agdistis.findResult(namedEntity);
@@ -67,10 +60,10 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(  dataDirectory, nodeType, edgeType);
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 		for (NamedEntityInText namedEntity : namedEntities) {
 			String disambiguatedURL = agdistis.findResult(namedEntity);

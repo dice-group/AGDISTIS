@@ -1,16 +1,16 @@
 package org.aksw.agdistis.webapp;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
-import org.aksw.agdistis.algorithm.NEDSpotlightPoster;
-import org.aksw.agdistis.util.DBPedia;
+import org.aksw.agdistis.datatypes.Document;
+import org.aksw.agdistis.datatypes.DocumentText;
+import org.aksw.agdistis.datatypes.NamedEntitiesInText;
+import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.openrdf.repository.RepositoryException;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -18,36 +18,17 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import datatypeshelper.utils.doc.Document;
-import datatypeshelper.utils.doc.DocumentText;
-import datatypeshelper.utils.doc.ner.NamedEntitiesInText;
-import datatypeshelper.utils.doc.ner.NamedEntityInText;
-
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
 	private NEDAlgo_HITS agdistis;
-	private DisambiguationAlgorithm spotlight;
-	private DBPedia dbpedia;
-
-	public GetDisambiguation(String dataDirectory) {
-		File data = new File(dataDirectory);
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
-		try {
-			dbpedia = new DBPedia("http://dbpedia.org/sparql");
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-		agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
-	}
 
 	public GetDisambiguation() {
-		File dataDirectory = new File("/home/rusbeck/englishAGDISTIS/indexdbpedia_en");// /home/rusbeck/AGDISTIS/ /data/r.usbeck"; // "/home/rusbeck/AGDISTIS/";
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
-
-		agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
-		spotlight = new NEDSpotlightPoster();
+		try {
+			agdistis = new NEDAlgo_HITS();
+		} catch (IOException e) {
+			log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
+			System.exit(0);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -58,15 +39,18 @@ public class GetDisambiguation extends ServerResource {
 		Form form = new Form(entity);
 		String text = form.getFirstValue("text");
 		String type = form.getFirstValue("type");
+
 		log.info("text: " + text);
 		log.info("type: " + type);
+
+		evaluationOptionalParameters(form);
+
 		JSONArray arr = new org.json.simple.JSONArray();
 		HashMap<NamedEntityInText, String> results = null;
 		Document d = textToDocument(text);
+
 		if (type.equals("agdistis")) {
 			results = results(d, agdistis);
-		} else if (type.equals("spotlight")) {
-			results = results(d, spotlight);
 		} else {
 			return "ERROR: wrong type";
 		}
@@ -83,6 +67,34 @@ public class GetDisambiguation extends ServerResource {
 		log.info("Finished Request");
 		return arr.toString();
 
+	}
+
+	private void evaluationOptionalParameters(Form form) {
+		String similarityThreshold = form.getFirstValue("similarity");
+		String explorationDepth = form.getFirstValue("depth");
+		String heuristicExpansion = form.getFirstValue("heuristic");
+		
+		log.info("similarityThreshold: " + similarityThreshold);
+		log.info("explorationDepth: " + explorationDepth);
+		log.info("heuristicExpansion: " + heuristicExpansion);
+
+		if (similarityThreshold != null) {
+			agdistis.setThreshholdTrigram(Double.valueOf(similarityThreshold));
+		} else {
+			agdistis.setThreshholdTrigram(0.82);
+		}
+		
+		if (explorationDepth != null) {
+			agdistis.setMaxDepth(Integer.valueOf(explorationDepth));
+		} else {
+			agdistis.setMaxDepth(2);
+		}
+		
+		if (heuristicExpansion != null) {
+			agdistis.setHeuristicExpansionOn(Boolean.valueOf(heuristicExpansion));
+		} else {
+			agdistis.setHeuristicExpansionOn(false);
+		}
 	}
 
 	public static Document textToDocument(String preAnnotatedText) {
@@ -107,14 +119,14 @@ public class GetDisambiguation extends ServerResource {
 		NamedEntitiesInText nes = new NamedEntitiesInText(list);
 		DocumentText text = new DocumentText(preAnnotatedText.replaceAll("<entity>", "").replaceAll("</entity>", ""));
 
-		document.addProperty(text);
-		document.addProperty(nes);
+		document.addTest(text);
+		document.addNamedEntitiesInText(nes);
 		return document;
 	}
 
-	private static HashMap<NamedEntityInText, String> results(Document document, DisambiguationAlgorithm algo) {
+	private static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo) {
 		algo.run(document);
-		NamedEntitiesInText namedEntities = document.getProperty(NamedEntitiesInText.class);
+		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 		for (NamedEntityInText namedEntity : namedEntities) {
 			String disambiguatedURL = algo.findResult(namedEntity);
@@ -123,51 +135,7 @@ public class GetDisambiguation extends ServerResource {
 		return results;
 	}
 
-	public HashMap<NamedEntityInText, String> processDocument(String subject, String predicate, String object, String preAnnotatedText) {
-		Document d = textToDocument(preAnnotatedText);
-		String domain = getDomain(predicate);
-		String range = getRange(predicate);
-//		System.out.println("domain: " + domain + " range: " + range);
-		NamedEntitiesInText namedEntities = d.getProperty(NamedEntitiesInText.class);
-
-		for (NamedEntityInText namedEntity : namedEntities) {
-			if (namedEntity.getNamedEntityUri().equals(subject)) {
-				namedEntity.setDomain(domain);
-			}
-			if (namedEntity.getNamedEntityUri().equals(object)) {
-				namedEntity.setDomain(range);
-			}
-		}
-		agdistis.run(d);
-
-		namedEntities = d.getProperty(NamedEntitiesInText.class);
-		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = agdistis.findResult(namedEntity);
-			results.put(namedEntity, disambiguatedURL);
-		}
-		return results;
-	}
-
-	private String getRange(String predicate) {
-		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#range> ?o.}";
-		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
-		if (!i.isEmpty())
-			return i.get(0).get(0);
-		else
-			return null;
-	}
-
-	private String getDomain(String predicate) {
-		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#domain> ?o.}";
-		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
-		if (!i.isEmpty())
-			return i.get(0).get(0);
-		else
-			return null;
-	}
-
-	public void close() {
+	public void close() throws IOException {
 		agdistis.close();
 	}
 
