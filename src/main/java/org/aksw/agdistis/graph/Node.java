@@ -32,7 +32,7 @@ public class Node implements Comparable<Node> {
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.####");
-		return candidateURI.replace("http://dbpedia.org/resource/", "") + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight)) + " A: " + String.valueOf(df.format(authorityWeight));
+		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight)) + " A: " + String.valueOf(df.format(authorityWeight));
 	}
 
 	@Override
