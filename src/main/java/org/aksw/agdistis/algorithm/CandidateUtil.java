@@ -243,7 +243,7 @@ public class CandidateUtil {
 	private boolean fitsIntoDomain(String candidateURL) {
 		//TODO put that in properties file as well
 		HashSet<String> whiteList = new HashSet<String>();
-		if (nodeType.contains("dbpedia.org")) {
+		if (nodeType.contains("http://dbpedia.org")) {
 			whiteList.add("http://dbpedia.org/ontology/Place");
 			whiteList.add("http://dbpedia.org/ontology/Person");
 			whiteList.add("http://dbpedia.org/ontology/Organisation");

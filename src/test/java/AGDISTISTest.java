@@ -3,7 +3,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
@@ -12,9 +11,6 @@ import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
 public class AGDISTISTest {
-	String languageTag = "en"; // de
-	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
 	@Test
 	public void testUmlaute() throws InterruptedException, IOException {
@@ -29,7 +25,7 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(nodeType, edgeType);
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
@@ -64,7 +60,7 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(nodeType, edgeType);
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();

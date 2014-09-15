@@ -1,13 +1,9 @@
 package org.aksw.agdistis.webapp;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
-import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;
@@ -31,16 +27,9 @@ public class GetDisambiguation extends ServerResource {
 
 	public GetDisambiguation() {
 		try {
-			Properties prop = new Properties();
-			InputStream input = new FileInputStream("agdistis.properties");
-			prop.load(input);
-
-			String nodeType = prop.getProperty("nodeType");
-			String edgeType = prop.getProperty("edgeType");
-
 			dbpedia = new SparqlEndpoint();
-			agdistis = new NEDAlgo_HITS(nodeType, edgeType);
-		} catch (IOException | RepositoryException e) {
+			agdistis = new NEDAlgo_HITS( );
+		} catch (RepositoryException | IOException e) {
 			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
 		}
 	}
@@ -105,7 +94,7 @@ public class GetDisambiguation extends ServerResource {
 		return document;
 	}
 
-	private static HashMap<NamedEntityInText, String> results(Document document, DisambiguationAlgorithm algo) {
+	private static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo) {
 		algo.run(document);
 		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();

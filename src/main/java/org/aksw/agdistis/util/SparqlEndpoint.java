@@ -27,8 +27,7 @@ public class SparqlEndpoint {
 	private RepositoryConnection con;
 	private QueryLanguage queryLanguage = QueryLanguage.SPARQL;
 
-	public SparqlEndpoint() throws RepositoryException {
-		try {
+	public SparqlEndpoint() throws RepositoryException, IOException  {
 			Properties prop = new Properties();
 			InputStream input = new FileInputStream("agdistis.properties");
 			prop.load(input);
@@ -39,9 +38,6 @@ public class SparqlEndpoint {
 			SPARQLRepository rep = new SPARQLRepository(endpoint);
 			rep.initialize();
 			con = rep.getConnection();
-		} catch (IOException e) {
-			log.error("Cannot establish connection to SPARQL endpoint.", e);
-		}
 	}
 
 	/**
