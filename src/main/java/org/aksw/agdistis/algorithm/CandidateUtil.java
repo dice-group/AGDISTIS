@@ -28,8 +28,7 @@ public class CandidateUtil {
 	private TripleIndex index;
 	private NGramDistance n;
 
-	public CandidateUtil() {
-		try {
+	public CandidateUtil() throws IOException {
 			Properties prop = new Properties();
 			InputStream input = new FileInputStream("agdistis.properties");
 			prop.load(input);
@@ -40,9 +39,6 @@ public class CandidateUtil {
 			this.index = new TripleIndex();
 			this.n = new NGramDistance(Integer.valueOf(nGramDistance));
 			this.nodeType = nodeType;
-		} catch (IOException e) {
-			log.error("Cannot create CandidateUtil. AGDISTIS will not work so.", e);
-		}
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document, double threshholdTrigram) {

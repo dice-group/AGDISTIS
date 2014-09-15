@@ -173,17 +173,13 @@ public class TripleIndexCreator {
 		iwriter.addDocument(doc);
 	}
 
-	public void close() {
-		try {
+	public void close() throws IOException {
 			if (ireader != null) {
 				ireader.close();
 			}
 			if (directory != null) {
 				directory.close();
 			}
-		} catch (IOException e) {
-			log.error("Error while closing TripleIndex", e);
-		}
 	}
 
 	private class OnlineStatementHandler extends RDFHandlerBase {

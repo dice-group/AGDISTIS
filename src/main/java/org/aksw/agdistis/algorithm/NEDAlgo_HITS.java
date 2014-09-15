@@ -33,8 +33,7 @@ public class NEDAlgo_HITS {
 	private double threshholdTrigram;
 	private int maxDepth;
 
-	public NEDAlgo_HITS() {
-		try {
+	public NEDAlgo_HITS() throws IOException {
 			Properties prop = new Properties();
 			InputStream input = new FileInputStream("agdistis.properties");
 			prop.load(input);
@@ -51,9 +50,6 @@ public class NEDAlgo_HITS {
 
 			this.cu = new CandidateUtil();
 			this.index = cu.getIndex();
-		} catch (IOException e) {
-			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
-		}
 	}
 
 	public void run(Document document) {

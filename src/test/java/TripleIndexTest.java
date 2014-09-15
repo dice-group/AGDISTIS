@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.aksw.agdistis.util.Triple;
@@ -17,12 +18,20 @@ public class TripleIndexTest {
 
 	@Before
 	public void init() {
-		index = new TripleIndex();
+		try {
+			index = new TripleIndex();
+		} catch (IOException e) {
+			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
+		}
 	}
 
 	@After
 	public void close() {
-		index.close();
+		try {
+			index.close();
+		} catch (IOException e) {
+			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
+		}
 	}
 
 	@Test

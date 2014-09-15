@@ -42,8 +42,7 @@ public class TripleIndex {
 	private DirectoryReader ireader;
 	private UrlValidator urlValidator;
 
-	public TripleIndex() {
-		try {
+	public TripleIndex() throws IOException {
 			this.urlValidator = new UrlValidator();
 
 			Properties prop = new Properties();
@@ -56,9 +55,6 @@ public class TripleIndex {
 			directory = new MMapDirectory(new File(index));
 			ireader = DirectoryReader.open(directory);
 			isearcher = new IndexSearcher(ireader);
-		} catch (IOException e) {
-			log.error("Error while opening the TripleIndex.", e);
-		}
 	}
 
 	public List<Triple> search(String subject, String predicate, String object) {
@@ -117,13 +113,9 @@ public class TripleIndex {
 		return triples;
 	}
 
-	public void close() {
-		try {
+	public void close() throws IOException {
 			ireader.close();
 			directory.close();
-		} catch (IOException e) {
-			log.error(e.getLocalizedMessage());
-		}
 	}
 
 	public DirectoryReader getIreader() {
