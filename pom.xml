@@ -64,7 +64,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mavenVersion>4.0</mavenVersion>
-		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
@@ -95,14 +94,15 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			<version>1.7.7</version>
 		</dependency>
 		<!-- slf4j: Logging Binding -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
+			<version>1.7.7</version>
 		</dependency>
+
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- ~~~~~~~~~~~~~~~~~~~ Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
@@ -155,8 +155,18 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~ End JSON ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<!-- ~~~~~~~~~~~~~~~~~~~ Restlet for restful API ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
-			<groupId>org.restlet.jee</groupId>
+			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.simple</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.servlet</artifactId>
 			<version>2.2.0</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Restlet for restful API ~~~~~~~~~~~~~~~~~~~~~~ -->
