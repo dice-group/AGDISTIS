@@ -32,7 +32,7 @@ public class CandidateUtil {
 
 	public CandidateUtil() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = new FileInputStream("agdistis.properties");
+		InputStream input = new FileInputStream("config/agdistis.properties");
 		prop.load(input);
 
 		this.nodeType = prop.getProperty("nodeType");
@@ -107,21 +107,6 @@ public class CandidateUtil {
 		}
 	}
 
-	public String redirect(String candidateURL) {
-		if (candidateURL == null) {
-			return candidateURL;
-		}
-		List<Triple> redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
-		if (redirect.size() == 1) {
-			return redirect.get(0).getObject();
-		} else if (redirect.size() > 1) {
-			log.error("Several redirects detected for :" + candidateURL);
-			return candidateURL;
-		} else {
-			return candidateURL;
-		}
-	}
-
 	private void checkLabelCandidates(DirectedSparseGraph<Node, String> graph, double threshholdTrigram, HashMap<String, Node> nodes, NamedEntityInText entity, String label, boolean searchInSurfaceForms) {
 		label = corporationAffixCleaner.cleanLabelsfromCorporationIdentifier(label);
 		label = label.trim();
@@ -186,12 +171,23 @@ public class CandidateUtil {
 			return true;
 	}
 
-	public void close() {
-		try {
-			index.close();
-		} catch (Exception e) {
-			log.error(e.getLocalizedMessage());
+	private String redirect(String candidateURL) {
+		if (candidateURL == null) {
+			return candidateURL;
 		}
+		List<Triple> redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
+		if (redirect.size() == 1) {
+			return redirect.get(0).getObject();
+		} else if (redirect.size() > 1) {
+			log.error("Several redirects detected for :" + candidateURL);
+			return candidateURL;
+		} else {
+			return candidateURL;
+		}
+	}
+
+	public void close() throws IOException {
+			index.close();
 	}
 
 	public TripleIndex getIndex() {

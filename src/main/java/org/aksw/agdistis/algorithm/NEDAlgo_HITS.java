@@ -35,7 +35,7 @@ public class NEDAlgo_HITS {
 
 	public NEDAlgo_HITS() throws IOException {
 			Properties prop = new Properties();
-			InputStream input = new FileInputStream("agdistis.properties");
+			InputStream input = new FileInputStream("config/agdistis.properties");
 			prop.load(input);
 
 			String nodeType = prop.getProperty("nodeType");
@@ -107,7 +107,7 @@ public class NEDAlgo_HITS {
 		}
 	}
 
-	public void close() {
+	public void close() throws IOException {
 		cu.close();
 	}
 

@@ -43,10 +43,8 @@ public class TripleIndex {
 	private UrlValidator urlValidator;
 
 	public TripleIndex() throws IOException {
-			this.urlValidator = new UrlValidator();
-
 			Properties prop = new Properties();
-			InputStream input = new FileInputStream("agdistis.properties");
+			InputStream input = new FileInputStream("config/agdistis.properties");
 			prop.load(input);
 
 			String index = prop.getProperty("index");
@@ -55,6 +53,7 @@ public class TripleIndex {
 			directory = new MMapDirectory(new File(index));
 			ireader = DirectoryReader.open(directory);
 			isearcher = new IndexSearcher(ireader);
+			this.urlValidator = new UrlValidator();
 	}
 
 	public List<Triple> search(String subject, String predicate, String object) {

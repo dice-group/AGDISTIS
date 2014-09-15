@@ -27,6 +27,7 @@ public class GetDisambiguation extends ServerResource {
 			agdistis = new NEDAlgo_HITS( );
 		} catch ( IOException e) {
 			log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
+			System.exit(0);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class GetDisambiguation extends ServerResource {
 		return results;
 	}
 
-	public void close() {
+	public void close() throws IOException {
 		agdistis.close();
 	}
 
