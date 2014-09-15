@@ -1,0 +1,3 @@
+http://yago-knowledge.org/resource/yagoGeoEntity
+http://yago-knowledge.org/resource/yagoLegalActor
+http://yago-knowledge.org/resource/wordnet_exchange_111409538
