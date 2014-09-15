@@ -4,13 +4,16 @@ import info.aduna.io.FileUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
@@ -48,47 +51,53 @@ public class TripleIndexCreator {
 	private MMapDirectory directory;
 
 	public static void main(String args[]) {
-		// if (args.length != 3) {
-		// System.err.println("Usage: TripleIndexCreator <index-directory> <data-directory> <language-tag>");
-		// return;
-		// }
-		// String knowledgeBase = "http://yago-knowledge.org/resource/";
-		// String knowledgeBase = "http://dbpedia.org/resource/";
-		String knowledgeBase = "http://dbpedia.org/resource/";
-		String languageTag = "en";
-		String indexDirectory = "/data/r.usbeck/indexdbpedia_en";
-		String dataDirectory = "/data/r.usbeck/dbpedia_39_data/en";
-		// String indexDirectory = args[0];
-		// String dataDirectory = args[1];
-		// String languageTag = args[2];
-		File labelsWithoutRedirectsFile;
-		List<File> tmp = new ArrayList<File>();
-		if (("http://dbpedia.org/resource/".equals(knowledgeBase)) || ("http://dbpedia.org/resource/".equals(knowledgeBase))) {
-			labelsWithoutRedirectsFile = new File(dataDirectory + "/labels_without_redirects_" + languageTag + ".ttl");
-			if (labelsWithoutRedirectsFile.exists()) {
-				tmp.add(labelsWithoutRedirectsFile);
-			} else {
-				tmp.add(new File(dataDirectory + "/labels_" + languageTag + ".ttl"));
-				tmp.add(new File(dataDirectory + "/redirects_transitive_" + languageTag + ".ttl"));
-			}
-
-			tmp.add(new File(dataDirectory + "/instance_types_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/mappingbased_properties_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/specific_mappingbased_properties_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/disambiguations_" + languageTag + ".ttl"));
-			// tmp.add(new File(dataDirectory + "/long_abstracts_" + languageTag + ".ttl"));
-			tmp.add(new File(dataDirectory + "/" + languageTag + "_surface_forms.tsv"));
-		} else {
-			tmp.add(new File(dataDirectory + "/yagoTypes.ttl"));
-			tmp.add(new File(dataDirectory + "/yagoTransitiveType.ttl"));
-			tmp.add(new File(dataDirectory + "/yagoFacts.ttl"));
-			tmp.add(new File(dataDirectory + "/yagoLiteralFacts.ttl"));
-			tmp.add(new File(dataDirectory + "/yagoLabels.ttl"));
-			tmp.add(new File(dataDirectory + "/yagoDBpediaInstances.ttl"));
+		if (args.length > 0) {
+			log.error("TripleIndexCreator works without parameters. Please use agdistis.properties File");
+			return;
 		}
-		TripleIndexCreator ic = new TripleIndexCreator();
-		ic.createIndex(tmp, indexDirectory, knowledgeBase);
-		ic.close();
+		try {
+			log.info("For using DBpedia we suggest you downlaod the following file: "
+					+ "labels_en.ttl, "
+					+ "redirects_transitive_en.ttl, "
+					+ "instance_types_en.ttl, "
+					+ "mappingbased_properties_en.ttl, "
+					+ "specific_mappingbased_properties_en.ttl,"
+					+ "disambiguations_en.ttl."
+					+ ""
+					+ "Please download them into one folder and configure it in the agdistis.properties File."
+					+ "For further information have a look at our wiki: https://github.com/AKSW/AGDISTIS/wiki");
+
+			Properties prop = new Properties();
+			InputStream input = new FileInputStream("agdistis.properties");
+			prop.load(input);
+
+			String index = prop.getProperty("index");
+			log.info("The index will be here: " + index);
+
+
+			String folder = prop.getProperty("folderWithTTLFiles");
+			log.info("Getting triple data from: " + folder);
+			List<File> listOfFiles = new ArrayList<File>();
+			for (File file : new File(folder).listFiles()) {
+				listOfFiles.add(file);
+			}
+			
+			String surfaceFormTSV = prop.getProperty("index");
+			log.info("Getting surface forms from: " + surfaceFormTSV);
+			File file = new File(surfaceFormTSV);
+			if (file.exists()) {
+				listOfFiles.add(file);
+			}
+			
+			String baseURI = prop.getProperty("index");
+			log.info("Setting Base URI to: " + baseURI);
+
+			TripleIndexCreator ic = new TripleIndexCreator();
+			ic.createIndex(listOfFiles, index, baseURI);
+			ic.close();
+		} catch (IOException e) {
+			log.error("Error while creating index. Maybe the index is corrupt now.", e);
+		}
 	}
 
 	public void createIndex(List<File> files, String idxDirectory, String baseURI) {
