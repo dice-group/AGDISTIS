@@ -9,10 +9,8 @@ import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
-import org.aksw.agdistis.util.SparqlEndpoint;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.openrdf.repository.RepositoryException;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -23,14 +21,12 @@ import org.slf4j.LoggerFactory;
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
 	private NEDAlgo_HITS agdistis;
-	private SparqlEndpoint dbpedia;
 
 	public GetDisambiguation() {
 		try {
-			dbpedia = new SparqlEndpoint();
 			agdistis = new NEDAlgo_HITS( );
-		} catch (RepositoryException | IOException e) {
-			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
+		} catch ( IOException e) {
+			log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
 		}
 	}
 
@@ -44,9 +40,12 @@ public class GetDisambiguation extends ServerResource {
 		String type = form.getFirstValue("type");
 		log.info("text: " + text);
 		log.info("type: " + type);
+		
+		
 		JSONArray arr = new org.json.simple.JSONArray();
 		HashMap<NamedEntityInText, String> results = null;
 		Document d = textToDocument(text);
+		
 		if (type.equals("agdistis")) {
 			results = results(d, agdistis);
 		} else {
@@ -103,49 +102,6 @@ public class GetDisambiguation extends ServerResource {
 			results.put(namedEntity, disambiguatedURL);
 		}
 		return results;
-	}
-
-	public HashMap<NamedEntityInText, String> processDocument(String subject, String predicate, String object, String preAnnotatedText) {
-		Document d = textToDocument(preAnnotatedText);
-		String domain = getDomain(predicate);
-		String range = getRange(predicate);
-		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
-
-		for (NamedEntityInText namedEntity : namedEntities) {
-			if (namedEntity.getNamedEntityUri().equals(subject)) {
-				namedEntity.setDomain(domain);
-			}
-			if (namedEntity.getNamedEntityUri().equals(object)) {
-				namedEntity.setDomain(range);
-			}
-		}
-		agdistis.run(d);
-
-		namedEntities = d.getNamedEntitiesInText();
-		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = agdistis.findResult(namedEntity);
-			results.put(namedEntity, disambiguatedURL);
-		}
-		return results;
-	}
-
-	private String getRange(String predicate) {
-		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#range> ?o.}";
-		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
-		if (!i.isEmpty())
-			return i.get(0).get(0);
-		else
-			return null;
-	}
-
-	private String getDomain(String predicate) {
-		String query = "SELECT * WHERE {<" + predicate + "> <http://www.w3.org/2000/01/rdf-schema#domain> ?o.}";
-		ArrayList<ArrayList<String>> i = dbpedia.askDbpedia(query);
-		if (!i.isEmpty())
-			return i.get(0).get(0);
-		else
-			return null;
 	}
 
 	public void close() {
