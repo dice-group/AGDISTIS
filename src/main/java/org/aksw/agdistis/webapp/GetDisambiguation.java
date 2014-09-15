@@ -1,6 +1,5 @@
 package org.aksw.agdistis.webapp;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +13,7 @@ import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
-import org.aksw.agdistis.util.DBPedia;
+import org.aksw.agdistis.util.SparqlEndpoint;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.openrdf.repository.RepositoryException;
@@ -28,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class GetDisambiguation extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
 	private NEDAlgo_HITS agdistis;
-	private DBPedia dbpedia;
+	private SparqlEndpoint dbpedia;
 
 	public GetDisambiguation() {
 		try {
@@ -39,7 +38,7 @@ public class GetDisambiguation extends ServerResource {
 			String nodeType = prop.getProperty("nodeType");
 			String edgeType = prop.getProperty("edgeType");
 
-			dbpedia = new DBPedia("http://dbpedia.org/sparql");
+			dbpedia = new SparqlEndpoint();
 			agdistis = new NEDAlgo_HITS(nodeType, edgeType);
 		} catch (IOException | RepositoryException e) {
 			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);

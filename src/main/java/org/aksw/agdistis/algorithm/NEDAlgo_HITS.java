@@ -1,6 +1,5 @@
 package org.aksw.agdistis.algorithm;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;

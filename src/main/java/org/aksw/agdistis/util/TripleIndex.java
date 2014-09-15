@@ -69,9 +69,6 @@ public class TripleIndex {
 		List<Triple> triples = new ArrayList<Triple>();
 		BooleanQuery bq = new BooleanQuery();
 		try {
-			// if (cache.containsKey(subject+predicate+object)) {
-			// return cache.get(subject+predicate+object);
-			// }
 			log.debug("\t start asking index...");
 			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
 				log.error("A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
@@ -96,8 +93,7 @@ public class TripleIndex {
 				}
 				bq.add(q, BooleanClause.Occur.MUST);
 			}
-			// bq.setMinimumNumberShouldMatch(2);
-			// System.out.println(bq);
+
 			TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
 			isearcher.search(bq, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -113,10 +109,8 @@ public class TripleIndex {
 				}
 				Triple triple = new Triple(s, p, o);
 				triples.add(triple);
-				// System.out.println(triple);
 			}
 			log.debug("\t finished asking index...");
-			// cache.put(subject+predicate+object, triples);
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + subject);
 		}
