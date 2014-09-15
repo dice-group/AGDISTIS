@@ -74,21 +74,20 @@ public class TripleIndexCreator {
 			String index = prop.getProperty("index");
 			log.info("The index will be here: " + index);
 
-
 			String folder = prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
 			for (File file : new File(folder).listFiles()) {
 				listOfFiles.add(file);
 			}
-			
+
 			String surfaceFormTSV = prop.getProperty("index");
 			log.info("Getting surface forms from: " + surfaceFormTSV);
 			File file = new File(surfaceFormTSV);
 			if (file.exists()) {
 				listOfFiles.add(file);
 			}
-			
+
 			String baseURI = prop.getProperty("index");
 			log.info("Setting Base URI to: " + baseURI);
 

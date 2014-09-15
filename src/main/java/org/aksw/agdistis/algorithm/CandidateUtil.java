@@ -31,11 +31,9 @@ public class CandidateUtil {
 	 * 
 	 * @param languageTag
 	 *            en or de
-	 * @param dataDirectory
-	 *            parent directory of index and dump file directory. E.g., /data/r.usbeck ---> /data/r.usbeck/index/.., ---> /data/r.usbeck/dbpedia_[LANGUAGE]
 	 */
-	public CandidateUtil(File indexDirectory, String nodeType) {
-		index = new TripleIndex(indexDirectory);
+	public CandidateUtil(String nodeType) {
+		index = new TripleIndex();
 		n = new NGramDistance(3);
 		if (nodeType != null) {
 			this.nodeType = nodeType;

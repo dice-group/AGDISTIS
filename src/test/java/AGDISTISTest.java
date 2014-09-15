@@ -1,6 +1,5 @@
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -14,7 +13,6 @@ import org.junit.Test;
 
 public class AGDISTISTest {
 	String languageTag = "en"; // de
-	File dataDirectory = new File("/data/r.usbeck/indexdbpedia_en/"); // "/home/rusbeck/AGDISTIS/";
 	String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
 	String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 
@@ -31,7 +29,7 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + osumi + "</entity> works in <entity>" + japan + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(nodeType, edgeType);
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
@@ -66,7 +64,7 @@ public class AGDISTISTest {
 
 		String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel + "</entity> in <entity>" + city + "</entity>.";
 
-		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(dataDirectory, nodeType, edgeType);
+		DisambiguationAlgorithm agdistis = new NEDAlgo_HITS(nodeType, edgeType);
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d);
 		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();

@@ -1,9 +1,12 @@
 package org.aksw.agdistis.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.lucene.analysis.Analyzer;
@@ -39,15 +42,20 @@ public class TripleIndex {
 	private DirectoryReader ireader;
 	private UrlValidator urlValidator;
 
-	// private HashMap<String, List<Triple>> cache;
-
-	public TripleIndex(File indexDirectory) {
-		this.urlValidator = new UrlValidator();
+	public TripleIndex() {
 		try {
-			directory = new MMapDirectory(indexDirectory);
+			this.urlValidator = new UrlValidator();
+
+			Properties prop = new Properties();
+			InputStream input = new FileInputStream("agdistis.properties");
+			prop.load(input);
+
+			String index = prop.getProperty("index");
+			log.info("The index will be here: " + index);
+
+			directory = new MMapDirectory(new File(index));
 			ireader = DirectoryReader.open(directory);
 			isearcher = new IndexSearcher(ireader);
-			// cache = new HashMap<String, List<Triple>>();
 		} catch (IOException e) {
 			log.error("Error while opening the TripleIndex.", e);
 		}

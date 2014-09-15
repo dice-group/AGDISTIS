@@ -18,7 +18,7 @@ public class TripleIndexTest {
 
 	@Before
 	public void init() {
-		index = new TripleIndex(new File("/data/r.usbeck/indexdbpedia_en/"));
+		index = new TripleIndex();
 	}
 
 	@After
@@ -78,6 +78,7 @@ public class TripleIndexTest {
 			log.debug(t.toString());
 		}
 	}
+
 	@Test
 	public void testMultipleTermsPerField() {
 		String candidate = "New York";
@@ -93,7 +94,7 @@ public class TripleIndexTest {
 		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
 		List<Triple> label = index.search(candidateURL, "http://www.w3.org/2000/01/rdf-schema#label", null);
 		List<Triple> surfaceForms = index.search(candidateURL, "http://www.w3.org/2004/02/skos/core#altLabel", null);
-		log.debug(" * "+surfaceForms.size());
+		log.debug(" * " + surfaceForms.size());
 		NGramDistance n = new NGramDistance(3);
 		for (Triple t : surfaceForms) {
 			log.debug(label.get(0).getObject() + " " + t.getObject() + " : " + n.getDistance(label.get(0).getObject(), t.getObject()));

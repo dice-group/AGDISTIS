@@ -36,10 +36,10 @@ public class NEDAlgo_HITS implements DisambiguationAlgorithm {
 	private int maxDepth = 2;
 
 	@SuppressWarnings("unchecked")
-	public NEDAlgo_HITS(File indexDirectory, String nodeType, String edgeType) {
+	public NEDAlgo_HITS(String nodeType, String edgeType) {
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
-		this.cu = new CandidateUtil(indexDirectory, nodeType);
+		this.cu = new CandidateUtil(nodeType);
 		this.index = cu.getIndex();
 		this.graph = new DirectedSparseGraph[1];
 	}

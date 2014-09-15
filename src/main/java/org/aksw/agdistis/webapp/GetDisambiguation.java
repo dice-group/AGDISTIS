@@ -30,33 +30,20 @@ public class GetDisambiguation extends ServerResource {
 	private NEDAlgo_HITS agdistis;
 	private DBPedia dbpedia;
 
-	public GetDisambiguation(String dataDirectory) {
+	public GetDisambiguation() {
 		try {
-			File data = null;
 			Properties prop = new Properties();
 			InputStream input = new FileInputStream("agdistis.properties");
 			prop.load(input);
-
-			if (dataDirectory == null) {
-				String index = prop.getProperty("index");
-				log.debug("Index location: ", index);
-				data = new File(index);
-			} else {
-				data = new File(dataDirectory);
-			}
 
 			String nodeType = prop.getProperty("nodeType");
 			String edgeType = prop.getProperty("edgeType");
 
 			dbpedia = new DBPedia("http://dbpedia.org/sparql");
-			agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
+			agdistis = new NEDAlgo_HITS(nodeType, edgeType);
 		} catch (IOException | RepositoryException e) {
 			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
 		}
-	}
-
-	public GetDisambiguation() {
-		this(null);
 	}
 
 	@SuppressWarnings("unchecked")
