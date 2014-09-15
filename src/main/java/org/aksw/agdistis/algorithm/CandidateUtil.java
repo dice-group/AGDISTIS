@@ -43,7 +43,7 @@ public class CandidateUtil {
 		this.domainWhiteLister = new DomainWhiteLister(index);
 	}
 
-	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document, double threshholdTrigram) {
+	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document, double threshholdTrigram, Boolean heuristicExpansionOn) {
 		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		String text = document.DocumentText().getText();
 
@@ -59,7 +59,9 @@ public class CandidateUtil {
 			log.info("\tLabel: " + label);
 			long start = System.currentTimeMillis();
 
-			label = heuristicExpansion(heuristicExpansion, label);
+			if (heuristicExpansionOn) {
+				label = heuristicExpansion(heuristicExpansion, label);
+			}
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, false);
 
 			log.info("\tGraph size: " + graph.getVertexCount() + " took: " + (System.currentTimeMillis() - start) + " ms");
@@ -187,7 +189,7 @@ public class CandidateUtil {
 	}
 
 	public void close() throws IOException {
-			index.close();
+		index.close();
 	}
 
 	public TripleIndex getIndex() {

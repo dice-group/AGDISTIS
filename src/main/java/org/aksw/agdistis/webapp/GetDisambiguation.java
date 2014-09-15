@@ -24,8 +24,8 @@ public class GetDisambiguation extends ServerResource {
 
 	public GetDisambiguation() {
 		try {
-			agdistis = new NEDAlgo_HITS( );
-		} catch ( IOException e) {
+			agdistis = new NEDAlgo_HITS();
+		} catch (IOException e) {
 			log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
 			System.exit(0);
 		}
@@ -39,14 +39,16 @@ public class GetDisambiguation extends ServerResource {
 		Form form = new Form(entity);
 		String text = form.getFirstValue("text");
 		String type = form.getFirstValue("type");
+
 		log.info("text: " + text);
 		log.info("type: " + type);
-		
-		
+
+		evaluationOptionalParameters(form);
+
 		JSONArray arr = new org.json.simple.JSONArray();
 		HashMap<NamedEntityInText, String> results = null;
 		Document d = textToDocument(text);
-		
+
 		if (type.equals("agdistis")) {
 			results = results(d, agdistis);
 		} else {
@@ -65,6 +67,34 @@ public class GetDisambiguation extends ServerResource {
 		log.info("Finished Request");
 		return arr.toString();
 
+	}
+
+	private void evaluationOptionalParameters(Form form) {
+		String similarityThreshold = form.getFirstValue("similarity");
+		String explorationDepth = form.getFirstValue("depth");
+		String heuristicExpansion = form.getFirstValue("heuristic");
+		
+		log.info("similarityThreshold: " + similarityThreshold);
+		log.info("explorationDepth: " + explorationDepth);
+		log.info("heuristicExpansion: " + heuristicExpansion);
+
+		if (similarityThreshold != null) {
+			agdistis.setThreshholdTrigram(Double.valueOf(similarityThreshold));
+		} else {
+			agdistis.setThreshholdTrigram(0.82);
+		}
+		
+		if (explorationDepth != null) {
+			agdistis.setMaxDepth(Integer.valueOf(explorationDepth));
+		} else {
+			agdistis.setMaxDepth(2);
+		}
+		
+		if (heuristicExpansion != null) {
+			agdistis.setHeuristicExpansionOn(Boolean.valueOf(heuristicExpansion));
+		} else {
+			agdistis.setHeuristicExpansionOn(false);
+		}
 	}
 
 	public static Document textToDocument(String preAnnotatedText) {

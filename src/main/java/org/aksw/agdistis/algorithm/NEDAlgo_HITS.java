@@ -32,24 +32,26 @@ public class NEDAlgo_HITS {
 	// needed for the experiment about which properties increase accuracy
 	private double threshholdTrigram;
 	private int maxDepth;
+	private Boolean heuristicExpansionOn;
 
 	public NEDAlgo_HITS() throws IOException {
-			Properties prop = new Properties();
-			InputStream input = new FileInputStream("config/agdistis.properties");
-			prop.load(input);
+		Properties prop = new Properties();
+		InputStream input = new FileInputStream("config/agdistis.properties");
+		prop.load(input);
 
-			String nodeType = prop.getProperty("nodeType");
-			String edgeType = prop.getProperty("edgeType");
-			double threshholdTrigram = Double.valueOf(prop.getProperty("threshholdTrigram"));
-			int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
+		String nodeType = prop.getProperty("nodeType");
+		String edgeType = prop.getProperty("edgeType");
+		double threshholdTrigram = Double.valueOf(prop.getProperty("threshholdTrigram"));
+		int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
+		this.heuristicExpansionOn = Boolean.valueOf(prop.getProperty("heuristicExpansionOn"));
 
-			this.nodeType = nodeType;
-			this.edgeType = edgeType;
-			this.threshholdTrigram = threshholdTrigram;
-			this.maxDepth = maxDepth;
+		this.nodeType = nodeType;
+		this.edgeType = edgeType;
+		this.threshholdTrigram = threshholdTrigram;
+		this.maxDepth = maxDepth;
 
-			this.cu = new CandidateUtil();
-			this.index = cu.getIndex();
+		this.cu = new CandidateUtil();
+		this.index = cu.getIndex();
 	}
 
 	public void run(Document document) {
@@ -60,7 +62,7 @@ public class NEDAlgo_HITS {
 
 			// 0) insert candidates into Text
 			log.debug("\tinsert candidates");
-			cu.insertCandidatesIntoText(graph, document, threshholdTrigram);
+			cu.insertCandidatesIntoText(graph, document, threshholdTrigram, heuristicExpansionOn);
 
 			// 1) let spread activation/ breadth first search run
 			log.info("\tGraph size before BFS: " + graph.getVertexCount());
@@ -109,6 +111,18 @@ public class NEDAlgo_HITS {
 
 	public void close() throws IOException {
 		cu.close();
+	}
+
+	public void setThreshholdTrigram(double threshholdTrigram) {
+		this.threshholdTrigram = threshholdTrigram;
+	}
+
+	public void setMaxDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
+	}
+
+	public void setHeuristicExpansionOn(Boolean value) {
+		this.heuristicExpansionOn = value;
 	}
 
 }
