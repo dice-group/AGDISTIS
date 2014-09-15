@@ -1,8 +1,12 @@
 package org.aksw.agdistis.webapp;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.aksw.agdistis.algorithm.DisambiguationAlgorithm;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
@@ -27,28 +31,32 @@ public class GetDisambiguation extends ServerResource {
 	private DBPedia dbpedia;
 
 	public GetDisambiguation(String dataDirectory) {
-		File data = new File(dataDirectory);
-		//TODO make this more convenient
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
 		try {
+			File data = null;
+			Properties prop = new Properties();
+			InputStream input = new FileInputStream("agdistis.properties");
+			prop.load(input);
+
+			if (dataDirectory == null) {
+				String index = prop.getProperty("index");
+				log.debug("Index location: ", index);
+				data = new File(index);
+			} else {
+				data = new File(dataDirectory);
+			}
+
+			String nodeType = prop.getProperty("nodeType");
+			String edgeType = prop.getProperty("edgeType");
+
 			dbpedia = new DBPedia("http://dbpedia.org/sparql");
-		} catch (RepositoryException e) {
-			e.printStackTrace();
+			agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
+		} catch (IOException | RepositoryException e) {
+			log.error("Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location", e);
 		}
-		agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
 	}
 
 	public GetDisambiguation() {
-		File data = new File("/data/r.usbeck/indexdbpedia_en");
-		String nodeType = "http://dbpedia.org/resource/";// "http://yago-knowledge.org/resource/"
-		String edgeType = "http://dbpedia.org/ontology/";// "http://yago-knowledge.org/resource/"
-		try {
-			dbpedia = new DBPedia("http://dbpedia.org/sparql");
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-		agdistis = new NEDAlgo_HITS(data, nodeType, edgeType);
+		this(null);
 	}
 
 	@SuppressWarnings("unchecked")
