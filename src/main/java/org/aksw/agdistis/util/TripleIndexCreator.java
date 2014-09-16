@@ -57,18 +57,18 @@ public class TripleIndexCreator {
 		}
 		try {
 			log.info("For using DBpedia we suggest you downlaod the following file: "
-					+ "labels_en.ttl, "
-					+ "redirects_transitive_en.ttl, "
-					+ "instance_types_en.ttl, "
-					+ "mappingbased_properties_en.ttl, "
-					+ "specific_mappingbased_properties_en.ttl,"
-					+ "disambiguations_en.ttl."
+					+ "labels_<LANG>.ttl, "
+					+ "redirects_transitive_<LANG>.ttl, "
+					+ "instance_types_<LANG>.ttl, "
+					+ "mappingbased_properties_<LANG>.ttl, "
+					+ "specific_mappingbased_properties_<LANG>.ttl,"
+					+ "disambiguations_<LANG>.ttl."
 					+ ""
 					+ "Please download them into one folder and configure it in the agdistis.properties File."
 					+ "For further information have a look at our wiki: https://github.com/AKSW/AGDISTIS/wiki");
 
 			Properties prop = new Properties();
-			InputStream input = new FileInputStream("agdistis.properties");
+			InputStream input = new FileInputStream("config/agdistis.properties");
 			prop.load(input);
 
 			String index = prop.getProperty("index");
@@ -78,17 +78,19 @@ public class TripleIndexCreator {
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
 			for (File file : new File(folder).listFiles()) {
-				listOfFiles.add(file);
+				if (file.getName().endsWith("ttl")) {
+					listOfFiles.add(file);
+				}
 			}
 
-			String surfaceFormTSV = prop.getProperty("index");
+			String surfaceFormTSV = prop.getProperty("surfaceFormTSV");
 			log.info("Getting surface forms from: " + surfaceFormTSV);
 			File file = new File(surfaceFormTSV);
 			if (file.exists()) {
 				listOfFiles.add(file);
 			}
 
-			String baseURI = prop.getProperty("index");
+			String baseURI = prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
 
 			TripleIndexCreator ic = new TripleIndexCreator();
@@ -174,12 +176,12 @@ public class TripleIndexCreator {
 	}
 
 	public void close() throws IOException {
-			if (ireader != null) {
-				ireader.close();
-			}
-			if (directory != null) {
-				directory.close();
-			}
+		if (ireader != null) {
+			ireader.close();
+		}
+		if (directory != null) {
+			directory.close();
+		}
 	}
 
 	private class OnlineStatementHandler extends RDFHandlerBase {

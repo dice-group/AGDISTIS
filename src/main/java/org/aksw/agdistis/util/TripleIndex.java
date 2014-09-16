@@ -28,6 +28,8 @@ import org.apache.lucene.util.Version;
 import org.slf4j.LoggerFactory;
 
 public class TripleIndex {
+	private static final Version LUCENE44 = Version.LUCENE_44;
+
 	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndex.class);
 
 	public static final String FIELD_NAME_SUBJECT = "subject";
@@ -81,8 +83,8 @@ public class TripleIndex {
 				if (urlValidator.isValid(object)) {
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
 				} else {
-					Analyzer analyzer = new LiteralAnalyzer(Version.LUCENE_44);
-					QueryParser parser = new QueryParser(Version.LUCENE_44, FIELD_NAME_OBJECT_LITERAL, analyzer);
+					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
+					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.OR);
 					q = parser.parse(QueryParserBase.escape(object));
 				}
