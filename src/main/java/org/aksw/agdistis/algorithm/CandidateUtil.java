@@ -95,6 +95,7 @@ public class CandidateUtil {
 
 	public void addNodeToGraph(DirectedSparseGraph<Node, String> graph, HashMap<String, Node> nodes, NamedEntityInText entity, Triple c, String candidateURL) {
 		Node currentNode = new Node(candidateURL, 0, 0);
+		log.debug("CandidateURL: "+ candidateURL);
 		// candidates are connected to a specific label in the text via their start position
 		if (!graph.addVertex(currentNode)) {
 			int st = entity.getStartPos();
@@ -132,6 +133,7 @@ public class CandidateUtil {
 		}
 		boolean added = false;
 		for (Triple c : candidates) {
+			log.debug("Candidate triple to check: " + c);
 			String candidateURL = c.getSubject();
 			String surfaceForm = c.getObject();
 			// rule of thumb: no year numbers in candidates
