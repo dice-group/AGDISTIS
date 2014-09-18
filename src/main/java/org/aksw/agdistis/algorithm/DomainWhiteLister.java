@@ -1,10 +1,9 @@
 package org.aksw.agdistis.algorithm;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -18,7 +17,7 @@ public class DomainWhiteLister {
 
 	public DomainWhiteLister(TripleIndex index) throws IOException {
 		Properties prop = new Properties();
-		InputStream input = new FileInputStream("config/agdistis.properties");
+		InputStream input =DomainWhiteLister.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 		String file = prop.getProperty("whiteList");
 
@@ -28,7 +27,7 @@ public class DomainWhiteLister {
 	}
 
 	private void loadWhiteDomains(String file) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br = new BufferedReader(new InputStreamReader(DomainWhiteLister.class.getResourceAsStream(file)));
 		while (br.ready()) {
 			String line = br.readLine();
 			whiteList.add(line);

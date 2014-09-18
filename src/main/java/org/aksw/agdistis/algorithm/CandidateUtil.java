@@ -1,6 +1,5 @@
 package org.aksw.agdistis.algorithm;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class CandidateUtil {
 
 	public CandidateUtil() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = new FileInputStream("config/agdistis.properties");
+		InputStream input = CandidateUtil.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
 		this.nodeType = prop.getProperty("nodeType");

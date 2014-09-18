@@ -1,7 +1,6 @@
 package org.aksw.agdistis.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -45,17 +44,17 @@ public class TripleIndex {
 	private UrlValidator urlValidator;
 
 	public TripleIndex() throws IOException {
-			Properties prop = new Properties();
-			InputStream input = new FileInputStream("config/agdistis.properties");
-			prop.load(input);
+		Properties prop = new Properties();
+		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
 
-			String index = prop.getProperty("index");
-			log.info("The index will be here: " + index);
+		String index = prop.getProperty("index");
+		log.info("The index will be here: " + index);
 
-			directory = new MMapDirectory(new File(index));
-			ireader = DirectoryReader.open(directory);
-			isearcher = new IndexSearcher(ireader);
-			this.urlValidator = new UrlValidator();
+		directory = new MMapDirectory(new File(index));
+		ireader = DirectoryReader.open(directory);
+		isearcher = new IndexSearcher(ireader);
+		this.urlValidator = new UrlValidator();
 	}
 
 	public List<Triple> search(String subject, String predicate, String object) {
@@ -115,8 +114,8 @@ public class TripleIndex {
 	}
 
 	public void close() throws IOException {
-			ireader.close();
-			directory.close();
+		ireader.close();
+		directory.close();
 	}
 
 	public DirectoryReader getIreader() {

@@ -1,10 +1,9 @@
 package org.aksw.agdistis.algorithm;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Properties;
 
@@ -14,7 +13,7 @@ public class CorporationAffixCleaner {
 
 	public CorporationAffixCleaner() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = new FileInputStream("config/agdistis.properties");
+		InputStream input = CorporationAffixCleaner.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 		String file = prop.getProperty("corporationAffixes");
 
@@ -22,7 +21,7 @@ public class CorporationAffixCleaner {
 	}
 
 	private void loadCorporationAffixes(String file) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br = new BufferedReader(new InputStreamReader(CorporationAffixCleaner.class.getResourceAsStream(file)));
 		while (br.ready()) {
 			String line = br.readLine();
 			corporationAffixes.add(line);
