@@ -14,7 +14,6 @@ import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.util.TripleIndex;
-import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +92,7 @@ public class NEDAlgo_HITS {
 				}
 			}
 
-		} catch (RepositoryException | IOException | InterruptedException e) {
+		} catch (Exception e) {
 			log.error("AGDISTIS cannot be run on this document.", e);
 		}
 	}
