@@ -8,6 +8,26 @@ Supplementary material can be found in the documents folder.
 
 We hope you will enjoy using AGDISTIS!
 
+### Support and Feedback
+If you need help or you have questions do not hesitate to write an email to  <a href="mailto:usbeck@informatik.uni-leipzig.de">Ricardo Usbeck</a>. Or use the issue tracker in the right sidebar.
+
+### How to cite
+```Tex
+@incollection{AGDISTIS_ISWC,
+  author = {Usbeck, Ricardo and {Ngonga Ngomo}, Axel-Cyrille and Auer, S{\"o}ren and Gerber, Daniel and Both, Andreas},
+  booktitle = {International Semantic Web Conference},
+  title = {AGDISTIS - Graph-Based Disambiguation of Named Entities using Linked Data},
+  url = {http://svn.aksw.org/papers/2014/ISWC_AGDISTIS/public.pdf},
+  year = 2014
+}
+
+
+```
+
+### Acknowlegements
+This work has been supported by the ESF and the Free State of Saxony.
+
+
 ## Annotation Tool
 
 The used annotation tool can be downloaded from <a href="https://github.com/RicardoUsbeck/QRTool">here</a>.
