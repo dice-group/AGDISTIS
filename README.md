@@ -15,7 +15,7 @@ If you need help or you have questions do not hesitate to write an email to  <a 
 ```Tex
 @incollection{AGDISTIS_ISWC,
   author = {Usbeck, Ricardo and {Ngonga Ngomo}, Axel-Cyrille and Auer, S{\"o}ren and Gerber, Daniel and Both, Andreas},
-  booktitle = {International Semantic Web Conference},
+  booktitle = {13th International Semantic Web Conference},
   title = {AGDISTIS - Graph-Based Disambiguation of Named Entities using Linked Data},
   url = {http://svn.aksw.org/papers/2014/ISWC_AGDISTIS/public.pdf},
   year = 2014
@@ -31,3 +31,7 @@ This work has been supported by the ESF and the Free State of Saxony.
 ## Annotation Tool
 
 The used annotation tool can be downloaded from <a href="https://github.com/RicardoUsbeck/QRTool">here</a>.
+
+## Disclaimer
+
+The deployed webservice does not reflect the optimal parametrization of AGDISTIS as published.
