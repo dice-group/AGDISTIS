@@ -68,7 +68,7 @@ public class TripleIndexCreator {
 					+ "For further information have a look at our wiki: https://github.com/AKSW/AGDISTIS/wiki");
 
 			Properties prop = new Properties();
-			InputStream input = new FileInputStream("config/agdistis.properties");
+			InputStream input = new FileInputStream("src/main/resources/config/agdistis.en.properties");
 			prop.load(input);
 
 			String index = prop.getProperty("index");

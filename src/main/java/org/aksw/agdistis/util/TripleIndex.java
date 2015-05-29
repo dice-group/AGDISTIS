@@ -36,7 +36,7 @@ public class TripleIndex {
 	public static final String FIELD_NAME_OBJECT_URI = "object_uri";
 	public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
 
-	private int defaultMaxNumberOfDocsRetrievedFromIndex = 1000;
+	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
 
 	private Directory directory;
 	private IndexSearcher isearcher;
@@ -45,7 +45,7 @@ public class TripleIndex {
 
 	public TripleIndex() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
+		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.en.mac.properties");
 		prop.load(input);
 
 		String index = prop.getProperty("index");

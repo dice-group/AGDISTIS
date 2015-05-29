@@ -93,7 +93,7 @@ public class GetDisambiguation extends ServerResource {
 		if (heuristicExpansion != null) {
 			agdistis.setHeuristicExpansionOn(Boolean.valueOf(heuristicExpansion));
 		} else {
-			agdistis.setHeuristicExpansionOn(false);
+			agdistis.setHeuristicExpansionOn(true);
 		}
 	}
 
