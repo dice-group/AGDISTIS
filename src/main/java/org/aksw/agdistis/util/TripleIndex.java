@@ -26,6 +26,9 @@ import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 public class TripleIndex {
 	private static final Version LUCENE44 = Version.LUCENE_44;
 
@@ -42,6 +45,7 @@ public class TripleIndex {
 	private IndexSearcher isearcher;
 	private DirectoryReader ireader;
 	private UrlValidator urlValidator;
+	private Cache<BooleanQuery, List<Triple>> cache;
 
 	public TripleIndex() throws IOException {
 		Properties prop = new Properties();
@@ -55,6 +59,8 @@ public class TripleIndex {
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 		this.urlValidator = new UrlValidator();
+
+		cache = CacheBuilder.newBuilder().maximumSize(50000).build();
 	}
 
 	public List<Triple> search(String subject, String predicate, String object) {
@@ -62,10 +68,9 @@ public class TripleIndex {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		List<Triple> triples = new ArrayList<Triple>();
 		BooleanQuery bq = new BooleanQuery();
+		List<Triple> triples = new ArrayList<Triple>();
 		try {
-			log.debug("\t start asking index...");
 			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
 				log.error("A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
 			}
@@ -89,27 +94,38 @@ public class TripleIndex {
 				}
 				bq.add(q, BooleanClause.Occur.MUST);
 			}
-
-			TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
-			isearcher.search(bq, collector);
-			ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
-			String s, p, o;
-			for (int i = 0; i < hits.length; i++) {
-				Document hitDoc = isearcher.doc(hits[i].doc);
-				s = hitDoc.get(FIELD_NAME_SUBJECT);
-				p = hitDoc.get(FIELD_NAME_PREDICATE);
-				o = hitDoc.get(FIELD_NAME_OBJECT_URI);
-				if (o == null) {
-					o = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
-				}
-				Triple triple = new Triple(s, p, o);
-				triples.add(triple);
+			// use the cache
+			if (null == (triples = cache.getIfPresent(bq))) {
+				triples = getFromIndex(maxNumberOfResults, bq);
+				cache.put(bq, triples);
 			}
-			log.debug("\t finished asking index...");
+
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + subject);
 		}
+		return triples;
+	}
+
+	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
+		log.debug("\t start asking index...");
+		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
+		isearcher.search(bq, collector);
+		ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+		List<Triple> triples = new ArrayList<Triple>();
+		String s, p, o;
+		for (int i = 0; i < hits.length; i++) {
+			Document hitDoc = isearcher.doc(hits[i].doc);
+			s = hitDoc.get(FIELD_NAME_SUBJECT);
+			p = hitDoc.get(FIELD_NAME_PREDICATE);
+			o = hitDoc.get(FIELD_NAME_OBJECT_URI);
+			if (o == null) {
+				o = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
+			}
+			Triple triple = new Triple(s, p, o);
+			triples.add(triple);
+		}
+		log.debug("\t finished asking index...");
 		return triples;
 	}
 

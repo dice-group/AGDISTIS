@@ -12,8 +12,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-  <argLine>-Xmx6G</argLine>
-	<source>${java.version}</source>
+					<argLine>-Xmx6G</argLine>
+					<source>${java.version}</source>
 					<target>${java.version}</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -179,5 +179,12 @@
 			<version>1.4.0</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Validating URIs ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ Cache for TripleIndex ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End Cache for TripleIndex ~~~~~~~~~~~~~~~~~~~~~~ -->
 	</dependencies>
 </project>
