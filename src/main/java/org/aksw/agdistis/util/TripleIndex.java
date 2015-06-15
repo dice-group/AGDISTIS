@@ -49,7 +49,7 @@ public class TripleIndex {
 
 	public TripleIndex() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.en.mac.properties");
+		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
 		String index = prop.getProperty("index");
