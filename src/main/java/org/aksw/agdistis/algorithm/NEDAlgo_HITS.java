@@ -13,6 +13,7 @@ import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
+import org.aksw.agdistis.graph.PageRank;
 import org.aksw.agdistis.util.TripleIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class NEDAlgo_HITS {
 		this.index = cu.getIndex();
 	}
 
-	public void run(Document document) {
+	public void run(Document document) {  //  TODO HITS as Parameter? 
 		try {
 			NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 			algorithmicResult = new HashMap<Integer, String>();
@@ -67,13 +68,22 @@ public class NEDAlgo_HITS {
 			BreadthFirstSearch bfs = new BreadthFirstSearch(index);
 			bfs.run(maxDepth, graph, edgeType, nodeType);
 			log.info("\tGraph size after BFS: " + graph.getVertexCount());
-
-			// 2) let HITS run
+			
+			
+			
+			// 2.1) let HITS run
+			// TODO: add other Graph Algorithms
 			log.debug("\trun HITS");
 			HITS h = new HITS();
 			h.runHits(graph, 20);
-
+			
+						
+			// 2.2) let Pagerank run
+            PageRank pr = new PageRank();
+            pr.runPr(graph, 100, 0.001);
+			
 			// 3) store the candidate with the highest hub, highest authority ratio
+            // manipulate which value to use directly in node.compareTo
 			log.debug("\torder results");
 			ArrayList<Node> orderedList = new ArrayList<Node>();
 			orderedList.addAll(graph.getVertices());

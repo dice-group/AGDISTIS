@@ -15,7 +15,11 @@ public class Node implements Comparable<Node> {
 	private double unnormalizedAuthorityWeight;
 	private double hubWeight;
 	private double authorityWeight;
-	private HashSet<Node> predecessors;
+	private double pageRank;
+	private double pageRankNew; 
+	
+
+    private HashSet<Node> predecessors;
 	private HashSet<Node> successors;
 
 	public Node(String uri, double activation, int level) {
@@ -27,12 +31,13 @@ public class Node implements Comparable<Node> {
 		ids = new HashSet<Integer>();
 		this.successors = new HashSet<Node>();
 		this.predecessors = new HashSet<Node>();
+		this.pageRank = 0; 
 	}
 
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.####");
-		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight)) + " A: " + String.valueOf(df.format(authorityWeight));
+		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight) + " A: " + String.valueOf(df.format(authorityWeight)  + " PR: " + String.valueOf(df.format(pageRank))));
 	}
 
 	@Override
@@ -50,7 +55,12 @@ public class Node implements Comparable<Node> {
 	}
 
 	@Override
+	// this determines the ordering of candidates and thus the result of the algorithm
+	// change to hub score
 	public int compareTo(Node m) {
+		
+	    // AuthorityWeight
+	    /*  
 		if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
 			return 0;
 		} else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
@@ -58,6 +68,29 @@ public class Node implements Comparable<Node> {
 		} else {
 			return -1;
 		}
+		*/
+	    
+	    // HubWeight
+	    /*
+		if (m.getHubWeight() == this.getHubWeight()) {
+			return 0;
+		} else if (m.getHubWeight() > this.getHubWeight()) {
+			return 1;
+		} else {
+			return -1;
+		}
+		*/
+	    
+	    // PageRank
+		if (m.getPageRank() == this.getPageRank()) {
+            return 0;
+        } else if (m.getPageRank() > this.getPageRank()) {
+            return 1;
+        } else {
+            return -1;
+        }
+		
+		
 	}
 
 	public boolean containsId(int id) {
@@ -171,4 +204,21 @@ public class Node implements Comparable<Node> {
 	public void setUnnormalizedAuthorityWeight(double unnormalizedAuthorityWeight) {
 		this.unnormalizedAuthorityWeight = unnormalizedAuthorityWeight;
 	}
+
+	public double getPageRank() {
+		return pageRank;
+	}
+
+	public void setPageRank(double pageRank) {
+		this.pageRank = pageRank;
+	}
+
+    public double getPageRankNew() {
+        return pageRankNew;
+    }
+    
+    public void setPageRankNew(double pageRankNew) {
+        this.pageRankNew = pageRankNew;
+    }
+
 }
