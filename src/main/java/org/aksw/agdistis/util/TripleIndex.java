@@ -39,7 +39,7 @@ public class TripleIndex {
 	public static final String FIELD_NAME_OBJECT_URI = "object_uri";
 	public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
 
-	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
+	private int defaultMaxNumberOfDocsRetrievedFromIndex = 1000;
 
 	private Directory directory;
 	private IndexSearcher isearcher;
