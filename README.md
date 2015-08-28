@@ -5,7 +5,7 @@ As a part of an <a href="http://3.okbqa.org">OKBQA</a>(Open Knowledge Base and Q
 
 Basically, the method is follows:
 From the candidate sets generated from each entity, candidates which only have few type information are discarded.
-As a consequence, smaller subgraph is generated so that the following HITS algorithm performs better. Sophiscated clstering function might boost the performance further(Please contribute to CandidateUtil.findLargestComponent() method <a href="https://github.com/Seondong/AGDISTIS/blob/master/src/main/java/org/aksw/agdistis/algorithm/CandidateUtil.java"here</a>).
+As a consequence, smaller subgraph is generated so that the following HITS algorithm performs better. Sophiscated clstering function might boost the performance further(Please contribute to CandidateUtil.findLargestComponent() method <a href="https://github.com/Seondong/AGDISTIS/blob/master/src/main/java/org/aksw/agdistis/algorithm/CandidateUtil.java">here</a>).
 
 Relevent documentation can be found on the following <a href="https://docs.google.com/presentation/d/1ZsZDb8f8hAlHHlOLyQVee2e5w_wTt10iSD2kAH0Vc3E/edit?usp=sharing">link</a>.
 
