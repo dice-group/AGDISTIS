@@ -35,3 +35,6 @@ The used annotation tool can be downloaded from <a href="https://github.com/Rica
 ## Disclaimer
 
 The deployed webservice does not reflect the optimal parametrization of AGDISTIS as published.
+
+## Bindings
+* Python bindings: https://pypi.python.org/pypi/agdistispy/
