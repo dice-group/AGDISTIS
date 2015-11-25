@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 import org.aksw.agdistis.datatypes.Document;
@@ -16,6 +17,8 @@ import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.util.TripleIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
@@ -62,18 +65,21 @@ public class NEDAlgo_HITS {
 			log.debug("\tinsert candidates");
 			cu.insertCandidatesIntoText(graph, document, threshholdTrigram, heuristicExpansionOn);
 
-			// 1) let spread activation/ breadth first search run
-			log.info("\tGraph size before BFS: " + graph.getVertexCount());
-			BreadthFirstSearch bfs = new BreadthFirstSearch(index);
-			bfs.run(maxDepth, graph, edgeType, nodeType);
-			log.info("\tGraph size after BFS: " + graph.getVertexCount());
+			// // 1) let spread activation/ breadth first search run
+			// log.info("\tGraph size before BFS: " + graph.getVertexCount());
+			// BreadthFirstSearch bfs = new BreadthFirstSearch(index);
+			// bfs.run(maxDepth, graph, edgeType, nodeType);
+			// log.info("\tGraph size after BFS: " + graph.getVertexCount());
+			String[] candidates = listNodes(graph);
+			
 
 			// 2) let HITS run
 			log.debug("\trun HITS");
 			HITS h = new HITS();
 			h.runHits(graph, 20);
 
-			// 3) store the candidate with the highest hub, highest authority ratio
+			// 3) store the candidate with the highest hub, highest authority
+			// ratio
 			log.debug("\torder results");
 			ArrayList<Node> orderedList = new ArrayList<Node>();
 			orderedList.addAll(graph.getVertices());
@@ -95,6 +101,14 @@ public class NEDAlgo_HITS {
 		} catch (Exception e) {
 			log.error("AGDISTIS cannot be run on this document.", e);
 		}
+	}
+
+	private String[] listNodes(DirectedSparseGraph<Node, String> graph) {
+		List<String> candidates = Lists.newArrayList();
+		for (Node n : graph.getVertices()) {
+			candidates.add(n.getCandidateURI());
+		}
+		return (String[]) candidates.toArray(new String[candidates.size()]);
 	}
 
 	public String findResult(NamedEntityInText namedEntity) {
