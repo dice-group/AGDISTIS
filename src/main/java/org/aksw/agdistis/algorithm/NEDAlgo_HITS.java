@@ -14,6 +14,7 @@ import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
+import org.aksw.agdistis.paths_webservice.Client;
 import org.aksw.agdistis.util.TripleIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,9 @@ public class NEDAlgo_HITS {
 			// bfs.run(maxDepth, graph, edgeType, nodeType);
 			// log.info("\tGraph size after BFS: " + graph.getVertexCount());
 			String[] candidates = listNodes(graph);
+			
+			Client c = new Client();
+			c.request(candidates);
 			
 
 			// 2) let HITS run
