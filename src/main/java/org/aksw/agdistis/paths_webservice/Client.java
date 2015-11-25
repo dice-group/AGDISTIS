@@ -7,11 +7,23 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.aksw.agdistis.graph.Node;
 import org.apache.commons.math3.linear.OpenMapRealMatrix;
 
+import com.google.common.collect.Lists;
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+
+import org.aksw.agdistis.graph.Node;
+
 public class Client {
-	    public OpenMapRealMatrix request(String[] uris) throws IOException, ClassNotFoundException {
+	    public DirectedSparseGraph<Node, String> request(DirectedSparseGraph<Node, String> graph) throws IOException, ClassNotFoundException {
+	    	String[] uris = listNodes(graph);
+	    	
 	    	OpenMapRealMatrix result=null;
 	    	try {
 	    		for (String s : uris){
@@ -48,6 +60,18 @@ public class Client {
 	        	}
 	        	
 	    		
+	    		Map<String, Node> m = mapNodes(graph);
+	        	for (int i=0; i<uris.length; i++){
+	        		for (int j=0; j<uris.length; j++){
+	        			if (result.getEntry(i, j)!=0){
+	        				//Create a new edge and add weight to the edge
+	        				graph.addEdge(graph.getEdgeCount() + ";" + result.getEntry(i, j), m.get(uris[i]), m.get(uris[j]));
+	        			}
+	        		}
+	        		System.out.print("\n");
+	        	}
+	        	
+	    		
 	        	oos.close();
 	        	os.close();
 	        	ois.close();
@@ -64,6 +88,23 @@ public class Client {
 	            System.err.println("Couldn't get I/O for the connection to ???");
 	            System.exit(1);
 	        }
-	    	return result;
+	    	return graph;
 	    }
+	   
+	    private String[] listNodes(DirectedSparseGraph<Node, String> graph) {
+			List<String> candidates = Lists.newArrayList();
+			for (Node n : graph.getVertices()) {
+				candidates.add(n.getCandidateURI());
+			}
+			return (String[]) candidates.toArray(new String[candidates.size()]);
+		}
+	    
+	    private Map<String, Node> mapNodes(DirectedSparseGraph<Node, String> graph) {
+	    	Map<String, Node> r = new HashMap<String,Node>();
+			for (Node n : graph.getVertices()) {
+				r.put(n.getCandidateURI(), n);
+			}
+			return r;
+		}
+
 }
