@@ -71,10 +71,10 @@ public class NEDAlgo_HITS {
 			// BreadthFirstSearch bfs = new BreadthFirstSearch(index);
 			// bfs.run(maxDepth, graph, edgeType, nodeType);
 			// log.info("\tGraph size after BFS: " + graph.getVertexCount());
-			String[] candidates = listNodes(graph);
+			
 			
 			Client c = new Client();
-			c.request(candidates);
+			graph=c.request(graph);
 			
 
 			// 2) let HITS run
