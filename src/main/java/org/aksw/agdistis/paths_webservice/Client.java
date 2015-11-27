@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URLEncoder;
 
 import org.aksw.agdistis.graph.Node;
 import org.apache.commons.math3.linear.OpenMapRealMatrix;
@@ -26,10 +27,11 @@ public class Client {
 	    	
 	    	OpenMapRealMatrix result=null;
 	    	try {
-	    		for (String s : uris){
-	    			System.out.println(s);
+	    		for (int i=0; i< uris.length; i++){
+				String[] tmp=uris[i].split("resource/");
+				uris[i]=tmp[0]+"resource/"+URLEncoder.encode(tmp[1],"UTF-8");
+				System.out.println(uris[i]);
 	    		}
-	    		
 	        	Socket socket = new Socket("localhost", 1112);
 	        	
 	        	OutputStream os = socket.getOutputStream();
