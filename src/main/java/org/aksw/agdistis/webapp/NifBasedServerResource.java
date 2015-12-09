@@ -13,6 +13,8 @@ import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.gerbil.transfer.nif.NIFDocumentCreator;
 import org.aksw.gerbil.transfer.nif.NIFDocumentParser;
 import org.aksw.gerbil.transfer.nif.Span;
+import org.aksw.gerbil.transfer.nif.TurtleNIFDocumentCreator;
+import org.aksw.gerbil.transfer.nif.TurtleNIFDocumentParser;
 import org.aksw.gerbil.transfer.nif.data.DocumentImpl;
 import org.aksw.gerbil.transfer.nif.data.NamedEntity;
 import org.restlet.data.Status;
@@ -25,8 +27,8 @@ import org.slf4j.LoggerFactory;
 public class NifBasedServerResource extends ServerResource {
 	private static Logger log = LoggerFactory.getLogger(NifBasedServerResource.class);
 	private NEDAlgo_HITS agdistis;
-	private NIFDocumentParser documentReader;
-	private NIFDocumentCreator documentWriter;
+	private NIFDocumentParser documentReader = new TurtleNIFDocumentParser();
+	private NIFDocumentCreator documentWriter = new TurtleNIFDocumentCreator();
 
 	public NifBasedServerResource() {
 		try {
@@ -44,6 +46,8 @@ public class NifBasedServerResource extends ServerResource {
 		log.info("Start working on Request for AGDISTIS");
 		// Parse the given representation and retrieve data
 		Map<String, Object> requestAttributes = this.getRequestAttributes();
+
+		log.error(entity.toString());
 
 		org.aksw.gerbil.transfer.nif.Document nifDoc = null;
 		try {
