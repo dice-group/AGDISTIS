@@ -11,6 +11,7 @@
 			<!-- MAVEN Compiler Plugin -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
 					<argLine>-Xmx6G</argLine>
 					<source>${java.version}</source>
@@ -27,6 +28,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -41,6 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -80,6 +83,11 @@
 			<id>Apache Repo Central</id>
 			<name>Apache Repository</name>
 			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>AKSW Repo</id>
+			<name>AKSW Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/internal</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -193,5 +201,12 @@
 			<version>3.4.1</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Sparse matrix storage ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- ~~~~~~~~~~~~~~~~~~~ NIF transfer ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<dependency>
+			<groupId>org.aksw</groupId>
+			<artifactId>gerbil.nif.transfer</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<!-- ~~~~~~~~~~~~~~~~~~~ End NIF transfer ~~~~~~~~~~~~~~~~~~~~~~ -->
 	</dependencies>
 </project>
