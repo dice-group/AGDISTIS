@@ -72,7 +72,7 @@ public class NEDAlgo_HITS {
 			// bfs.run(maxDepth, graph, edgeType, nodeType);
 			// log.info("\tGraph size after BFS: " + graph.getVertexCount());
 			
-			
+			log.debug("\trun matrix client");
 			Client c = new Client();
 			graph=c.request(graph);
 			
