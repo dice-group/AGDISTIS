@@ -12,6 +12,7 @@ import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
@@ -26,7 +27,9 @@ public class GetDisambiguation extends ServerResource {
 		try {
 			agdistis = new NEDAlgo_HITS();
 		} catch (IOException e) {
-			log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
+			log.error(
+					"Can not load index due to either wrong properties in agdistis.properties or missing index at location",
+					e);
 			System.exit(0);
 		}
 	}
@@ -38,6 +41,11 @@ public class GetDisambiguation extends ServerResource {
 		// Parse the given representation and retrieve data
 		Form form = new Form(entity);
 		String text = form.getFirstValue("text");
+		if (text == null) {
+			log.error("Couldn't get the text from the request.");
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Couldn't get the text from the request.");
+			return "ERROR: no text found";
+		}
 		String type = form.getFirstValue("type");
 
 		log.info("text: " + text);
@@ -73,7 +81,7 @@ public class GetDisambiguation extends ServerResource {
 		String similarityThreshold = form.getFirstValue("similarity");
 		String explorationDepth = form.getFirstValue("depth");
 		String heuristicExpansion = form.getFirstValue("heuristic");
-		
+
 		log.info("similarityThreshold: " + similarityThreshold);
 		log.info("explorationDepth: " + explorationDepth);
 		log.info("heuristicExpansion: " + heuristicExpansion);
@@ -83,13 +91,13 @@ public class GetDisambiguation extends ServerResource {
 		} else {
 			agdistis.setThreshholdTrigram(0.82);
 		}
-		
+
 		if (explorationDepth != null) {
 			agdistis.setMaxDepth(Integer.valueOf(explorationDepth));
 		} else {
 			agdistis.setMaxDepth(2);
 		}
-		
+
 		if (heuristicExpansion != null) {
 			agdistis.setHeuristicExpansionOn(Boolean.valueOf(heuristicExpansion));
 		} else {

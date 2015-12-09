@@ -7,7 +7,7 @@ import org.restlet.routing.Router;
 
 public class RestletApplication extends Application {
 
-	private static final String NIF_BASED_WEB_SERVICE = "nif";
+	private static final String NIF_BASED_WEB_SERVICE = "/nif";
 
 	public static final String DEPTH_PARAMETER_NAME = "depth";
 	public static final String HEURISTIC_PARAMETER_NAME = "heuristic";
