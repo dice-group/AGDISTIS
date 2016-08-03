@@ -138,7 +138,7 @@ public class CandidateUtil {
 			// rule of thumb: no year numbers in candidates
 			if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
 				// trigram similarity
-				if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
+				if (nGramDistance.getDistance(surfaceForm.toLowerCase(), label.toLowerCase()) < threshholdTrigram)  {
 					continue;
 				}
 				// iff it is a disambiguation resource, skip it
