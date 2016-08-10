@@ -53,7 +53,7 @@ public class Document implements Comparable<Document>, Serializable {
 		return result.toString();
 	}
 
-	public void addTest(DocumentText text) {
+	public void addText(DocumentText text) {
 		this.text = text;
 	}
 
