@@ -119,7 +119,7 @@ public class GetDisambiguation extends ServerResource {
 		NamedEntitiesInText nes = new NamedEntitiesInText(list);
 		DocumentText text = new DocumentText(preAnnotatedText.replaceAll("<entity>", "").replaceAll("</entity>", ""));
 
-		document.addTest(text);
+		document.addText(text);
 		document.addNamedEntitiesInText(nes);
 		return document;
 	}
