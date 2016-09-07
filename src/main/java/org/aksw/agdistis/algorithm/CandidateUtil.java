@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
@@ -18,6 +22,13 @@ import org.aksw.agdistis.util.TripleIndex;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
@@ -115,7 +126,16 @@ public class CandidateUtil {
 
 		List<Triple> candidates = new ArrayList<Triple>();
 		candidates = searchCandidatesByLabel(label, searchInSurfaceForms);
-		log.info("\t\tnumber of candidates: " + candidates.size());
+		log.info("\t\tnumber of candidates before type reduction: " + candidates.size());
+		
+		
+		
+/// Modified by Sundong KIM (Candidate set reduction using type information)
+		candidates = reductionByTypeInference(candidates);
+		log.info("\t\tnumber of candidates after type reduction: " + candidates.size());
+///		
+		
+		
 		if (candidates.size() == 0) {
 			log.info("\t\t\tNo candidates for: " + label);
 			if (label.endsWith("'s")) {
@@ -157,6 +177,121 @@ public class CandidateUtil {
 			checkLabelCandidates(graph, threshholdTrigram, nodes, entity, label, true);
 	}
 
+	
+	
+	private List<Triple> reductionByTypeInference(List<Triple> candidates) {
+	// BY SUNDONG KIM	
+		
+		List<String> candidatesSubject = new ArrayList<String>();
+		for(Triple t : candidates){
+			candidatesSubject.add(t.getSubject());
+		}
+//		log.info("Candidate triple to check: " + candidatesSubject);
+		
+		Map<String, Set<String>> candidateTypeMap = findCandidateTypes(candidatesSubject);
+		Map<String, Set<String>> reducedCandidateTypeMap = findLargestComponent(candidateTypeMap);
+		List<String> reducedCandidatesSubject = extractReducedCandidate(reducedCandidateTypeMap);
+		List<Triple> reducedCandidates = new ArrayList<Triple>();
+		reducedCandidates.addAll(candidates);
+		
+		for(Iterator<Triple> it = reducedCandidates.iterator(); it.hasNext(); ) {
+		      Triple t = it.next();
+		      if(!reducedCandidatesSubject.contains(t.getSubject())) {
+		        it.remove();
+		      }
+	    }
+	
+		return reducedCandidates;
+	}
+	
+	
+	public Map<String, Set<String>> findCandidateTypes(List<String> candidatesSubject) {
+		// BY SUNDONG KIM	
+		
+		Map<String, Set<String>> candidateTypeMap = new HashMap<String, Set<String>>();
+		
+		for (String s : candidatesSubject) {
+			Set<String> candidateofs = new HashSet<String>();
+			
+			List<Triple> type = index.search(s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", null);
+			
+			for (Triple t : type) {		
+				candidateofs.add(t.getObject());
+			}
+
+			candidateTypeMap.put(s, candidateofs);
+
+//			
+//			String sparqlQueryString = " select * " + "where {" + "<" + s + ">"
+//					+ " a ?o }" + "limit 10";
+//			Query query = QueryFactory.create(sparqlQueryString);
+//			QueryExecution qexec = QueryExecutionFactory.sparqlService(
+//					"http://dbpedia.org/sparql", query);
+//			try {
+//				ResultSet results = qexec.execSelect();
+//				while(results.hasNext()){
+//					QuerySolution soln = results.nextSolution();
+//					String type = soln.get("?o").toString();
+//					candidateofs.add(type);
+//				}
+//				candidateTypeMap.put(s, candidateofs);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			} finally {
+//				qexec.close();
+//			}
+			
+			
+		}
+		
+		
+		
+		return candidateTypeMap;
+
+	}
+	
+	
+	public Map<String, Set<String>> findLargestComponent(Map<String, Set<String>> candidateTypeMap){
+		// BY SUNDONG KIM	
+		
+		Map<String, Set<String>> candidateLargestComponent = new HashMap<String, Set<String>>();
+		
+//		DEFAULT (No reduction)
+//		candidateLargestComponent = candidateTypeMap;
+		
+		//REMOVE INSTANCES HAVING TYPE LESS THAN AVERAGE NUMBER OF TYPES
+		
+		for(Iterator<Entry<String, Set<String>>> it = candidateTypeMap.entrySet().iterator(); it.hasNext(); ) {
+		      Map.Entry<String, Set<String>> entry = it.next();
+		      if(entry.getValue().size() < 5) {
+		        it.remove();
+		      }
+	    }
+		
+		candidateLargestComponent.putAll(candidateTypeMap);
+		
+		
+		
+		
+		
+		return candidateLargestComponent;
+		
+	}
+	
+	
+	public ArrayList<String> extractReducedCandidate(Map<String, Set<String>> candidateTypeMap){
+		// BY SUNDONG KIM	
+		
+		ArrayList<String> reducedCandidate = new ArrayList<String>();
+		
+		reducedCandidate.addAll(candidateTypeMap.keySet());
+		
+		return reducedCandidate;
+		
+	}
+	
+
+
 	private ArrayList<Triple> searchCandidatesByLabel(String label, boolean searchInSurfaceFormsToo) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		tmp.addAll(index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", label));
@@ -165,6 +300,7 @@ public class CandidateUtil {
 		}
 		return tmp;
 	}
+	
 
 	private boolean isDisambiguationResource(String candidateURL) {
 		List<Triple> tmp = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageDisambiguates", null);
