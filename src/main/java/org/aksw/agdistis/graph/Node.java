@@ -60,7 +60,7 @@ public class Node implements Comparable<Node> {
 	public int compareTo(Node m) {
 		
 	    // AuthorityWeight
-	    /*  
+	    
 		if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
 			return 0;
 		} else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
@@ -68,10 +68,10 @@ public class Node implements Comparable<Node> {
 		} else {
 			return -1;
 		}
-		*/
-	    
-	    // HubWeight
+		
 	    /*
+	    // HubWeight
+	    
 		if (m.getHubWeight() == this.getHubWeight()) {
 			return 0;
 		} else if (m.getHubWeight() > this.getHubWeight()) {
@@ -79,7 +79,7 @@ public class Node implements Comparable<Node> {
 		} else {
 			return -1;
 		}
-		*/
+		
 	    
 	    // PageRank
 		if (m.getPageRank() == this.getPageRank()) {
@@ -89,7 +89,7 @@ public class Node implements Comparable<Node> {
         } else {
             return -1;
         }
-		
+	*/	
 		
 	}
 
