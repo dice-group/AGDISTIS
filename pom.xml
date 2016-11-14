@@ -193,16 +193,5 @@
 			<artifactId>jena-arq</artifactId>
 			<version>2.13.0</version>
 		</dependency>
-		<!-- build plugins -->
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>3.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-source-plugin</artifactId>
-			<version>3.0.1</version>
-		</dependency>
 	</dependencies>
 </project>
