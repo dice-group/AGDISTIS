@@ -14,7 +14,7 @@ RUN mvn dependency:go-offline
 
 # Copy source folder and install app
 COPY src /usr/src/app/src
-RUN mvn install -Dmaven.test.skip=true
+RUN mvn compile -Dmaven.test.skip=true
 
 # Expose default app index folder as volume
 VOLUME /usr/src/app/indexdbpedia_en_2014
@@ -23,4 +23,4 @@ VOLUME /usr/src/app/indexdbpedia_en_2014
 EXPOSE 8080
 
 # Set default command to run tomcat in offline (-o) mode
-CMD ["mvn", "-o",  "tomcat:run"]
+CMD ["mvn", "-o",  "tomcat7:run"]
