@@ -1,5 +1,5 @@
 .DS_Store
 .git/
 indexdbpedia*
+src/
 documents/
-target/
