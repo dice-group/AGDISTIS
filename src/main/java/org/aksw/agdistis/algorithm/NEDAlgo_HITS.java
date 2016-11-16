@@ -35,7 +35,7 @@ public class NEDAlgo_HITS {
 
 	public NEDAlgo_HITS() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = NEDAlgo_HITS.class.getResourceAsStream("/config/agdistis.en.mac.properties");
+		InputStream input = NEDAlgo_HITS.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
 		String nodeType = prop.getProperty("nodeType");
