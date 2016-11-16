@@ -131,8 +131,8 @@ public class CandidateUtil {
 		
 		
 /// Modified by Sundong KIM (Candidate set reduction using type information)
-		candidates = reductionByTypeInference(candidates);
-		log.info("\t\tnumber of candidates after type reduction: " + candidates.size());
+		//candidates = reductionByTypeInference(candidates);
+		//log.info("\t\tnumber of candidates after type reduction: " + candidates.size());
 ///		
 		
 		
