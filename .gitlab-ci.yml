@@ -6,23 +6,6 @@ stages:
 variables:
   IMAGE: aksw/agdistis:latest
 
-# cache index between builds
-cache:
-  key: "index"
-  paths:
-    - /index
-
-# download index if it's not cached yet
-before_script:
-  - if [ ! -d "/index" ] ; then
-      apt-get update &&
-      apt-get install p7zip-full &&
-      wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-      7z x indexdbpedia_en_2014.7z &&
-      mv indexdbpedia_en_2014 /index &&
-      ls /index ;
-    fi
-
 build:
   image: maven
   stage: build
@@ -39,6 +22,20 @@ test:
   stage: test
   only:
     - docker
+  # cache index between builds
+  cache:
+    key: "index"
+    paths:
+      - /index
+  # download index if it's not cached yet
+  before_script:
+    - if [ ! -d "/index" ] ; then
+        apt-get update &&
+        apt-get install p7zip-full &&
+        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+        7z x indexdbpedia_en_2014.7z &&
+        mv indexdbpedia_en_2014 /index ;
+      fi
   script:
     - mvn test
 
