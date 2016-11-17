@@ -18,6 +18,7 @@ build:
     - target/*.war
 
 test:
+  image: maven
   stage: test
   only:
     - docker
