@@ -1,7 +1,7 @@
 stages:
 - build
 - test
-#- release
+- release
 
 variables:
   IMAGE: aksw/agdistis:latest
@@ -39,15 +39,15 @@ test:
   script:
     - mvn test
 
-#release:
-#  image: docker:latest
-#  stage: release
-#  services:
-#    - docker:dind
-#  only:
-#    - docker
-#  before_script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
-#  script:
-#    - docker build --pull -t $IMAGE .
-#    - docker push $IMAGE
+release:
+  image: docker:latest
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - docker
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
+  script:
+    - docker build --pull -t $IMAGE .
+    - docker push $IMAGE
