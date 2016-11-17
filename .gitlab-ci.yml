@@ -20,7 +20,7 @@ before_script:
       wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
       7z x indexdbpedia_en_2014.7z &&
       mv indexdbpedia_en_2014 /index &&
-      ls /index
+      ls /index ;
     fi
 
 build:
