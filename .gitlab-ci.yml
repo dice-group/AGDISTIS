@@ -10,7 +10,7 @@ build:
   image: maven
   stage: build
   only:
-    - docker
+    - master
   script:
     - mvn package -Dmaven.test.skip=true
   artifacts:
@@ -21,7 +21,7 @@ test:
   image: maven
   stage: test
   only:
-    - docker
+    - master
   # cache index between builds
   cache:
     key: "index"
@@ -45,7 +45,7 @@ release:
   services:
     - docker:dind
   only:
-    - docker
+    - master
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
   script:
