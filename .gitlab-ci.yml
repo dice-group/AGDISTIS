@@ -27,6 +27,7 @@ test:
   script:
     - wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z
     - 7z x -o/index indexdbpedia_en_2014.7z
+    - ls /index
     - mvn test
 
 #release:
