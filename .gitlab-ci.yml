@@ -1,0 +1,53 @@
+stages:
+- build
+- test
+- release
+
+variables:
+  IMAGE: aksw/agdistis:latest
+
+build:
+  image: maven
+  stage: build
+  only:
+    - master
+  script:
+    - mvn package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+    - target/*.war
+
+test:
+  image: maven
+  stage: test
+  only:
+    - master
+  # cache index between builds
+  cache:
+    key: "index"
+    paths:
+      - index
+  # download index if it's not cached yet
+  before_script:
+    - if [ ! -d "index" ] ; then
+        apt-get update &&
+        apt-get install p7zip-full &&
+        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+        7z x indexdbpedia_en_2014.7z &&
+        mv indexdbpedia_en_2014 index ;
+      fi
+  script:
+    - mvn test
+
+release:
+  image: docker:latest
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - master
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
+  script:
+    - docker build --pull -t $IMAGE .
+    - docker push $IMAGE
