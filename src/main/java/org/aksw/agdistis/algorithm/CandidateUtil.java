@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
@@ -22,7 +22,6 @@ import org.aksw.agdistis.util.TripleIndex;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 

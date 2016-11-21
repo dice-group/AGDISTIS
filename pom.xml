@@ -32,10 +32,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin> 
+			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
-    				<artifactId>tomcat7-maven-plugin</artifactId>
-    				<version>2.2</version>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -80,7 +80,7 @@
 			<version>2.0.1</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
-		<!-- ~~~~~~~~~~~~~~~~~~~ Load tripple files ~~~~~~~~~~~~~~~~~~~~~~ --> 
+		<!-- ~~~~~~~~~~~~~~~~~~~ Load tripple files ~~~~~~~~~~~~~~~~~~~~~~ -->
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-rio-turtle</artifactId>
@@ -138,5 +138,16 @@
 			<version>18.0</version>
 		</dependency>
 		<!-- ~~~~~~~~~~~~~~~~~~~ End Cache for TripleIndex ~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- SPARQL experiment -->
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-core</artifactId>
+			<version>3.1.0-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-cache-h2</artifactId>
+			<version>3.1.0-1</version>
+		</dependency>
 	</dependencies>
 </project>
