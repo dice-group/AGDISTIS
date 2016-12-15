@@ -88,6 +88,16 @@
             <name>Apache Repository</name>
             <url>http://repo.maven.apache.org/maven2</url>
         </repository>
+        <repository>
+            <id>maven.aksw.internal</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/archiva/repository/internal</url>
+        </repository>
+        <repository>
+            <id>maven.aksw.snapshots</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+        </repository>
     </repositories>
     <dependencies>
         <!-- ~~~~~~~~~~~~~~~~~~~ Testing ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -99,11 +109,10 @@
         </dependency>
         <!-- ~~~~~~~~~~~~~~~~~~~ End Testing ~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- ~~~~~~~~~~~~~~~~~~~ NIF ~~~~~~~~~~~~~~~~~~~~~~ -->
-                
         <dependency>
             <groupId>org.aksw</groupId>
             <artifactId>gerbil.nif.transfer</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2-jena3.1</version>
             <type>jar</type>
         </dependency>
         <!-- ~~~~~~~~~~~~~~~~~~~ End NIF ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -202,10 +211,5 @@
             <version>18.0</version>
         </dependency>
         <!-- ~~~~~~~~~~~~~~~~~~~ End Cache for TripleIndex ~~~~~~~~~~~~~~~~~~~~~~ -->
-        <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-arq</artifactId>
-            <version>2.13.0</version>
-        </dependency>
     </dependencies>
 </project>
