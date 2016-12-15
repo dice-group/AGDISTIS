@@ -70,7 +70,9 @@ public class GetDisambiguation extends ServerResource {
 
         log.info("text: " + text);
         log.info("type: " + type);
-
+        if(type == null){
+            type = "agdistis";
+        }
         evaluationOptionalParameters(form);
 
         JSONArray arr = new org.json.simple.JSONArray();
@@ -78,7 +80,7 @@ public class GetDisambiguation extends ServerResource {
         HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsScore = null;
 
         //This type is the standard and in case the user doesn't send the type parameter, it is considered as the main one(e.g AGDISTIS?type=agdistis&text=<entity>Barack Obama</entity>). 
-        if (type.equals("agdistis") || type == null) {
+        if (type.equals("agdistis")) {
             Document d = textToDocument(text);
             results = results(d, agdistis, type);
 
