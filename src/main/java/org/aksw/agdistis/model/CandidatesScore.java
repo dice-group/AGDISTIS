@@ -16,8 +16,6 @@
  */
 package org.aksw.agdistis.model;
 
-import java.util.Arrays;
-
 /**
  *
  * @author diegomoussallem

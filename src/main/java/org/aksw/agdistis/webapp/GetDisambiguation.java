@@ -3,7 +3,6 @@ package org.aksw.agdistis.webapp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;
@@ -41,12 +40,32 @@ public class GetDisambiguation extends ServerResource {
 
     @SuppressWarnings("unchecked")
     @Post
-    public String postText(Representation entity) throws IOException {
+    public String postText(Representation entity) throws IOException, Exception {
+
         log.info("Start working on Request for AGDISTIS");
         // Parse the given representation and retrieve data
         Form form = new Form(entity);
         String text = form.getFirstValue("text");
         String type = form.getFirstValue("type");
+
+        if (text == null && type == null) {
+
+            NIFParser nifParser = new NIFParser();
+
+            org.aksw.gerbil.transfer.nif.Document document;
+            try {
+                document = parser.getDocumentFromNIFString(form.toString().replace("[[", "").replace("]]", ""));
+            } catch (Exception e) {
+                log.error("Exception while reading request.", e);
+                return "";
+            }
+            log.debug("Request: " + document.toString());
+            document.setMarkings(new ArrayList<Marking>(nifParser.convertNIF(document)));
+            log.debug("Result: " + document.toString());
+            String nifDocument = creator.getDocumentAsNIFString(document);
+            log.debug(nifDocument);
+            return nifDocument;
+        }
 
         log.info("text: " + text);
         log.info("type: " + type);
@@ -57,26 +76,7 @@ public class GetDisambiguation extends ServerResource {
         HashMap<NamedEntityInText, String> results = null;
         HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsScore = null;
 
-        if (type.equals("nif")) {
-
-            NIFParser nifParser = new NIFParser();
-
-            org.aksw.gerbil.transfer.nif.Document document;
-            try {
-                document = parser.getDocumentFromNIFString(text);
-            } catch (Exception e) {
-                log.error("Exception while reading request.", e);
-                return "";
-            }
-            log.debug("Request: " + document.toString());
-            document.setMarkings(new ArrayList<Marking>(nifParser.convertNIF(document)));
-            log.debug("Result: " + document.toString());
-            String nifDocument = creator.getDocumentAsNIFString(document);
-            //System.out.println(nifDocument);
-            return nifDocument;
-        }
-
-        if (type.equals("agdistis")) {
+        if (type.equals("agdistis") || type == null) {
             Document d = textToDocument(text);
             results = results(d, agdistis, type);
 
@@ -93,6 +93,23 @@ public class GetDisambiguation extends ServerResource {
             log.info("Finished Request");
             return arr.toString();
 
+        } else if (type.equals("nif")) {
+
+            NIFParser nifParser = new NIFParser();
+
+            org.aksw.gerbil.transfer.nif.Document document;
+            try {
+                document = parser.getDocumentFromNIFString(text);
+            } catch (Exception e) {
+                log.error("Exception while reading request.", e);
+                return "";
+            }
+            log.debug("Request: " + document.toString());
+            document.setMarkings(new ArrayList<Marking>(nifParser.convertNIF(document)));
+            log.debug("Result: " + document.toString());
+            String nifDocument = creator.getDocumentAsNIFString(document);
+            //System.out.println(nifDocument);
+            return nifDocument;
         } else if (type.equals("candidates")) {
             Document d = textToDocument(text);
             resultsScore = resultsCandidates(d, agdistis, type);

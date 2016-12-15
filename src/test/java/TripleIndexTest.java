@@ -79,11 +79,11 @@ public class TripleIndexTest {
 
 	@Test
 	public void testSurfaceForm() {
-		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
+		String candidateURL = "http://dbpedia.org/resource/Angela_Merkel";
 		List<Triple> type = index.search(candidateURL, "http://www.w3.org/2004/02/skos/core#altLabel", null);
 		assertTrue(type.size() > 0);
 		for (Triple t : type) {
-			log.debug(t.toString());
+			log.info(t.toString());
 		}
 	}
 

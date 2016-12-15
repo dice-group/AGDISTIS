@@ -17,7 +17,7 @@ import org.aksw.gerbil.transfer.nif.TurtleNIFDocumentParser;
 import org.junit.Test;
 
 public class AGDISTISTest {
-
+/*
     @Test
     public void testUmlaute() throws InterruptedException, IOException {
         String osumi = "Masaaki_Ōsumi";
@@ -49,7 +49,7 @@ public class AGDISTISTest {
         }
 
     }
-
+*/
     @Test
     public void testMinimalExample() throws InterruptedException, IOException {
         String obama = "Barack Obama";
