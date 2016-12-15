@@ -101,7 +101,7 @@ public class NEDAlgo_HITS {
 
                 }
             }
-
+            //To get all candidates along with their scores
             if(type.equals("candidates")){
             for (NamedEntityInText entity : namedEntities) {
                 for (int i = 0; i < orderedList.size(); i++) {
@@ -134,6 +134,7 @@ public class NEDAlgo_HITS {
         }
     }
 
+    //To make the type parameter as "candidates" works
     public ArrayList<CandidatesScore> findCandidates(NamedEntityInText namedEntity) {
         ArrayList<CandidatesScore> results = new ArrayList<CandidatesScore>();
         if (ListCandidates.size() > 0) {

@@ -48,6 +48,7 @@ public class GetDisambiguation extends ServerResource {
         String text = form.getFirstValue("text");
         String type = form.getFirstValue("type");
 
+        //This part is created to work along with GERBIL, because GERBIL only sends the NIF files without taking care of more than one parameter. So, GERBIL is not capable to send the nif in the text parameter making AGDISTIS?type=nif&text= not work.  
         if (text == null && type == null) {
 
             NIFParser nifParser = new NIFParser();
@@ -76,6 +77,7 @@ public class GetDisambiguation extends ServerResource {
         HashMap<NamedEntityInText, String> results = null;
         HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsScore = null;
 
+        //This type is the standard and in case the user doesn't send the type parameter, it is considered as the main one(e.g AGDISTIS?type=agdistis&text=<entity>Barack Obama</entity>). 
         if (type.equals("agdistis") || type == null) {
             Document d = textToDocument(text);
             results = results(d, agdistis, type);
@@ -93,6 +95,7 @@ public class GetDisambiguation extends ServerResource {
             log.info("Finished Request");
             return arr.toString();
 
+        //This type is for AGDISTIS works beyond the GERBIL, this part is in case of user wants to check just a certain NIF file(e.g AGDISTIS?type=nif&text=@prefix....)
         } else if (type.equals("nif")) {
 
             NIFParser nifParser = new NIFParser();
@@ -110,6 +113,7 @@ public class GetDisambiguation extends ServerResource {
             String nifDocument = creator.getDocumentAsNIFString(document);
             //System.out.println(nifDocument);
             return nifDocument;
+        //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score.    
         } else if (type.equals("candidates")) {
             Document d = textToDocument(text);
             resultsScore = resultsCandidates(d, agdistis, type);
@@ -196,10 +200,10 @@ public class GetDisambiguation extends ServerResource {
         return results;
     }
 
+    //To make the type parameter as "candidates" works
     private static HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsCandidates(Document document, NEDAlgo_HITS algo, String type) {
         algo.run(document, type);
         NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-        //HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         HashMap<NamedEntityInText, ArrayList<CandidatesScore>> results = new HashMap<NamedEntityInText, ArrayList<CandidatesScore>>();
         for (NamedEntityInText namedEntity : namedEntities) {
             results.put(namedEntity, algo.findCandidates(namedEntity));
