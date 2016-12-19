@@ -69,11 +69,11 @@ public class TripleIndexTest {
 
 	@Test
 	public void testRdfsLabel() {
-		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
+		String candidateURL = "http://dbpedia.org/resource/Berlin";
 		List<Triple> type = index.search(candidateURL, "http://www.w3.org/2000/01/rdf-schema#label", null);
 		assertTrue(type.size() > 0);
 		for (Triple t : type) {
-			log.debug(t.toString());
+			log.info(t.toString());
 		}
 	}
 

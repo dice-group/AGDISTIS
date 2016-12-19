@@ -1,6 +1,8 @@
 package org.aksw.agdistis.webapp;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
@@ -13,6 +15,7 @@ import org.aksw.agdistis.util.NIFParser;
 import org.aksw.gerbil.transfer.nif.Marking;
 import org.aksw.gerbil.transfer.nif.TurtleNIFDocumentCreator;
 import org.aksw.gerbil.transfer.nif.TurtleNIFDocumentParser;
+import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.restlet.data.Form;
@@ -28,6 +31,7 @@ public class GetDisambiguation extends ServerResource {
     private NEDAlgo_HITS agdistis;
     private TurtleNIFDocumentParser parser = new TurtleNIFDocumentParser();
     private TurtleNIFDocumentCreator creator = new TurtleNIFDocumentCreator();
+    NIFParser nifParser = new NIFParser();
 
     public GetDisambiguation() {
         try {
@@ -41,36 +45,42 @@ public class GetDisambiguation extends ServerResource {
     @SuppressWarnings("unchecked")
     @Post
     public String postText(Representation entity) throws IOException, Exception {
-
         log.info("Start working on Request for AGDISTIS");
-        // Parse the given representation and retrieve data
-        Form form = new Form(entity);
-        String text = form.getFirstValue("text");
-        String type = form.getFirstValue("type");
-
-        //This part is created to work along with GERBIL, because GERBIL only sends the NIF files without taking care of more than one parameter. So, GERBIL is not capable to send the nif in the text parameter making AGDISTIS?type=nif&text= not work.  
-        if (text == null && type == null) {
-
-            NIFParser nifParser = new NIFParser();
-
-            org.aksw.gerbil.transfer.nif.Document document;
-            try {
-                document = parser.getDocumentFromNIFString(form.toString().replace("[[", "").replace("]]", ""));
-            } catch (Exception e) {
-                log.error("Exception while reading request.", e);
-                return "";
-            }
-            log.debug("Request: " + document.toString());
+         //This part is created to work along with GERBIL, because GERBIL only sends the NIF files without taking care of more than one parameter. So, GERBIL is not capable to send the nif in the text parameter making AGDISTIS?type=nif&text= not work.  
+        org.aksw.gerbil.transfer.nif.Document document = null;
+        InputStream input = entity.getStream();
+        byte[] byteArray = IOUtils.toByteArray(input);
+        InputStream input1 = new ByteArrayInputStream(byteArray);
+        InputStream input2 = new ByteArrayInputStream(byteArray);
+        try {
+            document = parser.getDocumentFromNIFStream(input1);
+        } catch (Exception e) {
+            //log.error("Exception while reading request.", e);
+            //return "";
+        }
+        if (!(document == null)) {
+            log.info("NIF file coming from GERBIL");
+            log.info("Request: " + document.toString());
             document.setMarkings(new ArrayList<Marking>(nifParser.convertNIF(document)));
             log.debug("Result: " + document.toString());
             String nifDocument = creator.getDocumentAsNIFString(document);
             log.debug(nifDocument);
             return nifDocument;
         }
+        
+        String string = IOUtils.toString(input2);
+        log.info(string);
 
+        // Parse the given representation and retrieve data
+        Form form = new Form(string);
+        String text = form.getFirstValue("text");
+        String type = form.getFirstValue("type");
         log.info("text: " + text);
         log.info("type: " + type);
-        if(type == null){
+        log.info(form.toString());
+       
+
+        if (type == null) {
             type = "agdistis";
         }
         evaluationOptionalParameters(form);
@@ -97,12 +107,10 @@ public class GetDisambiguation extends ServerResource {
             log.info("Finished Request");
             return arr.toString();
 
-        //This type is for AGDISTIS works beyond the GERBIL, this part is in case of user wants to check just a certain NIF file(e.g AGDISTIS?type=nif&text=@prefix....)
+            //This type is for AGDISTIS works beyond the GERBIL, this part is in case of user wants to check just a certain NIF file(e.g AGDISTIS?type=nif&text=@prefix....)
         } else if (type.equals("nif")) {
 
             NIFParser nifParser = new NIFParser();
-
-            org.aksw.gerbil.transfer.nif.Document document;
             try {
                 document = parser.getDocumentFromNIFString(text);
             } catch (Exception e) {
@@ -115,7 +123,7 @@ public class GetDisambiguation extends ServerResource {
             String nifDocument = creator.getDocumentAsNIFString(document);
             //System.out.println(nifDocument);
             return nifDocument;
-        //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score.    
+            //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score.    
         } else if (type.equals("candidates")) {
             Document d = textToDocument(text);
             resultsScore = resultsCandidates(d, agdistis, type);
@@ -191,7 +199,7 @@ public class GetDisambiguation extends ServerResource {
         return document;
     }
 
-    private static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo, String type) {
+    public static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo, String type) {
         algo.run(document, type);
         NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
         HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
