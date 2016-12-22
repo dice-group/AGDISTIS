@@ -33,23 +33,13 @@ public class NIFParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NIFParser.class);
     protected JSONParser jsonParser = new JSONParser();
-    private NEDAlgo_HITS agdistis;
 
-    public NIFParser() {
-        try {
-            agdistis = new NEDAlgo_HITS();
-        } catch (IOException e) {
-            LOGGER.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
-            System.exit(0);
-        }
-    }
+//    public List<MeaningSpan> generateNIFwithDisambiguation(Document document, NEDAlgo_HITS agdistis) throws IOException {
+//        String textWithMentions = createTextWithMentions(document.getText(), document.getMarkings(Span.class));
+//        return getAnnotations(textWithMentions, agdistis);
+//    }
 
-    public List<MeaningSpan> convertNIF(Document document) throws IOException {
-        String textWithMentions = createTextWithMentions(document.getText(), document.getMarkings(Span.class));
-        return getAnnotations(textWithMentions);
-    }
-
-    static String createTextWithMentions(String text, List<Span> mentions) {
+    public String createTextWithMentions(String text, List<Span> mentions) {
         // Example: 'The <entity>University of Leipzig</entity> in
         // <entity>Barack Obama</entity>.'
 
@@ -92,24 +82,24 @@ public class NIFParser {
         return textBuilder.toString();
     }
 
-    public List<MeaningSpan> getAnnotations(String textWithMentions) throws IOException {
-
-        HashMap<NamedEntityInText, String> results;
-        List<MeaningSpan> annotations = new ArrayList<>();
-        String type = "agdistis";
-        org.aksw.agdistis.datatypes.Document d = textToDocument(textWithMentions);
-
-        results = GetDisambiguation.results(d, agdistis, type);
-
-        for (NamedEntityInText namedEntity : results.keySet()) {
-            String disambiguatedURL = results.get(namedEntity);
-
-            if (disambiguatedURL == null) {
-                annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
-            } else {
-                annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode(disambiguatedURL, "UTF-8")));
-            }
-        }
-        return annotations;
-    }
+//    public List<MeaningSpan> getAnnotations(String textWithMentions, NEDAlgo_HITS agdistis) throws IOException {
+//
+//        HashMap<NamedEntityInText, String> results;
+//        List<MeaningSpan> annotations = new ArrayList<>();
+//        String type = "agdistis";
+//        org.aksw.agdistis.datatypes.Document d = textToDocument(textWithMentions);
+//
+//        results = GetDisambiguation.results(d, agdistis, type);
+//
+//        for (NamedEntityInText namedEntity : results.keySet()) {
+//            String disambiguatedURL = results.get(namedEntity);
+//
+//            if (disambiguatedURL == null) {
+//                annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
+//            } else {
+//                annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode(disambiguatedURL, "UTF-8")));
+//            }
+//        }
+//        return annotations;
+//    }
 }
