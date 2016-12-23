@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class GetDisambiguation extends ServerResource {
 
     private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
-    private NEDAlgo_HITS agdistis;
+//    private NEDAlgo_HITS agdistis;
     private TurtleNIFDocumentParser parser = new TurtleNIFDocumentParser();
     private TurtleNIFDocumentCreator creator = new TurtleNIFDocumentCreator();
     private NIFParser nifParser = new NIFParser();
@@ -50,6 +50,7 @@ public class GetDisambiguation extends ServerResource {
     @SuppressWarnings("unchecked")
     @Post
     public String postText(Representation entity) throws IOException, Exception {
+        NEDAlgo_HITS agdistis = null;
         log.info("Start working on Request for AGDISTIS");
         String result = "";
         InputStream input = entity.getStream();
@@ -63,17 +64,13 @@ public class GetDisambiguation extends ServerResource {
             log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
             System.exit(0);
         }
-
-        //evaluationOptionalParameters(form, agdistis);
         result = NIFGerbil(input1, agdistis);        //This part is created to work along with GERBIL, because GERBIL only sends the NIF files without taking care of more than one parameter. So, GERBIL is not capable to send the nif in the text parameter making AGDISTIS?type=nif&text= not work.  
 
-        if (!(result == null)) {
+        if (!(result.equals(""))) {
             return result;
         } else {
 
             String string = IOUtils.toString(input2);
-            //log.info(string);
-
             // Parse the given representation and retrieve data
             Form form = new Form(string);
             String text = form.getFirstValue("text");
@@ -81,6 +78,7 @@ public class GetDisambiguation extends ServerResource {
             log.info("text: " + text);
             log.info("type: " + type);
 
+            evaluationOptionalParameters(form, agdistis);
             if (type == null) {
                 type = "agdistis";
             }
@@ -90,10 +88,9 @@ public class GetDisambiguation extends ServerResource {
 
             } else if (type.equals("nif")) {
                 return NIFType(text, agdistis);                //This type is for AGDISTIS works beyond the GERBIL, this part is in case of user wants to check just a certain NIF file(e.g AGDISTIS?type=nif&text=@prefix....)
-
-                //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score.    
+   
             } else if (type.equals("candidates")) {
-                return candidateType(text, agdistis, type);
+                return candidateType(text, agdistis, type); //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score. 
             } else {
                 return "ERROR";
             }
@@ -186,7 +183,6 @@ public class GetDisambiguation extends ServerResource {
         HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         try {
             document = parser.getDocumentFromNIFStream(input);
-            if (!(document == null)) {
                 log.info("NIF file coming from GERBIL");
                 textWithMentions = nifParser.createTextWithMentions(document.getText(), document.getMarkings(Span.class));
                 Document d = textToDocument(textWithMentions);
@@ -205,12 +201,9 @@ public class GetDisambiguation extends ServerResource {
                 nifDocument = creator.getDocumentAsNIFString(document);
                 log.debug(nifDocument);
 
-            } else {
-                nifDocument = null;
-            }
         } catch (Exception e) {
-            //log.error("Exception while reading request.", e);
-            return null;
+            log.error("Exception while reading request.", e);
+            return "";
         }
 
         return nifDocument;

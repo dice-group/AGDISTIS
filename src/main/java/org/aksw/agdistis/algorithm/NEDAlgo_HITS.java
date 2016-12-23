@@ -79,8 +79,8 @@ public class NEDAlgo_HITS {
             h.runHits(graph, 20);
 
             // 2.2) let Pagerank run
-            PageRank pr = new PageRank();
-            pr.runPr(graph, 100, 0.001);
+            //PageRank pr = new PageRank();
+            //pr.runPr(graph, 100, 0.001);
 
             // 3) store the candidate with the highest hub, highest authority ratio
             // manipulate which value to use directly in node.compareTo

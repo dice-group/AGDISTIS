@@ -118,11 +118,6 @@ public class CandidateUtil {
         candidates = searchCandidatesByLabel(label, searchInSurfaceForms);
         log.info("\t\tnumber of candidates: " + candidates.size());
 
-/// Modified by Sundong KIM (Candidate set reduction using type information)
-//log.info("\t\tnumber of candidates before type reduction: " + candidates.size());
-        //candidates = reductionByTypeInference(candidates);
-        //log.info("\t\tnumber of candidates after type reduction: " + candidates.size());
-///		
         if (candidates.size() == 0) {
             log.info("\t\t\tNo candidates for: " + label);
             if (label.endsWith("'s")) {
@@ -145,7 +140,7 @@ public class CandidateUtil {
             // rule of thumb: no year numbers in candidates
             if (candidateURL.startsWith(nodeType) && !candidateURL.matches("[0-9][0-9]")) {
                 // trigram similarity
-                if (nGramDistance.getDistance(surfaceForm.toLowerCase(), label.toLowerCase()) < threshholdTrigram) {
+                if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
                     continue;
                 }
                 // iff it is a disambiguation resource, skip it
