@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;
@@ -54,6 +55,7 @@ public class GetDisambiguation extends ServerResource {
         log.info("Start working on Request for AGDISTIS");
         String result = "";
         InputStream input = entity.getStream();
+        //here the inputStream is duplicated due to it can be read only once. Therefore, we do it for checking if the input is from gerbil or not.
         byte[] byteArray = IOUtils.toByteArray(input);
         InputStream input1 = new ByteArrayInputStream(byteArray);
         InputStream input2 = new ByteArrayInputStream(byteArray);
@@ -84,13 +86,13 @@ public class GetDisambiguation extends ServerResource {
             }
 
             if (type.equals("agdistis")) {
-                return standardAG(text, agdistis, type);             //This type is the standard and in case the user doesn't send the type parameter, it is considered as the main one(e.g AGDISTIS?type=agdistis&text=<entity>Barack Obama</entity>). 
+                return standardAG(text, agdistis);             //This type is the standard and in case the user doesn't send the type parameter, it is considered as the main one(e.g AGDISTIS?type=agdistis&text=<entity>Barack Obama</entity>). 
 
             } else if (type.equals("nif")) {
                 return NIFType(text, agdistis);                //This type is for AGDISTIS works beyond the GERBIL, this part is in case of user wants to check just a certain NIF file(e.g AGDISTIS?type=nif&text=@prefix....)
-   
+
             } else if (type.equals("candidates")) {
-                return candidateType(text, agdistis, type); //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score. 
+                return candidateType(text, agdistis); //Here is to let us know about all candidates for each mention and its respective HITS/PageRank score. 
             } else {
                 return "ERROR";
             }
@@ -153,53 +155,52 @@ public class GetDisambiguation extends ServerResource {
         return document;
     }
 
-    public static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo, String type) {
-        algo.run(document, type);
-        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-        for (NamedEntityInText namedEntity : namedEntities) {
-            String disambiguatedURL = algo.findResult(namedEntity);
-            results.put(namedEntity, disambiguatedURL);
-        }
-        return results;
-    }
-
-    //To make the type parameter as "candidates" works
-    private static HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsCandidates(Document document, NEDAlgo_HITS algo, String type) {
-        algo.run(document, type);
-        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-        HashMap<NamedEntityInText, ArrayList<CandidatesScore>> results = new HashMap<NamedEntityInText, ArrayList<CandidatesScore>>();
-        for (NamedEntityInText namedEntity : namedEntities) {
-            results.put(namedEntity, algo.findCandidates(namedEntity));
-        }
-        return results;
-    }
-
+//    public static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo, String type) {
+//        algo.run(document, type);
+//        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
+//        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+//        for (NamedEntityInText namedEntity : namedEntities) {
+//            String disambiguatedURL = algo.findResult(namedEntity);
+//            results.put(namedEntity, disambiguatedURL);
+//        }
+//        return results;
+//    }
+//
+//    //To make the type parameter as "candidates" works
+//    private static HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsCandidates(Document document, NEDAlgo_HITS algo, String type) {
+//        algo.run(document, type);
+//        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
+//        HashMap<NamedEntityInText, ArrayList<CandidatesScore>> results = new HashMap<NamedEntityInText, ArrayList<CandidatesScore>>();
+//        for (NamedEntityInText namedEntity : namedEntities) {
+//            results.put(namedEntity, algo.findCandidates(namedEntity));
+//        }
+//        return results;
+//    }
     public String NIFGerbil(InputStream input, NEDAlgo_HITS agdistis) throws IOException {
         org.aksw.gerbil.transfer.nif.Document document;
         String nifDocument = "";
         String textWithMentions = "";
         List<MeaningSpan> annotations = new ArrayList<>();
-        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+        //HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         try {
             document = parser.getDocumentFromNIFStream(input);
-                log.info("NIF file coming from GERBIL");
-                textWithMentions = nifParser.createTextWithMentions(document.getText(), document.getMarkings(Span.class));
-                Document d = textToDocument(textWithMentions);
-                results = results(d, agdistis, "agdistis");
-                for (NamedEntityInText namedEntity : results.keySet()) {
-                    String disambiguatedURL = results.get(namedEntity);
+            log.info("NIF file coming from GERBIL");
+            textWithMentions = nifParser.createTextWithMentions(document.getText(), document.getMarkings(Span.class));
+            Document d = textToDocument(textWithMentions);
+            agdistis.run(d, null);
+            for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
+                String disambiguatedURL = namedEntity.getNamedEntityUri();
 
-                    if (disambiguatedURL == null) {
-                        annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
-                    } else {
-                        annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode(disambiguatedURL, "UTF-8")));
-                    }
+                if (disambiguatedURL == null) {
+                    annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
+                } else {
+                    annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode(namedEntity.getNamedEntityUri(), "UTF-8")));
                 }
-                document.setMarkings(new ArrayList<Marking>(annotations));
-                log.debug("Result: " + document.toString());
-                nifDocument = creator.getDocumentAsNIFString(document);
-                log.debug(nifDocument);
+            }
+            document.setMarkings(new ArrayList<Marking>(annotations));
+            log.debug("Result: " + document.toString());
+            nifDocument = creator.getDocumentAsNIFString(document);
+            log.debug(nifDocument);
 
         } catch (Exception e) {
             log.error("Exception while reading request.", e);
@@ -209,20 +210,18 @@ public class GetDisambiguation extends ServerResource {
         return nifDocument;
     }
 
-    public String standardAG(String text, NEDAlgo_HITS agdistis, String type) {
-        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+    public String standardAG(String text, NEDAlgo_HITS agdistis) {
         JSONArray arr = new org.json.simple.JSONArray();
 
         Document d = textToDocument(text);
-        results = results(d, agdistis, type);
+        agdistis.run(d, null);
 
-        for (NamedEntityInText namedEntity : results.keySet()) {
-            String disambiguatedURL = results.get(namedEntity);
+        for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
             JSONObject obj = new JSONObject();
             obj.put("namedEntity", namedEntity.getLabel());
             obj.put("start", namedEntity.getStartPos());
             obj.put("offset", namedEntity.getLength());
-            obj.put("disambiguatedURL", disambiguatedURL);
+            obj.put("disambiguatedURL", namedEntity.getNamedEntityUri());
             arr.add(obj);
         }
         log.info("\t" + arr.toString());
@@ -244,9 +243,9 @@ public class GetDisambiguation extends ServerResource {
             log.debug("Request: " + document.toString());
             textWithMentions = nifParser.createTextWithMentions(document.getText(), document.getMarkings(Span.class));
             Document d = textToDocument(textWithMentions);
-            results = results(d, agdistis, "agdistis");
-            for (NamedEntityInText namedEntity : results.keySet()) {
-                String disambiguatedURL = results.get(namedEntity);
+            agdistis.run(d, null);
+            for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
+                String disambiguatedURL = namedEntity.getNamedEntityUri();
 
                 if (disambiguatedURL == null) {
                     annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
@@ -264,14 +263,13 @@ public class GetDisambiguation extends ServerResource {
         return nifDocument;
     }
 
-    public String candidateType(String text, NEDAlgo_HITS agdistis, String type) {
+    public String candidateType(String text, NEDAlgo_HITS agdistis) {
         JSONArray arr = new org.json.simple.JSONArray();
-        HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsScore = new HashMap<NamedEntityInText, ArrayList<CandidatesScore>>();
         Document d = textToDocument(text);
-
-        resultsScore = resultsCandidates(d, agdistis, type);
-        for (NamedEntityInText namedEntity : resultsScore.keySet()) {
-            ArrayList<CandidatesScore> candidates = resultsScore.get(namedEntity);
+        Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE = new HashMap<>();
+        agdistis.run(d, candidatesPerNE);
+        for (NamedEntityInText namedEntity : candidatesPerNE.keySet()) {
+            List<CandidatesScore> candidates = candidatesPerNE.get(namedEntity);
             JSONObject obj = new JSONObject();
             obj.put("namedEntity", namedEntity.getLabel());
             obj.put("Candidates", candidates.toString());

@@ -58,7 +58,6 @@ public class AGDISTISTest {
         String merkelURL = "http://dbpedia.org/resource/Angela_Merkel";
         String city = "Berlin";
         String cityURL = "http://dbpedia.org/resource/Berlin";
-        //String cityURL = "http://dbpedia.org/resource/Berlín";
 
         HashMap<String, String> correct = new HashMap<String, String>();
         correct.put(obama, obamaURL);
@@ -70,15 +69,17 @@ public class AGDISTISTest {
         NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
         Document d = GetDisambiguation.textToDocument(preAnnotatedText);
         String type = "agdistis";
-        agdistis.run(d, type);
+        agdistis.run(d, null);
+        
+        
         NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
         HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         for (NamedEntityInText namedEntity : namedEntities) {
-            String disambiguatedURL = agdistis.findResult(namedEntity);
-            results.put(namedEntity, disambiguatedURL);
+            String disambiguatedURL = namedEntity.getNamedEntityUri();
+           results.put(namedEntity, disambiguatedURL);
         }
-        for (NamedEntityInText namedEntity : results.keySet()) {
-            String disambiguatedURL = results.get(namedEntity);
+        for (NamedEntityInText namedEntity : namedEntities) {
+            String disambiguatedURL = namedEntity.getNamedEntityUri();
             System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
             assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
         }

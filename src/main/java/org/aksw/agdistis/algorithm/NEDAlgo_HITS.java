@@ -20,12 +20,13 @@ import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import java.util.List;
+import java.util.Map;
 import org.aksw.agdistis.model.CandidatesScore;
 
 public class NEDAlgo_HITS {
 
     private Logger log = LoggerFactory.getLogger(NEDAlgo_HITS.class);
-    private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
+//    private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private String edgeType;
     private String nodeType;
     private CandidateUtil cu;
@@ -34,7 +35,7 @@ public class NEDAlgo_HITS {
     private double threshholdTrigram;
     private int maxDepth;
     private Boolean heuristicExpansionOn;
-    List<CandidatesScore> ListCandidates = new ArrayList<CandidatesScore>();
+    //List<CandidatesScore> ListCandidates = new ArrayList<CandidatesScore>();
 
     public NEDAlgo_HITS() throws IOException {
         Properties prop = new Properties();
@@ -56,10 +57,10 @@ public class NEDAlgo_HITS {
         this.index = cu.getIndex();
     }
 
-    public void run(Document document, String type) {  //  TODO HITS as Parameter? 
+    public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {  //  TODO HITS as Parameter? 
         try {
             NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-            algorithmicResult = new HashMap<Integer, String>();
+            //algorithmicResult = new HashMap<Integer, String>();
             DirectedSparseGraph<Node, String> graph = new DirectedSparseGraph<Node, String>();
 
             // 0) insert candidates into Text
@@ -79,9 +80,9 @@ public class NEDAlgo_HITS {
             h.runHits(graph, 20);
 
             // 2.2) let Pagerank run
-            //PageRank pr = new PageRank();
-            //pr.runPr(graph, 100, 0.001);
-
+            PageRank pr = new PageRank();
+            pr.runPr(graph, 100, 0.001);
+            
             // 3) store the candidate with the highest hub, highest authority ratio
             // manipulate which value to use directly in node.compareTo
             log.debug("\torder results");
@@ -93,62 +94,36 @@ public class NEDAlgo_HITS {
                     Node m = orderedList.get(i);
                     // there can be one node (candidate) for two labels
                     if (m.containsId(entity.getStartPos())) {
-                        if (!algorithmicResult.containsKey(entity.getStartPos())) {
-                            algorithmicResult.put(entity.getStartPos(), m.getCandidateURI());
-                            break;
-                        }
+                        entity.setNamedEntity(m.getCandidateURI());
+                        break;
                     }
 
                 }
             }
             //To get all candidates along with their scores
-            if(type.equals("candidates")){
-            for (NamedEntityInText entity : namedEntities) {
-                for (int i = 0; i < orderedList.size(); i++) {
-                    Node m = orderedList.get(i);
-                    // there can be one node (candidate) for two labels
-                    if (m.containsId(entity.getStartPos())) {
+            if (candidatesPerNE != null) {
+                List<CandidatesScore> listCandidates = new ArrayList<>();
+                for (NamedEntityInText entity : namedEntities) {
+                    for (int i = 0; i < orderedList.size(); i++) {
+                        Node m = orderedList.get(i);
+                        
+                        // there can be one node (candidate) for two labels
+                        if (m.containsId(entity.getStartPos())) {
 
-                        CandidatesScore candidates = new CandidatesScore();
-                        candidates.setStart(entity.getStartPos());
-                        candidates.setUri(m.getCandidateURI());
-                        candidates.setScore(m.getAuthorityWeight());
-                        ListCandidates.add(candidates);
+                            CandidatesScore candidates = new CandidatesScore();
+                            candidates.setStart(entity.getStartPos());
+                            candidates.setUri(m.getCandidateURI());
+                            candidates.setScore(m.getAuthorityWeight());
+                            listCandidates.add(candidates);
+                        }
+
                     }
+                    candidatesPerNE.put(entity, listCandidates);
                 }
-            } 
             }
 
         } catch (Exception e) {
             log.error("AGDISTIS cannot be run on this document.", e);
-        }
-    }
-
-    public String findResult(NamedEntityInText namedEntity) {
-        if (algorithmicResult.containsKey(namedEntity.getStartPos())) {
-            log.debug("\t result  " + algorithmicResult.get(namedEntity.getStartPos()));
-            return algorithmicResult.get(namedEntity.getStartPos());
-        } else {
-            log.debug("\t result null means that we have no candidate for this NE");
-            return null;
-        }
-    }
-
-    //To make the type parameter as "candidates" works
-    public ArrayList<CandidatesScore> findCandidates(NamedEntityInText namedEntity) {
-        ArrayList<CandidatesScore> results = new ArrayList<CandidatesScore>();
-        if (ListCandidates.size() > 0) {
-            for (int i = 0; i < ListCandidates.size(); i++) {
-                if (ListCandidates.get(i).getStart() == namedEntity.getStartPos()) {
-                    results.add(ListCandidates.get(i));
-                }
-
-            }
-            Collections.sort(results);
-            return results;
-        } else {
-            log.debug("\t result null means that we have no candidate for this NE");
-            return null;
         }
     }
 

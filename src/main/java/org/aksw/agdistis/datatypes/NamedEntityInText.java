@@ -71,7 +71,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 
 	public void setNamedEntity(String namedEntityUri) {
 		this.namedEntityUri = namedEntityUri;
-		this.label = extractLabel(namedEntityUri);
+		//this.label = extractLabel(namedEntityUri);
 	}
 
 	public String getLabel() {
