@@ -14,16 +14,16 @@ public class AGDISTISTest {
 
 	@Test
 	public void testUmlaute() throws InterruptedException, IOException {
-		String katsumata = "Tomoharu Katsumata";
-		String katsumataURL = "http://dbpedia.org/resource/Tomoharu_Katsumata";
+		String taisho = "Emperor Taishō";
+		String taishoURL = "http://dbpedia.org/resource/Emperor_Taishō";
 		String japan = "Japan";
 		String japanURL = "http://dbpedia.org/resource/Japan";
 
 		HashMap<String, String> correct = new HashMap<String, String>();
-		correct.put(katsumata, katsumataURL);
+		correct.put(taisho, taishoURL);
 		correct.put(japan, japanURL);
 
-		String preAnnotatedText = "<entity>" + katsumata + "</entity> works in <entity>" + japan + "</entity>.";
+		String preAnnotatedText = "<entity>" + taisho + "</entity> was the 123rd Emperor of <entity>" + japan + "</entity>.";
 
 		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
@@ -76,5 +76,4 @@ public class AGDISTISTest {
 		}
 
 	}
-
 }
