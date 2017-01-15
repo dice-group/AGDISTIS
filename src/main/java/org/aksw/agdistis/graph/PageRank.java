@@ -2,7 +2,6 @@ package org.aksw.agdistis.graph;
 
 import java.util.Collection;
 
-
 import edu.uci.ics.jung.graph.Graph;
 
 /**
