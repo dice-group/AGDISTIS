@@ -1,5 +1,4 @@
 stages:
-- index
 - build
 - test
 - build-docker
@@ -74,7 +73,7 @@ test-docker:
     - docker run -d --name agdistis -p 8080:8080 -v /cache/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 20
     - docker logs agdistis
-    - curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
+    - docker exec -it agdistis curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
     - ./test-docker.sh
 
 release:
