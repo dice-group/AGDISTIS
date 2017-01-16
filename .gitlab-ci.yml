@@ -26,7 +26,7 @@ index:
     - apt-get update &&
         apt-get install -y unzip wget &&
         wget http://titan.informatik.uni-leipzig.de/dmoussallem/indexdbpedia_en_2016.zip &&
-        unzip -d indexdbpedia_en_2016.zip index
+        unzip indexdbpedia_en_2016.zip -d index
     #  fi
 
 build:
