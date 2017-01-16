@@ -67,7 +67,6 @@ test-docker:
     - docker pull $TEST_IMAGE
     - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 20
-    - docker exec agdistis curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
     - ./test-docker.sh
 
 release:
