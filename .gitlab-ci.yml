@@ -38,7 +38,7 @@ test:
         7z x indexdbpedia_en_2014.7z &&
         mv indexdbpedia_en_2014 index ;
       else
-        mv /cache/aksw/AGDISTIS/index index/
+        mv /cache/aksw/AGDISTIS/index index ;
       fi
   script:
     - mvn test
@@ -76,7 +76,7 @@ test-docker:
         7z x indexdbpedia_en_2014.7z &&
         mv indexdbpedia_en_2014 index ;
       else
-        mv /cache/aksw/AGDISTIS/index index/
+        mv /cache/aksw/AGDISTIS/index index ;
       fi
   script:
     - ls -al
