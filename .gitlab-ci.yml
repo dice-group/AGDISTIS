@@ -1,4 +1,5 @@
 stages:
+- index
 - build
 - test
 - build-docker
@@ -14,6 +15,21 @@ cache:
   key: "index"
   paths:
     - index/
+
+index:
+  image: ubuntu
+  stage: index
+  only:
+    - master
+  script:
+    - ls -al
+    - if [ ! -d "index" ] ; then
+        apt-get update &&
+        apt-get install p7zip-full &&
+        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+        7z x indexdbpedia_en_2014.7z &&
+        mv indexdbpedia_en_2014 index ;
+      fi
 
 build:
   image: maven
@@ -31,15 +47,6 @@ test:
   stage: test
   only:
     - master
-  # download index if it's not cached yet
-  before_script:
-    - if [ ! -d "index" ] ; then
-        apt-get update &&
-        apt-get install p7zip-full &&
-        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-        7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 index ;
-      fi
   script:
     - mvn test
 
@@ -63,19 +70,11 @@ test-docker:
     - master
   services:
     - docker:dind
-  # download index if it's not cached yet
-  before_script:
-    - if [ ! -d "index" ] ; then
-        apt-get update &&
-        apt-get install p7zip-full &&
-        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-        7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 index ;
-      fi
   script:
+    - ls -al
     - docker pull $TEST_IMAGE
     - docker run -d --name agdistis -p 8080:8080 -v `pwd`/index:/usr/local/tomcat/index $TEST_IMAGE
-    - sleep 5
+    - sleep 20
     - docker logs agdistis
     - curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
     - ./test-docker.sh
