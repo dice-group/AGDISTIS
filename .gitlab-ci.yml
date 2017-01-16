@@ -1,9 +1,12 @@
 stages:
 - build
 - test
+- build-docker
+- test-docker
 - release
 
 variables:
+  TEST_IMAGE: aksw/agdistis:$CI_BUILD_REF_NAME
   IMAGE: aksw/agdistis:latest
 
 build:
@@ -39,6 +42,45 @@ test:
   script:
     - mvn test
 
+build-docker:
+  image: docker:latest
+  stage: build-docker
+  services:
+    - docker:dind
+  only:
+    - master
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
+  script:
+    - docker build --pull -t $TEST_IMAGE .
+    - docker push $TEST_IMAGE
+
+test-docker:
+  image: docker
+  stage: test-docker
+  only:
+    - master
+  services:
+    - docker:dind
+  # cache index between builds
+  cache:
+    key: "index"
+    paths:
+      - index
+  # download index if it's not cached yet
+  before_script:
+    - if [ ! -d "index" ] ; then
+        apt-get update &&
+        apt-get install p7zip-full &&
+        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+        7z x indexdbpedia_en_2014.7z &&
+        mv indexdbpedia_en_2014 index ;
+      fi
+  script:
+    - docker pull $TEST_IMAGE
+    - docker run -d -p 8080:8080 -v `pwd`/index:/usr/local/tomcat/index $TEST_IMAGE
+    - test-docker.sh
+
 release:
   image: docker:latest
   stage: release
@@ -49,5 +91,6 @@ release:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS
   script:
-    - docker build --pull -t $IMAGE .
+    - docker pull $TEST_IMAGE
+    - docker tag $TEST_IMAGE $IMAGE
     - docker push $IMAGE
