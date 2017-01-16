@@ -25,7 +25,7 @@ index:
     - ls -al
     - if [ ! -d "index" ] ; then
         apt-get update &&
-        apt-get install p7zip-full wget &&
+        apt-get install -y p7zip-full wget &&
         wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
         7z x indexdbpedia_en_2014.7z &&
         mv indexdbpedia_en_2014 index ;
