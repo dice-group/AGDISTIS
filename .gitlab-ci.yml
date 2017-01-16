@@ -25,17 +25,22 @@ test:
   stage: test
   only:
     - master
+  cache:
+    key: "index"
+    paths:
+      - index/
   # download index if it's not cached yet
   before_script:
-    - if [ ! -d "/cache/index" ] ; then
+    - if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
         apt-get update &&
         apt-get install -y p7zip-full &&
         wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
         7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 /cache/index ;
+        mv indexdbpedia_en_2014 index ;
+      else
+        mv /cache/aksw/AGDISTIS/index index/
       fi
   script:
-    - mv /cache/index index
     - mvn test
 
 build-docker:
@@ -58,19 +63,25 @@ test-docker:
     - master
   services:
     - docker:dind
+  cache:
+    key: "index"
+    paths:
+      - index/
   # download index if it's not cached yet
   before_script:
-    - if [ ! -d "/cache/index" ] ; then
+    - if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
         apt-get update &&
         apt-get install -y p7zip-full &&
         wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
         7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 /cache/index ;
+        mv indexdbpedia_en_2014 index ;
+      else
+        mv /cache/aksw/AGDISTIS/index index/
       fi
   script:
     - ls -al
     - docker pull $TEST_IMAGE
-    - docker run -d --name agdistis -v /cache/index:/usr/local/tomcat/index $TEST_IMAGE
+    - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 20
     - docker logs agdistis
     - docker exec -it agdistis curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
