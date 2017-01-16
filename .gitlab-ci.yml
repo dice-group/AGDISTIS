@@ -9,6 +9,12 @@ variables:
   TEST_IMAGE: aksw/agdistis:$CI_BUILD_REF_NAME
   IMAGE: aksw/agdistis:latest
 
+# cache index between all builds
+cache:
+  key: "index"
+  paths:
+    - index/
+
 build:
   image: maven
   stage: build
@@ -25,11 +31,6 @@ test:
   stage: test
   only:
     - master
-  # cache index between builds
-  cache:
-    key: "index"
-    paths:
-      - index/
   # download index if it's not cached yet
   before_script:
     - if [ ! -d "index" ] ; then
@@ -62,11 +63,6 @@ test-docker:
     - master
   services:
     - docker:dind
-  # cache index between builds
-  cache:
-    key: "index"
-    paths:
-      - index/
   # download index if it's not cached yet
   before_script:
     - if [ ! -d "index" ] ; then
