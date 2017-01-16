@@ -22,8 +22,7 @@ index:
   only:
     - master
   script:
-    - ls -al /cache/aksw/AGDISTIS
-    - if [ ! -d "index" ] ; then
+    - if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
         apt-get update &&
         apt-get install -y p7zip-full wget &&
         wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
@@ -48,6 +47,7 @@ test:
   only:
     - master
   script:
+    - mv /cache/aksw/AGDISTIS/index index
     - mvn test
 
 build-docker:
@@ -73,7 +73,7 @@ test-docker:
   script:
     - ls -al
     - docker pull $TEST_IMAGE
-    - docker run -d --name agdistis -p 8080:8080 -v `pwd`/index:/usr/local/tomcat/index $TEST_IMAGE
+    - docker run -d --name agdistis -p 8080:8080 -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 20
     - docker logs agdistis
     - curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
