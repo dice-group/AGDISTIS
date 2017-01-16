@@ -22,7 +22,7 @@ index:
   only:
     - master
   script:
-    - ls -al /cache/aksw
+    - ls -al /cache/aksw/AGDISTIS
     - if [ ! -d "index" ] ; then
         apt-get update &&
         apt-get install -y p7zip-full wget &&
