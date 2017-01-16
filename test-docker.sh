@@ -8,9 +8,10 @@ curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <e
 # log response
 echo "Got response:"
 cat response.txt
+echo ""
 
 # check
-if cmp --silent expected.txt response.txt;
+if cmp -s expected.txt response.txt;
 then
   echo "OK, correct response!";
   exit 0;

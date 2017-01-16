@@ -80,6 +80,7 @@ test-docker:
     - docker pull $TEST_IMAGE
     - docker run -d -p 8080:8080 -v `pwd`/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 5
+    - curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
     - ./test-docker.sh
 
 release:
