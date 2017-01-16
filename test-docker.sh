@@ -3,7 +3,7 @@ RESULT="[{\"disambiguatedURL\":\"http:\/\/dbpedia.org\/resource\/Leipzig_Univers
 echo $RESULT > expected.txt
 
 # get response
-docker exec -it agdistis curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS > response.txt
+docker exec agdistis curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS > response.txt
 
 # log response
 echo "Got response:"
