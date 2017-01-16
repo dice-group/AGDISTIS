@@ -79,7 +79,7 @@ test-docker:
   script:
     - docker pull $TEST_IMAGE
     - docker run -d -p 8080:8080 -v `pwd`/index:/usr/local/tomcat/index $TEST_IMAGE
-    - test-docker.sh
+    - ./test-docker.sh
 
 release:
   image: docker:latest
