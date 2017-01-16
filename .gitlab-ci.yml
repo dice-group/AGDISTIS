@@ -70,7 +70,7 @@ test-docker:
   script:
     - ls -al
     - docker pull $TEST_IMAGE
-    - docker run -d --name agdistis -p 8080:8080 -v /cache/index:/usr/local/tomcat/index $TEST_IMAGE
+    - docker run -d --name agdistis -v /cache/index:/usr/local/tomcat/index $TEST_IMAGE
     - sleep 20
     - docker logs agdistis
     - docker exec -it agdistis curl --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS
