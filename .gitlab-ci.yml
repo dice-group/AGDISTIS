@@ -31,15 +31,11 @@ test:
       - index/
   # download index if it's not cached yet
   before_script:
-    - if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
-        apt-get update &&
-        apt-get install -y p7zip-full &&
-        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-        7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 index ;
-      else
-        mv /cache/aksw/AGDISTIS/index index ;
-      fi
+    - apt-get update &&
+      apt-get install -y p7zip-full &&
+      wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+      7z x indexdbpedia_en_2014.7z &&
+      mv indexdbpedia_en_2014 index
   script:
     - mvn test
 
@@ -67,17 +63,6 @@ test-docker:
     key: "index"
     paths:
       - index/
-  # download index if it's not cached yet
-  before_script:
-    - if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
-        apt-get update &&
-        apt-get install -y p7zip-full &&
-        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-        7z x indexdbpedia_en_2014.7z &&
-        mv indexdbpedia_en_2014 index ;
-      else
-        mv /cache/aksw/AGDISTIS/index index ;
-      fi
   script:
     - ls -al
     - docker pull $TEST_IMAGE
