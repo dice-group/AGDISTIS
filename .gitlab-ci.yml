@@ -24,10 +24,10 @@ index:
   script:
     #- if [ ! -d "/cache/aksw/AGDISTIS/index" ] ; then
     - apt-get update &&
-        apt-get install -y unzip wget &&
-        wget http://titan.informatik.uni-leipzig.de/dmoussallem/indexdbpedia_en_2016.zip &&
-        unzip indexdbpedia_en_2016.zip &&
-        mv indexdbpedia_en_2016 index
+        apt-get install -y p7zip-full wget &&
+        wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+        7z x indexdbpedia_en_2014.7z &&
+        mv indexdbpedia_en_2014 index ;
     #  fi
 
 build:
