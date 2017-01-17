@@ -65,9 +65,9 @@ test-docker:
       - index/
   script:
     - docker pull $TEST_IMAGE
-    - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index $TEST_IMAGE
+    - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
     - sleep 30
-    - ./test-docker.sh
+    - docker exec agdistis sh /usr/local/tomcat/test-docker.sh
 
 release:
   image: docker:latest
