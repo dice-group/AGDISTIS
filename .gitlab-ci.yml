@@ -25,10 +25,6 @@ test:
   stage: test
   only:
     - master
-  cache:
-    key: "index"
-    paths:
-      - index/
   # download index if it's not cached yet
   before_script:
     - apt-get update &&
@@ -59,10 +55,13 @@ test-docker:
     - master
   services:
     - docker:dind
-  cache:
-    key: "index"
-    paths:
-      - index/
+  # download index
+  before_script:
+    - apk update &&
+      apk add wget p7zip &&
+      wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
+      7z x indexdbpedia_en_2014.7z &&
+      mv indexdbpedia_en_2014 index/
   script:
     - docker pull $TEST_IMAGE
     - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
