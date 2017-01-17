@@ -2,11 +2,15 @@
 RESULT="[{\"disambiguatedURL\":\"http:\/\/dbpedia.org\/resource\/Leipzig_University\",\"offset\":21,\"namedEntity\":\"University of Leipzig\",\"start\":5},{\"disambiguatedURL\":\"http:\/\/dbpedia.org\/resource\/Barack_Obama\",\"offset\":12,\"namedEntity\":\"Barack Obama\",\"start\":30}]\c"
 echo $RESULT > expected.txt
 
+# get test logs
+docker logs agdistis
+
 # get response
 docker exec agdistis curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS > response.txt
 
 # log response
 echo "Got response:"
+ls -al
 cat response.txt
 echo ""
 

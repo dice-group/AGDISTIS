@@ -66,7 +66,7 @@ test-docker:
   script:
     - docker pull $TEST_IMAGE
     - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index $TEST_IMAGE
-    - sleep 20
+    - sleep 30
     - ./test-docker.sh
 
 release:
