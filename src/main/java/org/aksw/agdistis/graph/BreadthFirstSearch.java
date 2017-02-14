@@ -8,7 +8,6 @@ import java.util.Queue;
 
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
-import org.openrdf.repository.RepositoryException;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class BreadthFirstSearch {
 	private static HashMap<String, Node> findNode = new HashMap<String, Node>();
 	private TripleIndex index;
 
-	public BreadthFirstSearch(TripleIndex index) throws RepositoryException {
+	public BreadthFirstSearch(TripleIndex index)  {
 		this.index = index;
 	}
 

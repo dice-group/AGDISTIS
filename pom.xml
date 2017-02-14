@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.aksw</groupId>
-    <artifactId>AGDISTISv2</artifactId>
+    <artifactId>AGDISTIS</artifactId>
     <version>0.4.0</version>
     <packaging>war</packaging>
     <!-- BUILD -->
@@ -14,8 +14,8 @@
                 <version>3.6.0</version>
                 <configuration>
                     <argLine>-Xmx6G</argLine>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -249,6 +249,18 @@
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
         </dependency>
+        <dependency>
+            <groupId>org.aksw.jena-sparql-api</groupId>
+            <artifactId>jena-sparql-api-core</artifactId>
+            <version>3.1.1-1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.aksw.jena-sparql-api</groupId>
+            <artifactId>jena-sparql-api-cache-h2</artifactId>
+            <version>3.1.1-1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
-    <name>AGDISTISv2</name>
+    <name>AGDISTIS</name>
 </project>

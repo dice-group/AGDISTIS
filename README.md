@@ -25,21 +25,27 @@ If you need help or you have questions do not hesitate to write an email to  <a 
   url = {http://svn.aksw.org/papers/2014/ISWC_AGDISTIS/public.pdf},
   year = 2014
 }
-
-
 ```
 
 ### Acknowlegements
 This work has been supported by the ESF and the Free State of Saxony.
 
 
-## Annotation Tool
+### Annotation Tool
 
 The used annotation tool can be downloaded from <a href="https://github.com/RicardoUsbeck/QRTool">here</a>.
 
-## Disclaimer
+### Disclaimer
 
 The deployed webservice does not reflect the optimal parametrization of AGDISTIS as published.
 
-## Bindings
+### Bindings
 * Python bindings: https://pypi.python.org/pypi/agdistispy/
+
+### Running AGDISTIS
+
+### How to run
+```
+mvn clean package tomcat:run
+```
+For more information, go to our <a href="https://github.com/AKSW/AGDISTIS/wiki/3-Running-the-webservice">Wiki</a>.
