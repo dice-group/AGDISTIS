@@ -6,13 +6,14 @@ import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import java.io.IOException;
 
 
 public class PageRankTest {
 
     @Test
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void oneGetsMost()  {
+    public void oneGetsMost() throws IOException  {
         
         Graph g = new DirectedSparseMultigraph<Node, String>();
         
@@ -40,7 +41,7 @@ public class PageRankTest {
     
     @Test
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void soEqual()  {
+    public void soEqual() throws IOException  {
         
         Graph g = new DirectedSparseMultigraph<Node, String>();
         
@@ -67,7 +68,7 @@ public class PageRankTest {
    
     @Test
     @SuppressWarnings({"rawtypes", "unchecked" })
-    public void soEqualByRandomWalker()  {
+    public void soEqualByRandomWalker() throws IOException  {
         
         Graph g = new DirectedSparseMultigraph<Node, String>();
       

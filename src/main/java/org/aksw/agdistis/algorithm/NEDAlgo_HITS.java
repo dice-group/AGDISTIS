@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.aksw.agdistis.datatypes.Document;
@@ -26,16 +25,16 @@ import org.aksw.agdistis.model.CandidatesScore;
 public class NEDAlgo_HITS {
 
     private Logger log = LoggerFactory.getLogger(NEDAlgo_HITS.class);
-//    private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
     private String edgeType;
     private String nodeType;
+    //private CandidateBKP cu;
     private CandidateUtil cu;
     private TripleIndex index;
     // needed for the experiment about which properties increase accuracy
     private double threshholdTrigram;
     private int maxDepth;
     private Boolean heuristicExpansionOn;
-    //List<CandidatesScore> ListCandidates = new ArrayList<CandidatesScore>();
+    private String algorithm;
 
     public NEDAlgo_HITS() throws IOException {
         Properties prop = new Properties();
@@ -47,20 +46,21 @@ public class NEDAlgo_HITS {
         double threshholdTrigram = Double.valueOf(prop.getProperty("threshholdTrigram"));
         int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
         this.heuristicExpansionOn = Boolean.valueOf(prop.getProperty("heuristicExpansionOn"));
+        this.algorithm = prop.getProperty("algorithm");
 
         this.nodeType = nodeType;
         this.edgeType = edgeType;
         this.threshholdTrigram = threshholdTrigram;
         this.maxDepth = maxDepth;
 
+        //this.cu = new CandidateBKP();
         this.cu = new CandidateUtil();
         this.index = cu.getIndex();
     }
 
-    public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {  //  TODO HITS as Parameter? 
+    public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {
         try {
             NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-            //algorithmicResult = new HashMap<Integer, String>();
             DirectedSparseGraph<Node, String> graph = new DirectedSparseGraph<Node, String>();
 
             // 0) insert candidates into Text
@@ -73,16 +73,18 @@ public class NEDAlgo_HITS {
             bfs.run(maxDepth, graph, edgeType, nodeType);
             log.info("\tGraph size after BFS: " + graph.getVertexCount());
 
-            // 2.1) let HITS run
-            // TODO: add other Graph Algorithms
-            log.debug("\trun HITS");
-            HITS h = new HITS();
-            h.runHits(graph, 20);
+            if (algorithm.equals("hits")) {
+                // 2.1) let HITS run
+                log.info("\trun HITS");
+                HITS h = new HITS();
+                h.runHits(graph, 20);
+            } else if (algorithm.equals("pagerank")) {
+                // 2.2) let Pagerank run
+                log.info("\trun PageRank");
+                PageRank pr = new PageRank();
+                pr.runPr(graph, 50, 0.1);
+            }
 
-            // 2.2) let Pagerank run
-            PageRank pr = new PageRank();
-            pr.runPr(graph, 100, 0.001);
-            
             // 3) store the candidate with the highest hub, highest authority ratio
             // manipulate which value to use directly in node.compareTo
             log.debug("\torder results");
@@ -106,7 +108,7 @@ public class NEDAlgo_HITS {
                 for (NamedEntityInText entity : namedEntities) {
                     for (int i = 0; i < orderedList.size(); i++) {
                         Node m = orderedList.get(i);
-                        
+
                         // there can be one node (candidate) for two labels
                         if (m.containsId(entity.getStartPos())) {
 

@@ -35,19 +35,10 @@ import org.slf4j.LoggerFactory;
 public class GetDisambiguation extends ServerResource {
 
     private static Logger log = LoggerFactory.getLogger(GetDisambiguation.class);
-//    private NEDAlgo_HITS agdistis;
     private TurtleNIFDocumentParser parser = new TurtleNIFDocumentParser();
     private TurtleNIFDocumentCreator creator = new TurtleNIFDocumentCreator();
     private NIFParser nifParser = new NIFParser();
 
-//    public GetDisambiguation() {
-//        try {
-//            agdistis = new NEDAlgo_HITS();
-//        } catch (IOException e) {
-//            log.error("Can not load index due to either wrong properties in agdistis.properties or missing index at location", e);
-//            System.exit(0);
-//        }
-//    }
     @SuppressWarnings("unchecked")
     @Post
     public String postText(Representation entity) throws IOException, Exception {
@@ -80,7 +71,7 @@ public class GetDisambiguation extends ServerResource {
             log.info("text: " + text);
             log.info("type: " + type);
 
-            evaluationOptionalParameters(form, agdistis);
+            //evaluationOptionalParameters(form, agdistis);
             if (type == null) {
                 type = "agdistis";
             }
@@ -141,7 +132,7 @@ public class GetDisambiguation extends ServerResource {
             endpos = preAnnotatedText.indexOf("</entity>", startpos);
             int newStartPos = sb.length();
             String entityLabel = preAnnotatedText.substring(startpos, endpos);
-            list.add(new NamedEntityInText(newStartPos, entityLabel.length(), entityLabel));
+            list.add(new NamedEntityInText(newStartPos, entityLabel.length(), entityLabel, ""));
             sb.append(entityLabel);
             endpos += 9;
             startpos = preAnnotatedText.indexOf("<entity>", startpos);
@@ -155,33 +146,11 @@ public class GetDisambiguation extends ServerResource {
         return document;
     }
 
-//    public static HashMap<NamedEntityInText, String> results(Document document, NEDAlgo_HITS algo, String type) {
-//        algo.run(document, type);
-//        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-//        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-//        for (NamedEntityInText namedEntity : namedEntities) {
-//            String disambiguatedURL = algo.findResult(namedEntity);
-//            results.put(namedEntity, disambiguatedURL);
-//        }
-//        return results;
-//    }
-//
-//    //To make the type parameter as "candidates" works
-//    private static HashMap<NamedEntityInText, ArrayList<CandidatesScore>> resultsCandidates(Document document, NEDAlgo_HITS algo, String type) {
-//        algo.run(document, type);
-//        NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-//        HashMap<NamedEntityInText, ArrayList<CandidatesScore>> results = new HashMap<NamedEntityInText, ArrayList<CandidatesScore>>();
-//        for (NamedEntityInText namedEntity : namedEntities) {
-//            results.put(namedEntity, algo.findCandidates(namedEntity));
-//        }
-//        return results;
-//    }
     public String NIFGerbil(InputStream input, NEDAlgo_HITS agdistis) throws IOException {
         org.aksw.gerbil.transfer.nif.Document document;
         String nifDocument = "";
         String textWithMentions = "";
         List<MeaningSpan> annotations = new ArrayList<>();
-        //HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
         try {
             document = parser.getDocumentFromNIFStream(input);
             log.info("NIF file coming from GERBIL");
@@ -192,7 +161,8 @@ public class GetDisambiguation extends ServerResource {
                 String disambiguatedURL = namedEntity.getNamedEntityUri();
 
                 if (disambiguatedURL == null) {
-                    annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
+                    //annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), new HashSet<String>()));
+                    annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode("http://aksw.org/notInWiki/"+namedEntity.getSingleWordLabel(), "UTF-8")));
                 } else {
                     annotations.add(new NamedEntity((int) namedEntity.getStartPos(), (int) namedEntity.getLength(), URLDecoder.decode(namedEntity.getNamedEntityUri(), "UTF-8")));
                 }
@@ -236,7 +206,6 @@ public class GetDisambiguation extends ServerResource {
         NIFParser nifParser = new NIFParser();
         String textWithMentions = "";
         List<MeaningSpan> annotations = new ArrayList<>();
-        HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
 
         try {
             document = parser.getDocumentFromNIFString(text);

@@ -4,11 +4,12 @@ import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import java.io.IOException;
 
 public class HitsTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testSimpleHITS() throws InterruptedException {
+	public void testSimpleHITS() throws InterruptedException, IOException {
 		Graph g = new DirectedSparseMultigraph<Node, String>();
 		Node a = new Node("dbpedia:Barack_Obama,_Sr.", 0, 0);
 		Node b = new Node("dbpedia:Barack_Obama", 0, 0);

@@ -27,5 +27,7 @@ public class LiteralAnalyzer extends Analyzer {
 	protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
 		final Tokenizer source = new LowerCaseTokenizer(matchVersion, reader);
 		return new TokenStreamComponents(source, new ASCIIFoldingFilter(source));
+
 	}
+
 }

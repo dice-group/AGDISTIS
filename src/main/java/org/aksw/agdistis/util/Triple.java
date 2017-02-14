@@ -1,6 +1,6 @@
 package org.aksw.agdistis.util;
 
-public class Triple {
+public class Triple implements Comparable<Triple>{
 	public Triple(String subject, String predicate, String object) {
 		super();
 		this.subject = subject;
@@ -40,5 +40,12 @@ public class Triple {
 	public String toString() {
 		return subject + " " + predicate + " " + object;
 	}
+        
+    @Override
+    public int compareTo(Triple o) {
+        double value = Double.parseDouble(object);
+        return new Double(o.getObject()).compareTo(value);
+    }
+    
 
 }

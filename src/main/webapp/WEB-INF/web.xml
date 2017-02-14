@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
                  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    <display-name>Archetype Created Web Application</display-name>
+  <display-name>Archetype Created Web Application</display-name>
   
-    <servlet>
-        <servlet-name>Restlet</servlet-name>
-        <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
-    </servlet>
-    <context-param>
-        <param-name>org.restlet.application</param-name>
-        <param-value>org.aksw.agdistis.webapp.RestletApplication</param-value>
-    </context-param>
+         <servlet>
+                 <servlet-name>Restlet</servlet-name>
+                 <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+                 <init-param>
+                         <param-name>org.restlet.application</param-name>
+                         <param-value>org.aksw.agdistis.webapp.RestletApplication</param-value>
+                 </init-param>
+         </servlet>
   
     <servlet-mapping>
         <servlet-name>Restlet</servlet-name>
