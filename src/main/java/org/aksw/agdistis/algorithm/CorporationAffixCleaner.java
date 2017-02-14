@@ -21,7 +21,8 @@ public class CorporationAffixCleaner {
 	}
 
 	private void loadCorporationAffixes(String file) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(CorporationAffixCleaner.class.getResourceAsStream(file)));
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(CorporationAffixCleaner.class.getResourceAsStream(file)));
 		while (br.ready()) {
 			String line = br.readLine();
 			corporationAffixes.add(line);

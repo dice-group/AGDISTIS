@@ -56,14 +56,10 @@ public class TripleIndexCreator {
 			return;
 		}
 		try {
-			log.info("For using DBpedia we suggest you downlaod the following file: "
-					+ "labels_<LANG>.ttl, "
-					+ "redirects_transitive_<LANG>.ttl, "
-					+ "instance_types_<LANG>.ttl, "
-					+ "mappingbased_properties_<LANG>.ttl, "
-					+ "specific_mappingbased_properties_<LANG>.ttl,"
-					+ "disambiguations_<LANG>.ttl."
-					+ ""
+			log.info("For using DBpedia we suggest you downlaod the following file: " + "labels_<LANG>.ttl, "
+					+ "redirects_transitive_<LANG>.ttl, " + "instance_types_<LANG>.ttl, "
+					+ "mappingbased_properties_<LANG>.ttl, " + "specific_mappingbased_properties_<LANG>.ttl,"
+					+ "disambiguations_<LANG>.ttl." + ""
 					+ "Please download them into one folder and configure it in the agdistis.properties File."
 					+ "For further information have a look at our wiki: https://github.com/AKSW/AGDISTIS/wiki");
 
@@ -133,7 +129,8 @@ public class TripleIndexCreator {
 		}
 	}
 
-	private void indexTTLFile(File file, String baseURI) throws RDFParseException, RDFHandlerException, FileNotFoundException, IOException {
+	private void indexTTLFile(File file, String baseURI)
+			throws RDFParseException, RDFHandlerException, FileNotFoundException, IOException {
 		log.info("Start parsing: " + file);
 		RDFParser parser = new TurtleParser();
 		OnlineStatementHandler osh = new OnlineStatementHandler();
@@ -153,7 +150,8 @@ public class TripleIndexCreator {
 				String object = line[i];
 				Document doc = new Document();
 				doc.add(new StringField(TripleIndex.FIELD_NAME_SUBJECT, subject, Store.YES));
-				doc.add(new StringField(TripleIndex.FIELD_NAME_PREDICATE, "http://www.w3.org/2004/02/skos/core#altLabel", Store.YES));
+				doc.add(new StringField(TripleIndex.FIELD_NAME_PREDICATE,
+						"http://www.w3.org/2004/02/skos/core#altLabel", Store.YES));
 				doc.add(new TextField(TripleIndex.FIELD_NAME_OBJECT_LITERAL, object, Store.YES));
 				iwriter.addDocument(doc);
 			}
@@ -162,7 +160,8 @@ public class TripleIndexCreator {
 		log.info("Finished parsing: " + file);
 	}
 
-	private void addDocumentToIndex(IndexWriter iwriter, String subject, String predicate, String object, boolean isUri) throws IOException {
+	private void addDocumentToIndex(IndexWriter iwriter, String subject, String predicate, String object, boolean isUri)
+			throws IOException {
 		Document doc = new Document();
 		log.debug(subject + " " + predicate + " " + object);
 		doc.add(new StringField(TripleIndex.FIELD_NAME_SUBJECT, subject, Store.YES));

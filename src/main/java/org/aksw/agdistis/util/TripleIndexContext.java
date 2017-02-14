@@ -29,138 +29,140 @@ import java.util.Collections;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.TermQuery;
 
-
 public class TripleIndexContext {
 
-    private static final Version LUCENE44 = Version.LUCENE_44;
+	private static final Version LUCENE44 = Version.LUCENE_44;
 
-    private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexContext.class);
+	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexContext.class);
 
-    public static final String FIELD_NAME_CONTEXT = "CONTEXT";
-    public static final String FIELD_NAME_SURFACE_FORM = "SURFACE_FORM";
-    public static final String FIELD_NAME_URI = "URI";
-    public static final String FIELD_NAME_URI_COUNT = "URI_COUNT";
+	public static final String FIELD_NAME_CONTEXT = "CONTEXT";
+	public static final String FIELD_NAME_SURFACE_FORM = "SURFACE_FORM";
+	public static final String FIELD_NAME_URI = "URI";
+	public static final String FIELD_NAME_URI_COUNT = "URI_COUNT";
 
-    private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
+	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
 
-    private Directory directory;
-    private IndexSearcher isearcher;
-    private DirectoryReader ireader;
-    private UrlValidator urlValidator;
-    private Cache<BooleanQuery, List<Triple>> cache;
+	private Directory directory;
+	private IndexSearcher isearcher;
+	private DirectoryReader ireader;
+	private Cache<BooleanQuery, List<Triple>> cache;
 
-    public TripleIndexContext() throws IOException {
-        Properties prop = new Properties();
-        InputStream input = TripleIndexContext.class.getResourceAsStream("/config/agdistis.properties");
-        prop.load(input);
+	public TripleIndexContext() throws IOException {
+		Properties prop = new Properties();
+		InputStream input = TripleIndexContext.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
 
-        String index = prop.getProperty("index2");
-        log.info("The index will be here: " + index);
+		String index = prop.getProperty("index2");
+		log.info("The index will be here: " + index);
 
-        directory = new MMapDirectory(new File(index));
-        ireader = DirectoryReader.open(directory);
-        isearcher = new IndexSearcher(ireader);
-        this.urlValidator = new UrlValidator();
+		directory = new MMapDirectory(new File(index));
+		ireader = DirectoryReader.open(directory);
+		isearcher = new IndexSearcher(ireader);
+		new UrlValidator();
 
-        cache = CacheBuilder.newBuilder().maximumSize(50000).build();
-    }
+		cache = CacheBuilder.newBuilder().maximumSize(50000).build();
+	}
 
-    public List<Triple> search(String subject, String predicate, String object) {
-        return search(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
-    }
+	public List<Triple> search(String subject, String predicate, String object) {
+		return search(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
+	}
 
-    public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-        BooleanQuery bq = new BooleanQuery();
-        List<Triple> triples = new ArrayList<Triple>();
-        try {
-            if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
-                log.error("A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
-            }
-            if (subject != null) {
-                //TermQuery tq = new TermQuery(new Term(FIELD_NAME_CONTEXT, subject));
-                //bq.add(tq, BooleanClause.Occur.MUST);
-                Query q = null;
-                //TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
-                Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-                QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_CONTEXT, analyzer);
-                parser.setDefaultOperator(QueryParser.Operator.AND);
-                q = parser.parse(QueryParserBase.escape(subject));
-                bq.add(q, BooleanClause.Occur.MUST);
-            }
-            if (predicate != null) {
-                
-                
-//                Query q = null;
-                TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
-                /*
-                
-                Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-                //KeywordAnalyzer analyzer = new KeywordAnalyzer();
-                QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_URI, analyzer);
-                parser.setDefaultOperator(QueryParser.Operator.OR);
-                q = parser.parse(QueryParserBase.escape(predicate));
-                bq.add(q, BooleanClause.Occur.MUST);
-                */
-//                TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI, predicate));
-		bq.add(tq, BooleanClause.Occur.SHOULD);
-            }
-            if (object != null) {
-                TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI_COUNT, object));
-                bq.add(tq, BooleanClause.Occur.MUST);
-            }
-            // use the cache
-            if (null == (triples = cache.getIfPresent(bq))) {
-                triples = getFromIndex(maxNumberOfResults, bq);
-                if (triples == null){
-                    return new ArrayList<Triple>();
-                }
-                cache.put(bq, triples);
-            }
+	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
+		BooleanQuery bq = new BooleanQuery();
+		List<Triple> triples = new ArrayList<Triple>();
+		try {
+			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
+				log.error(
+						"A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
+			}
+			if (subject != null) {
+				// TermQuery tq = new TermQuery(new Term(FIELD_NAME_CONTEXT,
+				// subject));
+				// bq.add(tq, BooleanClause.Occur.MUST);
+				Query q = null;
+				// TermQuery tq = new TermQuery(new
+				// Term(FIELD_NAME_SURFACE_FORM, predicate));
+				Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
+				QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_CONTEXT, analyzer);
+				parser.setDefaultOperator(QueryParser.Operator.AND);
+				q = parser.parse(QueryParserBase.escape(subject));
+				bq.add(q, BooleanClause.Occur.MUST);
+			}
+			if (predicate != null) {
 
-        } catch (Exception e) {       
-            log.error(e.getLocalizedMessage() + " -> " + subject);
-            
-        }
-        return triples;
-    }
+				// Query q = null;
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
+				/*
+				 * 
+				 * Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
+				 * //KeywordAnalyzer analyzer = new KeywordAnalyzer();
+				 * QueryParser parser = new QueryParser(LUCENE44,
+				 * FIELD_NAME_URI, analyzer);
+				 * parser.setDefaultOperator(QueryParser.Operator.OR); q =
+				 * parser.parse(QueryParserBase.escape(predicate)); bq.add(q,
+				 * BooleanClause.Occur.MUST);
+				 */
+				// TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI,
+				// predicate));
+				bq.add(tq, BooleanClause.Occur.SHOULD);
+			}
+			if (object != null) {
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI_COUNT, object));
+				bq.add(tq, BooleanClause.Occur.MUST);
+			}
+			// use the cache
+			if (null == (triples = cache.getIfPresent(bq))) {
+				triples = getFromIndex(maxNumberOfResults, bq);
+				if (triples == null) {
+					return new ArrayList<Triple>();
+				}
+				cache.put(bq, triples);
+			}
 
-    private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
-        //log.debug("\t start asking index...");
-        //Similarity BM25Similarity = new BM25Similarity();
-        //isearcher.setSimilarity(BM25Similarity);
-        ScoreDoc[] hits = isearcher.search(bq, null, maxNumberOfResults).scoreDocs;
+		} catch (Exception e) {
+			log.error(e.getLocalizedMessage() + " -> " + subject);
 
-        if (hits.length == 0) {
-            return new ArrayList<Triple>();
-        }
-        List<Triple> triples = new ArrayList<Triple>();
-        String s, p, o;
-        for (int i = 0; i < hits.length; i++) {
-            Document hitDoc = isearcher.doc(hits[i].doc);
-            s = hitDoc.get(FIELD_NAME_CONTEXT);
-            p = hitDoc.get(FIELD_NAME_URI);
-            o = hitDoc.get(FIELD_NAME_URI_COUNT);
-            Triple triple = new Triple(s, p, o);
-            triples.add(triple);
-        }
-        log.debug("\t finished asking index...");
+		}
+		return triples;
+	}
 
-        Collections.sort(triples);
-        
-        if (triples.size() < 500){
-            return triples.subList(0, triples.size());
-        }
-        return triples.subList(0, 500);
-        //return triples;
-    }
+	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
+		// log.debug("\t start asking index...");
+		// Similarity BM25Similarity = new BM25Similarity();
+		// isearcher.setSimilarity(BM25Similarity);
+		ScoreDoc[] hits = isearcher.search(bq, null, maxNumberOfResults).scoreDocs;
 
-    public void close() throws IOException {
-        ireader.close();
-        directory.close();
-    }
+		if (hits.length == 0) {
+			return new ArrayList<Triple>();
+		}
+		List<Triple> triples = new ArrayList<Triple>();
+		String s, p, o;
+		for (int i = 0; i < hits.length; i++) {
+			Document hitDoc = isearcher.doc(hits[i].doc);
+			s = hitDoc.get(FIELD_NAME_CONTEXT);
+			p = hitDoc.get(FIELD_NAME_URI);
+			o = hitDoc.get(FIELD_NAME_URI_COUNT);
+			Triple triple = new Triple(s, p, o);
+			triples.add(triple);
+		}
+		log.debug("\t finished asking index...");
 
-    public DirectoryReader getIreader() {
-        return ireader;
-    }
+		Collections.sort(triples);
+
+		if (triples.size() < 500) {
+			return triples.subList(0, triples.size());
+		}
+		return triples.subList(0, 500);
+		// return triples;
+	}
+
+	public void close() throws IOException {
+		ireader.close();
+		directory.close();
+	}
+
+	public DirectoryReader getIreader() {
+		return ireader;
+	}
 
 }

@@ -17,7 +17,8 @@ public class LiteralAnalyzer extends Analyzer {
 	 * Creates a new {@link SimpleAnalyzer}
 	 * 
 	 * @param matchVersion
-	 *            Lucene version to match See {@link <a href="#version">above</a>}
+	 *            Lucene version to match See
+	 *            {@link <a href="#version">above</a>}
 	 */
 	public LiteralAnalyzer(Version matchVersion) {
 		this.matchVersion = matchVersion;

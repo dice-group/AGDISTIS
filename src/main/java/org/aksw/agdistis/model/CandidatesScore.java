@@ -21,51 +21,51 @@ package org.aksw.agdistis.model;
  * @author diegomoussallem
  */
 public class CandidatesScore implements Comparable<CandidatesScore> {
-    
-  private int startPos;
-    private String uri;
-    private double score; // Don't use double type for financial information.
 
-    public int getStart() {
-        return startPos;
-    }
+	private int startPos;
+	private String uri;
+	private double score; // Don't use double type for financial information.
 
-    public void setStart(int start) {
-        this.startPos = start;
-    }
+	public int getStart() {
+		return startPos;
+	}
 
-    public String getUri() {
-        return uri;
-    }
+	public void setStart(int start) {
+		this.startPos = start;
+	}
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
+	public String getUri() {
+		return uri;
+	}
 
-    public double getScore() {
-        return score;
-    }
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 
-    public void setScore(double score) {
-        this.score = score;
-    }
-@Override
-    public int compareTo(CandidatesScore o) {
-        return new Double(o.getScore()).compareTo(score);
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Candidates [StartPosition=");
-        builder.append(startPos);
-        builder.append(", Uri=");
-        builder.append(uri);
-        builder.append(", Score=");
-        builder.append(score);
-        builder.append("]");
-        return builder.toString();
-    }
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	@Override
+	public int compareTo(CandidatesScore o) {
+		return new Double(o.getScore()).compareTo(score);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Candidates [StartPosition=");
+		builder.append(startPos);
+		builder.append(", Uri=");
+		builder.append(uri);
+		builder.append(", Score=");
+		builder.append(score);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }
-

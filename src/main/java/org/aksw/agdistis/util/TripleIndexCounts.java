@@ -34,139 +34,140 @@ import org.apache.lucene.util.NumericUtils;
 
 public class TripleIndexCounts {
 
-    private static final Version LUCENE44 = Version.LUCENE_44;
+	private static final Version LUCENE44 = Version.LUCENE_44;
 
-    private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCounts.class);
+	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCounts.class);
 
-    public static final String FIELD_NAME_SUBJECT = "subject";
-    public static final String FIELD_NAME_PREDICATE = "predicate";
-    public static final String FIELD_NAME_OBJECT_URI = "object_uri";
-    public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
-    //public static final String FIELD_URI_COUNT = "uri_counts";
-    public static final String FIELD_FREQ = "freq";
+	public static final String FIELD_NAME_SUBJECT = "subject";
+	public static final String FIELD_NAME_PREDICATE = "predicate";
+	public static final String FIELD_NAME_OBJECT_URI = "object_uri";
+	public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
+	// public static final String FIELD_URI_COUNT = "uri_counts";
+	public static final String FIELD_FREQ = "freq";
 
-    private int defaultMaxNumberOfDocsRetrievedFromIndex = 1000;
+	private int defaultMaxNumberOfDocsRetrievedFromIndex = 1000;
 
-    private Directory directory;
-    private IndexSearcher isearcher;
-    private DirectoryReader ireader;
-    private UrlValidator urlValidator;
-    private Cache<BooleanQuery, List<Triple>> cache;
-    StringUtils isInt = new StringUtils();
+	private Directory directory;
+	private IndexSearcher isearcher;
+	private DirectoryReader ireader;
+	private UrlValidator urlValidator;
+	private Cache<BooleanQuery, List<Triple>> cache;
+	StringUtils isInt = new StringUtils();
 
-    public TripleIndexCounts() throws IOException {
-        Properties prop = new Properties();
-        InputStream input = TripleIndexCounts.class.getResourceAsStream("/config/agdistis.properties");
-        prop.load(input);
+	public TripleIndexCounts() throws IOException {
+		Properties prop = new Properties();
+		InputStream input = TripleIndexCounts.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
 
-        String index = prop.getProperty("index");
-        log.info("The index will be here: " + index);
+		String index = prop.getProperty("index");
+		log.info("The index will be here: " + index);
 
-        directory = new MMapDirectory(new File(index));
-        ireader = DirectoryReader.open(directory);
-        isearcher = new IndexSearcher(ireader);
-        this.urlValidator = new UrlValidator();
+		directory = new MMapDirectory(new File(index));
+		ireader = DirectoryReader.open(directory);
+		isearcher = new IndexSearcher(ireader);
+		this.urlValidator = new UrlValidator();
 
-        cache = CacheBuilder.newBuilder().maximumSize(50000).build();
-    }
+		cache = CacheBuilder.newBuilder().maximumSize(50000).build();
+	}
 
-    public List<Triple> searchC(String subject, String predicate, String object) {
-        return searchC(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
-    }
+	public List<Triple> searchC(String subject, String predicate, String object) {
+		return searchC(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
+	}
 
-    public List<Triple> searchC(String subject, String predicate, String object, int maxNumberOfResults) {
-        BooleanQuery bq = new BooleanQuery();
-        List<Triple> triples = new ArrayList<Triple>();
-        try {
-            if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
-                log.error("A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
-            }
-            if (subject != null) {
-                TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
-                bq.add(tq, BooleanClause.Occur.MUST);
-            }
-            if (predicate != null) {
-                TermQuery tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
-                bq.add(tq, BooleanClause.Occur.MUST);
-            }
-            /*
-                        if (object != null) {
-				Query tq = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, object));
-				bq.add(tq, BooleanClause.Occur.MUST);
-                                
-                                
+	public List<Triple> searchC(String subject, String predicate, String object, int maxNumberOfResults) {
+		BooleanQuery bq = new BooleanQuery();
+		List<Triple> triples = new ArrayList<Triple>();
+		try {
+			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
+				log.error(
+						"A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
 			}
-             */
+			if (subject != null) {
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
+				bq.add(tq, BooleanClause.Occur.MUST);
+			}
+			if (predicate != null) {
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
+				bq.add(tq, BooleanClause.Occur.MUST);
+			}
+			/*
+			 * if (object != null) { Query tq = new TermQuery(new
+			 * Term(FIELD_NAME_OBJECT_LITERAL, object)); bq.add(tq,
+			 * BooleanClause.Occur.MUST);
+			 * 
+			 * 
+			 * }
+			 */
 
-            if (object != null) {
-                Query q = null;
-                if (urlValidator.isValid(object)) {
-                    q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
-                } else if (isInt.isNumeric(object)) {
-                    //System.out.println("here");
-                    int tempInt = Integer.parseInt(object);
-                    BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
-                    NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
-                    q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
-                } else if (!object.contains(" ")) {
+			if (object != null) {
+				Query q = null;
+				if (urlValidator.isValid(object)) {
+					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
+				} else if (StringUtils.isNumeric(object)) {
+					// System.out.println("here");
+					int tempInt = Integer.parseInt(object);
+					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
+					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
+					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
+				} else if (!object.contains(" ")) {
 
-                    //System.out.println("here regex");
-                    KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
-                    q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, kanalyzer).parse(object);
-                    bq.add(q, BooleanClause.Occur.MUST);
-                } else {
-                    Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-                    QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
-                    parser.setDefaultOperator(QueryParser.Operator.AND);
-                    q = parser.parse(QueryParserBase.escape(object));
-                }
-                bq.add(q, BooleanClause.Occur.MUST);
-            }
+					// System.out.println("here regex");
+					KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
+					q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, kanalyzer).parse(object);
+					bq.add(q, BooleanClause.Occur.MUST);
+				} else {
+					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
+					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
+					parser.setDefaultOperator(QueryParser.Operator.AND);
+					q = parser.parse(QueryParserBase.escape(object));
+				}
+				bq.add(q, BooleanClause.Occur.MUST);
+			}
 
-            // use the cache
-            //if (null == (triples = cache.getIfPresent(bq))) {
-            triples = getFromIndex(maxNumberOfResults, bq);
-            cache.put(bq, triples);
-            //}
+			// use the cache
+			// if (null == (triples = cache.getIfPresent(bq))) {
+			triples = getFromIndex(maxNumberOfResults, bq);
+			cache.put(bq, triples);
+			// }
 
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage() + " -> " + subject);
-        }
-        return triples;
-    }
+		} catch (Exception e) {
+			log.error(e.getLocalizedMessage() + " -> " + subject);
+		}
+		return triples;
+	}
 
-    private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
-        log.debug("\t start asking index...");
-        TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
-        //Similarity BM25Similarity = new BM25Similarity();
-        //isearcher.setSimilarity(BM25Similarity);
-        isearcher.search(bq, collector);
-        ScoreDoc[] hits = collector.topDocs().scoreDocs;
+	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
+		log.debug("\t start asking index...");
+		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
+		// Similarity BM25Similarity = new BM25Similarity();
+		// isearcher.setSimilarity(BM25Similarity);
+		isearcher.search(bq, collector);
+		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-        List<Triple> triples = new ArrayList<Triple>();
-        String s, p, o;
-        for (int i = 0; i < hits.length; i++) {
-            Document hitDoc = isearcher.doc(hits[i].doc);
-            s = hitDoc.get(FIELD_NAME_SUBJECT);
-            p = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
-            o = hitDoc.get(FIELD_FREQ);
-            if (o == null) {
-                o = "1";
-            }
-            Triple triple = new Triple(s, p, o);
-            triples.add(triple);
-        }
-        log.debug("\t finished asking index...");
-        return triples;
-    }
+		List<Triple> triples = new ArrayList<Triple>();
+		String s, p, o;
+		for (int i = 0; i < hits.length; i++) {
+			Document hitDoc = isearcher.doc(hits[i].doc);
+			s = hitDoc.get(FIELD_NAME_SUBJECT);
+			p = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
+			o = hitDoc.get(FIELD_FREQ);
+			if (o == null) {
+				o = "1";
+			}
+			Triple triple = new Triple(s, p, o);
+			triples.add(triple);
+		}
+		log.debug("\t finished asking index...");
+		return triples;
+	}
 
-    public void close() throws IOException {
-        ireader.close();
-        directory.close();
-    }
+	public void close() throws IOException {
+		ireader.close();
+		directory.close();
+	}
 
-    public DirectoryReader getIreader() {
-        return ireader;
-    }
+	public DirectoryReader getIreader() {
+		return ireader;
+	}
 
 }

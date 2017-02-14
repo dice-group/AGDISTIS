@@ -21,7 +21,8 @@ public class BreadthFirstSearch {
 		this.index = index;
 	}
 
-	public void run(int maxDepth, DirectedSparseGraph<Node, String> graph, String edgeType, String nodeType) throws UnsupportedEncodingException, IOException {
+	public void run(int maxDepth, DirectedSparseGraph<Node, String> graph, String edgeType, String nodeType)
+			throws UnsupportedEncodingException, IOException {
 		Queue<Node> q = new LinkedList<Node>();
 		for (Node node : graph.getVertices()) {
 			findNode.put(node.getCandidateURI(), node);
@@ -31,15 +32,15 @@ public class BreadthFirstSearch {
 			Node currentNode = q.poll();
 			int level = currentNode.getLevel();
 			if (level < maxDepth) {
-                                List<Triple> outgoingNodes = null;
+				List<Triple> outgoingNodes = null;
 				outgoingNodes = index.search(currentNode.getCandidateURI(), null, null);
-                                if(outgoingNodes == null){
-                                    continue;
-                                }
+				if (outgoingNodes == null) {
+					continue;
+				}
 				for (Triple targetNode : outgoingNodes) {
-                                    if(targetNode.getPredicate() == null && targetNode.getObject() == null){
-                                        continue;
-                                    }
+					if (targetNode.getPredicate() == null && targetNode.getObject() == null) {
+						continue;
+					}
 					if (targetNode.getPredicate().startsWith(edgeType) && targetNode.getObject().startsWith(nodeType)) {
 						int levelNow = level + 1;
 						Node Node = null;
@@ -52,7 +53,7 @@ public class BreadthFirstSearch {
 						}
 						graph.addEdge(graph.getEdgeCount() + ";" + targetNode.getPredicate(), currentNode, Node);
 					}
-                                }
+				}
 			}
 		}
 	}

@@ -8,234 +8,240 @@ import java.util.Properties;
 
 public class Node implements Comparable<Node> {
 
-    private HashSet<Integer> ids;
-    private double activation;
-    private String candidateURI;
-    private int level;
-    private double hubWeightForCalculation = 1;
-    private double authorityWeightForCalculation = 1;
-    private double unnormalizedHubWeight;
-    private double unnormalizedAuthorityWeight;
-    private double hubWeight;
-    private double authorityWeight;
-    private double pageRank;
-    private double pageRankNew;
-    private String algorithm;
+	private HashSet<Integer> ids;
+	private double activation;
+	private String candidateURI;
+	private int level;
+	private double hubWeightForCalculation = 1;
+	private double authorityWeightForCalculation = 1;
+	private double unnormalizedHubWeight;
+	private double unnormalizedAuthorityWeight;
+	private double hubWeight;
+	private double authorityWeight;
+	private double pageRank;
+	private double pageRankNew;
+	private String algorithm;
 
-    private HashSet<Node> predecessors;
-    private HashSet<Node> successors;
+	private HashSet<Node> predecessors;
+	private HashSet<Node> successors;
 
-    public Node(String uri, double activation, int level) throws IOException {
-        this.candidateURI = uri;
-        this.activation = activation;
-        this.level = level;
-        this.hubWeight = 1;
-        this.authorityWeight = 1;
-        ids = new HashSet<Integer>();
-        this.successors = new HashSet<Node>();
-        this.predecessors = new HashSet<Node>();
-        this.pageRank = 0;
-        Properties prop = new Properties();
-        InputStream input = Node.class.getResourceAsStream("/config/agdistis.properties");
-        prop.load(input);
-        this.algorithm = prop.getProperty("algorithm");
-    }
+	public Node(String uri, double activation, int level) throws IOException {
+		this.candidateURI = uri;
+		this.activation = activation;
+		this.level = level;
+		this.hubWeight = 1;
+		this.authorityWeight = 1;
+		ids = new HashSet<Integer>();
+		this.successors = new HashSet<Node>();
+		this.predecessors = new HashSet<Node>();
+		this.pageRank = 0;
+		Properties prop = new Properties();
+		InputStream input = Node.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
+		this.algorithm = prop.getProperty("algorithm");
+	}
 
-    @Override
-    public String toString() {
-        DecimalFormat df = new DecimalFormat("#.####");
-        return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight) + " A: " + String.valueOf(df.format(authorityWeight) + " PR: " + String.valueOf(df.format(pageRank))));
-    }
+	@Override
+	public String toString() {
+		DecimalFormat df = new DecimalFormat("#.####");
+		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight)
+				+ " A: " + String.valueOf(df.format(authorityWeight) + " PR: " + String.valueOf(df.format(pageRank))));
+	}
 
-    @Override
-    public int hashCode() {
-        return candidateURI.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return candidateURI.hashCode();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this.hashCode() == o.hashCode()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this.hashCode() == o.hashCode()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    // this determines the ordering of candidates and thus the result of the algorithm
-    // change to hub score
-    public int compareTo(Node m) {
+	@Override
+	// this determines the ordering of candidates and thus the result of the
+	// algorithm
+	// change to hub score
+	public int compareTo(Node m) {
 
-        if (algorithm.equals("hits")) {
-            //System.out.println("AuthorityWeight");
-            if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
-                return 0;
-            } else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } else if (algorithm.equals("pagerank")) {
-            //System.out.println("PageRank compareTo");
-            if (m.getPageRank() == this.getPageRank()) {
-                return 0;
-            } else if (m.getPageRank() > this.getPageRank()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } else {
-            return -1;
-        }
-        // HubWeight
-//		if (m.getHubWeight() == this.getHubWeight()) {
-//			return 0; 
-//		} else if (m.getHubWeight() > this.getHubWeight()) {
-//			return 1;
-//		} else {
-//			return -1;
-//		}
+		if (algorithm.equals("hits")) {
+			// System.out.println("AuthorityWeight");
+			if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
+				return 0;
+			} else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
+				return 1;
+			} else {
+				return -1;
+			}
+		} else if (algorithm.equals("pagerank")) {
+			// System.out.println("PageRank compareTo");
+			if (m.getPageRank() == this.getPageRank()) {
+				return 0;
+			} else if (m.getPageRank() > this.getPageRank()) {
+				return 1;
+			} else {
+				return -1;
+			}
+		} else {
+			return -1;
+		}
+		// HubWeight
+		// if (m.getHubWeight() == this.getHubWeight()) {
+		// return 0;
+		// } else if (m.getHubWeight() > this.getHubWeight()) {
+		// return 1;
+		// } else {
+		// return -1;
+		// }
 
-        // AuthorityWeight && PageRank
-//            if (m.getPageRank() * (2*(m.getAuthorityWeight() + m.getHubWeight())) == this.getPageRank() * (2*(this.getAuthorityWeight() + this.getHubWeight()))) {
-//            return 0;
-//        } else if (m.getPageRank() * (2*(m.getAuthorityWeight() + m.getHubWeight()))  > this.getPageRank() * (2*(this.getAuthorityWeight() + this.getHubWeight()))) {
-//            return 1;
-//        } else {
-//            return -1;
-//        }
-    }
+		// AuthorityWeight && PageRank
+		// if (m.getPageRank() * (2*(m.getAuthorityWeight() + m.getHubWeight()))
+		// == this.getPageRank() * (2*(this.getAuthorityWeight() +
+		// this.getHubWeight()))) {
+		// return 0;
+		// } else if (m.getPageRank() * (2*(m.getAuthorityWeight() +
+		// m.getHubWeight())) > this.getPageRank() *
+		// (2*(this.getAuthorityWeight() + this.getHubWeight()))) {
+		// return 1;
+		// } else {
+		// return -1;
+		// }
+	}
 
-    public boolean containsId(int id) {
-        return ids.contains(id);
-    }
+	public boolean containsId(int id) {
+		return ids.contains(id);
+	}
 
-    public void addId(int id) {
-        ids.add(id);
-    }
+	public void addId(int id) {
+		ids.add(id);
+	}
 
-    public HashSet<Integer> getId() {
-        return ids;
-    }
+	public HashSet<Integer> getId() {
+		return ids;
+	}
 
-    public String getCandidateURI() {
-        return candidateURI;
-    }
+	public String getCandidateURI() {
+		return candidateURI;
+	}
 
-    public void setCandidateURI(String uri) {
-        this.candidateURI = uri;
-    }
+	public void setCandidateURI(String uri) {
+		this.candidateURI = uri;
+	}
 
-    public void setActivation(double activation) {
-        this.activation = activation;
+	public void setActivation(double activation) {
+		this.activation = activation;
 
-    }
+	}
 
-    public double getActivation() {
-        return activation;
-    }
+	public double getActivation() {
+		return activation;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public void setLevel(int i) {
-        level = i;
+	public void setLevel(int i) {
+		level = i;
 
-    }
+	}
 
-    public double getHubWeight() {
-        return hubWeight;
-    }
+	public double getHubWeight() {
+		return hubWeight;
+	}
 
-    public void setAuthorityWeight(double x) {
-        this.authorityWeight = x;
+	public void setAuthorityWeight(double x) {
+		this.authorityWeight = x;
 
-    }
+	}
 
-    public double getAuthorityWeight() {
-        return authorityWeight;
-    }
+	public double getAuthorityWeight() {
+		return authorityWeight;
+	}
 
-    public void setHubWeight(double y) {
-        this.hubWeight = y;
+	public void setHubWeight(double y) {
+		this.hubWeight = y;
 
-    }
+	}
 
-    public Integer[] getLabels() {
-        return ids.toArray(new Integer[ids.size()]);
-    }
+	public Integer[] getLabels() {
+		return ids.toArray(new Integer[ids.size()]);
+	}
 
-    public HashSet<Node> getSuccessors() {
-        return successors;
-    }
+	public HashSet<Node> getSuccessors() {
+		return successors;
+	}
 
-    public HashSet<Node> getPredecessors() {
-        return predecessors;
-    }
+	public HashSet<Node> getPredecessors() {
+		return predecessors;
+	}
 
-    public void addPredecessor(Node first) {
-        predecessors.add(first);
-    }
+	public void addPredecessor(Node first) {
+		predecessors.add(first);
+	}
 
-    public void addSuccesor(Node second) {
-        successors.add(second);
-    }
+	public void addSuccesor(Node second) {
+		successors.add(second);
+	}
 
-    public void removeSuccesor(Node right) {
-        successors.remove(right);
-    }
+	public void removeSuccesor(Node right) {
+		successors.remove(right);
+	}
 
-    public void removePredecessor(Node left) {
-        predecessors.remove(left);
-    }
+	public void removePredecessor(Node left) {
+		predecessors.remove(left);
+	}
 
-    public double getHubWeightForCalculation() {
-        return hubWeightForCalculation;
-    }
+	public double getHubWeightForCalculation() {
+		return hubWeightForCalculation;
+	}
 
-    public void setHubWeightForCalculation(double hubWeightForCalculation) {
-        this.hubWeightForCalculation = hubWeightForCalculation;
-    }
+	public void setHubWeightForCalculation(double hubWeightForCalculation) {
+		this.hubWeightForCalculation = hubWeightForCalculation;
+	}
 
-    public double getAuthorityWeightForCalculation() {
-        return authorityWeightForCalculation;
-    }
+	public double getAuthorityWeightForCalculation() {
+		return authorityWeightForCalculation;
+	}
 
-    public void setAuthorityWeightForCalculation(double authorityWeightForCalculation) {
-        this.authorityWeightForCalculation = authorityWeightForCalculation;
-    }
+	public void setAuthorityWeightForCalculation(double authorityWeightForCalculation) {
+		this.authorityWeightForCalculation = authorityWeightForCalculation;
+	}
 
-    public double getUnnormalizedHubWeight() {
-        return unnormalizedHubWeight;
-    }
+	public double getUnnormalizedHubWeight() {
+		return unnormalizedHubWeight;
+	}
 
-    public void setUnnormalizedHubWeight(double unnormalizedHubWeight) {
-        this.unnormalizedHubWeight = unnormalizedHubWeight;
-    }
+	public void setUnnormalizedHubWeight(double unnormalizedHubWeight) {
+		this.unnormalizedHubWeight = unnormalizedHubWeight;
+	}
 
-    public double getUnnormalizedAuthorityWeight() {
-        return unnormalizedAuthorityWeight;
-    }
+	public double getUnnormalizedAuthorityWeight() {
+		return unnormalizedAuthorityWeight;
+	}
 
-    public void setUnnormalizedAuthorityWeight(double unnormalizedAuthorityWeight) {
-        this.unnormalizedAuthorityWeight = unnormalizedAuthorityWeight;
-    }
+	public void setUnnormalizedAuthorityWeight(double unnormalizedAuthorityWeight) {
+		this.unnormalizedAuthorityWeight = unnormalizedAuthorityWeight;
+	}
 
-    public double getPageRank() {
-        return pageRank;
-    }
+	public double getPageRank() {
+		return pageRank;
+	}
 
-    public void setPageRank(double pageRank) {
-        this.pageRank = pageRank;
-    }
+	public void setPageRank(double pageRank) {
+		this.pageRank = pageRank;
+	}
 
-    public double getPageRankNew() {
-        return pageRankNew;
-    }
+	public double getPageRankNew() {
+		return pageRankNew;
+	}
 
-    public void setPageRankNew(double pageRankNew) {
-        this.pageRankNew = pageRankNew;
-    }
+	public void setPageRankNew(double pageRankNew) {
+		this.pageRankNew = pageRankNew;
+	}
 
 }
