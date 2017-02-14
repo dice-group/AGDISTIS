@@ -1,6 +1,6 @@
 This branch regards an inclusion of new algorithms and new features in AGDISTIS Framework.
 
-More information can be found  <a>href="https://github.com/AKSW/AGDISTIS/wiki">here</a>.
+More information can be found  <a href="https://github.com/AKSW/AGDISTIS/wiki">here</a>.
 
 Supplementary material can be found in the documents folder.
 
