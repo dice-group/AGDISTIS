@@ -17,7 +17,8 @@ public class LiteralAnalyzer extends Analyzer {
 	 * Creates a new {@link SimpleAnalyzer}
 	 * 
 	 * @param matchVersion
-	 *            Lucene version to match See {@link <a href="#version">above</a>}
+	 *            Lucene version to match See
+	 *            {@link <a href="#version">above</a>}
 	 */
 	public LiteralAnalyzer(Version matchVersion) {
 		this.matchVersion = matchVersion;
@@ -27,5 +28,7 @@ public class LiteralAnalyzer extends Analyzer {
 	protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
 		final Tokenizer source = new LowerCaseTokenizer(matchVersion, reader);
 		return new TokenStreamComponents(source, new ASCIIFoldingFilter(source));
+
 	}
+
 }

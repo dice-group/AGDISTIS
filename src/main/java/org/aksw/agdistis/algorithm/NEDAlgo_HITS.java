@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.aksw.agdistis.datatypes.Document;
@@ -19,19 +18,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import java.util.List;
+import java.util.Map;
+import org.aksw.agdistis.model.CandidatesScore;
 
 public class NEDAlgo_HITS {
 
 	private Logger log = LoggerFactory.getLogger(NEDAlgo_HITS.class);
-	private HashMap<Integer, String> algorithmicResult = new HashMap<Integer, String>();
 	private String edgeType;
 	private String nodeType;
+	// private CandidateBKP cu;
 	private CandidateUtil cu;
 	private TripleIndex index;
 	// needed for the experiment about which properties increase accuracy
 	private double threshholdTrigram;
 	private int maxDepth;
 	private Boolean heuristicExpansionOn;
+	private String algorithm;
 
 	public NEDAlgo_HITS() throws IOException {
 		Properties prop = new Properties();
@@ -43,20 +46,21 @@ public class NEDAlgo_HITS {
 		double threshholdTrigram = Double.valueOf(prop.getProperty("threshholdTrigram"));
 		int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
 		this.heuristicExpansionOn = Boolean.valueOf(prop.getProperty("heuristicExpansionOn"));
+		this.algorithm = prop.getProperty("algorithm");
 
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
 		this.threshholdTrigram = threshholdTrigram;
 		this.maxDepth = maxDepth;
 
+		// this.cu = new CandidateBKP();
 		this.cu = new CandidateUtil();
 		this.index = cu.getIndex();
 	}
 
-	public void run(Document document) {  //  TODO HITS as Parameter? 
+	public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {
 		try {
 			NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
-			algorithmicResult = new HashMap<Integer, String>();
 			DirectedSparseGraph<Node, String> graph = new DirectedSparseGraph<Node, String>();
 
 			// 0) insert candidates into Text
@@ -68,22 +72,22 @@ public class NEDAlgo_HITS {
 			BreadthFirstSearch bfs = new BreadthFirstSearch(index);
 			bfs.run(maxDepth, graph, edgeType, nodeType);
 			log.info("\tGraph size after BFS: " + graph.getVertexCount());
-			
-			
-			
-			// 2.1) let HITS run
-			// TODO: add other Graph Algorithms
-			log.debug("\trun HITS");
-			HITS h = new HITS();
-			h.runHits(graph, 20);
-			
-						
-			// 2.2) let Pagerank run
-            PageRank pr = new PageRank();
-            pr.runPr(graph, 100, 0.001);
-			
-			// 3) store the candidate with the highest hub, highest authority ratio
-            // manipulate which value to use directly in node.compareTo
+
+			if (algorithm.equals("hits")) {
+				// 2.1) let HITS run
+				log.info("\trun HITS");
+				HITS h = new HITS();
+				h.runHits(graph, 20);
+			} else if (algorithm.equals("pagerank")) {
+				// 2.2) let Pagerank run
+				log.info("\trun PageRank");
+				PageRank pr = new PageRank();
+				pr.runPr(graph, 50, 0.1);
+			}
+
+			// 3) store the candidate with the highest hub, highest authority
+			// ratio
+			// manipulate which value to use directly in node.compareTo
 			log.debug("\torder results");
 			ArrayList<Node> orderedList = new ArrayList<Node>();
 			orderedList.addAll(graph.getVertices());
@@ -93,27 +97,36 @@ public class NEDAlgo_HITS {
 					Node m = orderedList.get(i);
 					// there can be one node (candidate) for two labels
 					if (m.containsId(entity.getStartPos())) {
-						if (!algorithmicResult.containsKey(entity.getStartPos())) {
-							algorithmicResult.put(entity.getStartPos(), m.getCandidateURI());
-							break;
-						}
+						entity.setNamedEntity(m.getCandidateURI());
+						break;
 					}
 
+				}
+			}
+			// To get all candidates along with their scores
+			if (candidatesPerNE != null) {
+				List<CandidatesScore> listCandidates = new ArrayList<>();
+				for (NamedEntityInText entity : namedEntities) {
+					for (int i = 0; i < orderedList.size(); i++) {
+						Node m = orderedList.get(i);
+
+						// there can be one node (candidate) for two labels
+						if (m.containsId(entity.getStartPos())) {
+
+							CandidatesScore candidates = new CandidatesScore();
+							candidates.setStart(entity.getStartPos());
+							candidates.setUri(m.getCandidateURI());
+							candidates.setScore(m.getAuthorityWeight());
+							listCandidates.add(candidates);
+						}
+
+					}
+					candidatesPerNE.put(entity, listCandidates);
 				}
 			}
 
 		} catch (Exception e) {
 			log.error("AGDISTIS cannot be run on this document.", e);
-		}
-	}
-
-	public String findResult(NamedEntityInText namedEntity) {
-		if (algorithmicResult.containsKey(namedEntity.getStartPos())) {
-			log.debug("\t result  " + algorithmicResult.get(namedEntity.getStartPos()));
-			return algorithmicResult.get(namedEntity.getStartPos());
-		} else {
-			log.debug("\t result null means that we have no candidate for this NE");
-			return null;
 		}
 	}
 

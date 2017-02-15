@@ -9,7 +9,10 @@ public class HITS {
 
 	/**
 	 * 
-	 * this methods runs hits on a graph and returns the most authoritative sources, due to HITS is very simple, it will be implemented by iterating two formulas can be written as matrix multiplication but this would be quite ineffective
+	 * this methods runs hits on a graph and returns the most authoritative
+	 * sources, due to HITS is very simple, it will be implemented by iterating
+	 * two formulas can be written as matrix multiplication but this would be
+	 * quite ineffective
 	 * 
 	 * @param k
 	 * 

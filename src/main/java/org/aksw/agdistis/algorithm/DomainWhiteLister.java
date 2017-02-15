@@ -17,7 +17,7 @@ public class DomainWhiteLister {
 
 	public DomainWhiteLister(TripleIndex index) throws IOException {
 		Properties prop = new Properties();
-		InputStream input =DomainWhiteLister.class.getResourceAsStream("/config/agdistis.properties");
+		InputStream input = DomainWhiteLister.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 		String file = prop.getProperty("whiteList");
 
@@ -27,7 +27,8 @@ public class DomainWhiteLister {
 	}
 
 	private void loadWhiteDomains(String file) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(DomainWhiteLister.class.getResourceAsStream(file)));
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(DomainWhiteLister.class.getResourceAsStream(file)));
 		while (br.ready()) {
 			String line = br.readLine();
 			whiteList.add(line);

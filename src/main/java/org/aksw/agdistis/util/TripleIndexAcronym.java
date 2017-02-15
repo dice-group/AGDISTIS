@@ -28,20 +28,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.NumericUtils;
 
-public class TripleIndex {
+public class TripleIndexAcronym {
 
 	private static final Version LUCENE44 = Version.LUCENE_44;
 
-	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndex.class);
+	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexAcronym.class);
 
 	public static final String FIELD_NAME_SUBJECT = "subject";
 	public static final String FIELD_NAME_PREDICATE = "predicate";
 	public static final String FIELD_NAME_OBJECT_URI = "object_uri";
 	public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
-	// public static final String FIELD_URI_COUNT = "uri_counts";
 	public static final String FIELD_FREQ = "freq";
 
 	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
@@ -53,9 +50,9 @@ public class TripleIndex {
 	private Cache<BooleanQuery, List<Triple>> cache;
 	StringUtils isInt = new StringUtils();
 
-	public TripleIndex() throws IOException {
+	public TripleIndexAcronym() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
+		InputStream input = TripleIndexAcronym.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
 		String index = prop.getProperty("index");
@@ -91,45 +88,17 @@ public class TripleIndex {
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
 
-			// if (object != null) {
-			// Query tq = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL,
-			// object));
-			// bq.add(tq, BooleanClause.Occur.MUST);
-			// }
 			if (object != null) {
 				Query q = null;
 				if (urlValidator.isValid(object)) {
-
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
-					bq.add(q, BooleanClause.Occur.MUST);
-
-				} else if (StringUtils.isNumeric(object)) {
-					// System.out.println("here numeric");
-					int tempInt = Integer.parseInt(object);
-					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
-					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
-					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
-					bq.add(q, BooleanClause.Occur.MUST);
-
-				}
-				// for index from 2014 comment the "else if" below.
-				// else if (!object.contains(" ")) {
-				//
-				// // System.out.println("here regex");
-				// KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
-				// q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL,
-				// kanalyzer).parse(object);
-				//
-				// bq.add(q, BooleanClause.Occur.MUST);
-				// }
-				else {
+				} else {
 					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
-					parser.setDefaultOperator(QueryParser.Operator.AND);
+					parser.setDefaultOperator(QueryParser.Operator.OR);
 					q = parser.parse(QueryParserBase.escape(object));
-					bq.add(q, BooleanClause.Occur.MUST);
 				}
-				// bq.add(q, BooleanClause.Occur.MUST);
+				bq.add(q, BooleanClause.Occur.MUST);
 			}
 
 			// use the cache

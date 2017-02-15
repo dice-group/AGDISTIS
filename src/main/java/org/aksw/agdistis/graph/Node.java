@@ -1,7 +1,10 @@
 package org.aksw.agdistis.graph;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.HashSet;
+import java.util.Properties;
 
 public class Node implements Comparable<Node> {
 
@@ -16,13 +19,13 @@ public class Node implements Comparable<Node> {
 	private double hubWeight;
 	private double authorityWeight;
 	private double pageRank;
-	private double pageRankNew; 
-	
+	private double pageRankNew;
+	private String algorithm;
 
-    private HashSet<Node> predecessors;
+	private HashSet<Node> predecessors;
 	private HashSet<Node> successors;
 
-	public Node(String uri, double activation, int level) {
+	public Node(String uri, double activation, int level) throws IOException {
 		this.candidateURI = uri;
 		this.activation = activation;
 		this.level = level;
@@ -31,13 +34,18 @@ public class Node implements Comparable<Node> {
 		ids = new HashSet<Integer>();
 		this.successors = new HashSet<Node>();
 		this.predecessors = new HashSet<Node>();
-		this.pageRank = 0; 
+		this.pageRank = 0;
+		Properties prop = new Properties();
+		InputStream input = Node.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
+		this.algorithm = prop.getProperty("algorithm");
 	}
 
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.####");
-		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight) + " A: " + String.valueOf(df.format(authorityWeight)  + " PR: " + String.valueOf(df.format(pageRank))));
+		return candidateURI + ":" + String.valueOf(df.format(activation)) + " H: " + String.valueOf(df.format(hubWeight)
+				+ " A: " + String.valueOf(df.format(authorityWeight) + " PR: " + String.valueOf(df.format(pageRank))));
 	}
 
 	@Override
@@ -55,42 +63,53 @@ public class Node implements Comparable<Node> {
 	}
 
 	@Override
-	// this determines the ordering of candidates and thus the result of the algorithm
+	// this determines the ordering of candidates and thus the result of the
+	// algorithm
 	// change to hub score
 	public int compareTo(Node m) {
-		
-	    // AuthorityWeight
-	    
-		if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
-			return 0;
-		} else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
-			return 1;
+
+		if (algorithm.equals("hits")) {
+			// System.out.println("AuthorityWeight");
+			if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
+				return 0;
+			} else if (m.getAuthorityWeight() > this.getAuthorityWeight()) {
+				return 1;
+			} else {
+				return -1;
+			}
+		} else if (algorithm.equals("pagerank")) {
+			// System.out.println("PageRank compareTo");
+			if (m.getPageRank() == this.getPageRank()) {
+				return 0;
+			} else if (m.getPageRank() > this.getPageRank()) {
+				return 1;
+			} else {
+				return -1;
+			}
 		} else {
 			return -1;
 		}
-		
-	    /*
-	    // HubWeight
-	    
-		if (m.getHubWeight() == this.getHubWeight()) {
-			return 0;
-		} else if (m.getHubWeight() > this.getHubWeight()) {
-			return 1;
-		} else {
-			return -1;
-		}
-		
-	    
-	    // PageRank
-		if (m.getPageRank() == this.getPageRank()) {
-            return 0;
-        } else if (m.getPageRank() > this.getPageRank()) {
-            return 1;
-        } else {
-            return -1;
-        }
-	*/	
-		
+		// HubWeight
+		// if (m.getHubWeight() == this.getHubWeight()) {
+		// return 0;
+		// } else if (m.getHubWeight() > this.getHubWeight()) {
+		// return 1;
+		// } else {
+		// return -1;
+		// }
+
+		// AuthorityWeight && PageRank
+		// if (m.getPageRank() * (2*(m.getAuthorityWeight() + m.getHubWeight()))
+		// == this.getPageRank() * (2*(this.getAuthorityWeight() +
+		// this.getHubWeight()))) {
+		// return 0;
+		// } else if (m.getPageRank() * (2*(m.getAuthorityWeight() +
+		// m.getHubWeight())) > this.getPageRank() *
+		// (2*(this.getAuthorityWeight() + this.getHubWeight()))) {
+		// return 1;
+		// } else {
+		// return -1;
+		// }
 	}
 
 	public boolean containsId(int id) {
@@ -99,6 +118,10 @@ public class Node implements Comparable<Node> {
 
 	public void addId(int id) {
 		ids.add(id);
+	}
+
+	public HashSet<Integer> getId() {
+		return ids;
 	}
 
 	public String getCandidateURI() {
@@ -213,12 +236,12 @@ public class Node implements Comparable<Node> {
 		this.pageRank = pageRank;
 	}
 
-    public double getPageRankNew() {
-        return pageRankNew;
-    }
-    
-    public void setPageRankNew(double pageRankNew) {
-        this.pageRankNew = pageRankNew;
-    }
+	public double getPageRankNew() {
+		return pageRankNew;
+	}
+
+	public void setPageRankNew(double pageRankNew) {
+		this.pageRankNew = pageRankNew;
+	}
 
 }

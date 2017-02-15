@@ -10,6 +10,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 	private int length;
 	private String namedEntityUri;
 	private String label;
+	private String type;
 
 	private String domain;
 
@@ -22,13 +23,14 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 
 	}
 
-	public NamedEntityInText(int startPos, int length, String namedEntityUri) {
+	public NamedEntityInText(int startPos, int length, String namedEntityUri, String type) {
 		this.startPos = startPos;
 		this.length = length;
 		this.namedEntityUri = namedEntityUri;
 		if (namedEntityUri != null) {
 			this.label = extractLabel(namedEntityUri);
 		}
+		this.type = type;
 	}
 
 	public NamedEntityInText(NamedEntityInText entity) {
@@ -36,6 +38,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 		this.length = entity.length;
 		this.namedEntityUri = entity.namedEntityUri;
 		this.label = entity.label;
+		this.type = entity.type;
 	}
 
 	public NamedEntityInText(NamedEntityInText entity, int startPos, int length) {
@@ -43,6 +46,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 		this.length = length;
 		this.namedEntityUri = entity.namedEntityUri;
 		this.label = entity.label;
+		this.type = entity.type;
 	}
 
 	public int getStartPos() {
@@ -71,7 +75,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 
 	public void setNamedEntity(String namedEntityUri) {
 		this.namedEntityUri = namedEntityUri;
-		this.label = extractLabel(namedEntityUri);
+		// this.label = extractLabel(namedEntityUri);
 	}
 
 	public String getLabel() {
@@ -80,6 +84,15 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 
 	public String getSingleWordLabel() {
 		return label.replaceAll("[ _\\(\\)]", "");
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+
 	}
 
 	@Override
@@ -91,6 +104,8 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 		result.append(startPos);
 		result.append(", ");
 		result.append(length);
+		result.append(", ");
+		result.append(type);
 		result.append(")");
 		return result.toString();
 	}
@@ -138,7 +153,7 @@ public class NamedEntityInText implements Comparable<NamedEntityInText>, Cloneab
 
 	@Override
 	public int hashCode() {
-		return namedEntityUri.hashCode() ^ startPos ^ length;
+		return label.hashCode() ^ startPos ^ length;
 	}
 
 	@Override

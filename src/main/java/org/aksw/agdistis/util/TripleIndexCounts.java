@@ -28,14 +28,15 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.NumericUtils;
 
-public class TripleIndex {
+public class TripleIndexCounts {
 
 	private static final Version LUCENE44 = Version.LUCENE_44;
 
-	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndex.class);
+	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCounts.class);
 
 	public static final String FIELD_NAME_SUBJECT = "subject";
 	public static final String FIELD_NAME_PREDICATE = "predicate";
@@ -44,7 +45,7 @@ public class TripleIndex {
 	// public static final String FIELD_URI_COUNT = "uri_counts";
 	public static final String FIELD_FREQ = "freq";
 
-	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
+	private int defaultMaxNumberOfDocsRetrievedFromIndex = 1000;
 
 	private Directory directory;
 	private IndexSearcher isearcher;
@@ -53,9 +54,9 @@ public class TripleIndex {
 	private Cache<BooleanQuery, List<Triple>> cache;
 	StringUtils isInt = new StringUtils();
 
-	public TripleIndex() throws IOException {
+	public TripleIndexCounts() throws IOException {
 		Properties prop = new Properties();
-		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
+		InputStream input = TripleIndexCounts.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
 		String index = prop.getProperty("index");
@@ -69,67 +70,58 @@ public class TripleIndex {
 		cache = CacheBuilder.newBuilder().maximumSize(50000).build();
 	}
 
-	public List<Triple> search(String subject, String predicate, String object) {
-		return search(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
+	public List<Triple> searchC(String subject, String predicate, String object) {
+		return searchC(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
 	}
 
-	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
+	public List<Triple> searchC(String subject, String predicate, String object, int maxNumberOfResults) {
 		BooleanQuery bq = new BooleanQuery();
 		List<Triple> triples = new ArrayList<Triple>();
-
 		try {
 			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
 				log.error(
 						"A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
 			}
 			if (subject != null) {
-				Query tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
 			if (predicate != null) {
-				Query tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
+				TermQuery tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
+			/*
+			 * if (object != null) { Query tq = new TermQuery(new
+			 * Term(FIELD_NAME_OBJECT_LITERAL, object)); bq.add(tq,
+			 * BooleanClause.Occur.MUST);
+			 * 
+			 * 
+			 * }
+			 */
 
-			// if (object != null) {
-			// Query tq = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL,
-			// object));
-			// bq.add(tq, BooleanClause.Occur.MUST);
-			// }
 			if (object != null) {
 				Query q = null;
 				if (urlValidator.isValid(object)) {
-
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
-					bq.add(q, BooleanClause.Occur.MUST);
-
 				} else if (StringUtils.isNumeric(object)) {
-					// System.out.println("here numeric");
+					// System.out.println("here");
 					int tempInt = Integer.parseInt(object);
 					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
 					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
-					bq.add(q, BooleanClause.Occur.MUST);
+				} else if (!object.contains(" ")) {
 
-				}
-				// for index from 2014 comment the "else if" below.
-				// else if (!object.contains(" ")) {
-				//
-				// // System.out.println("here regex");
-				// KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
-				// q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL,
-				// kanalyzer).parse(object);
-				//
-				// bq.add(q, BooleanClause.Occur.MUST);
-				// }
-				else {
+					// System.out.println("here regex");
+					KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
+					q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, kanalyzer).parse(object);
+					bq.add(q, BooleanClause.Occur.MUST);
+				} else {
 					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.AND);
 					q = parser.parse(QueryParserBase.escape(object));
-					bq.add(q, BooleanClause.Occur.MUST);
 				}
-				// bq.add(q, BooleanClause.Occur.MUST);
+				bq.add(q, BooleanClause.Occur.MUST);
 			}
 
 			// use the cache
@@ -157,10 +149,10 @@ public class TripleIndex {
 		for (int i = 0; i < hits.length; i++) {
 			Document hitDoc = isearcher.doc(hits[i].doc);
 			s = hitDoc.get(FIELD_NAME_SUBJECT);
-			p = hitDoc.get(FIELD_NAME_PREDICATE);
-			o = hitDoc.get(FIELD_NAME_OBJECT_URI);
+			p = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
+			o = hitDoc.get(FIELD_FREQ);
 			if (o == null) {
-				o = hitDoc.get(FIELD_NAME_OBJECT_LITERAL);
+				o = "1";
 			}
 			Triple triple = new Triple(s, p, o);
 			triples.add(triple);
