@@ -1,7 +1,5 @@
 package org.aksw.agdistis.util;
 
-import info.aduna.io.FileUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +34,8 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
+import info.aduna.io.FileUtil;
+
 public class TripleIndexCreator {
 	private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreator.class);
 
@@ -64,7 +64,7 @@ public class TripleIndexCreator {
 					+ "For further information have a look at our wiki: https://github.com/AKSW/AGDISTIS/wiki");
 
 			Properties prop = new Properties();
-			InputStream input = new FileInputStream("src/main/resources/config/agdistis.en.properties");
+			InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
 			prop.load(input);
 
 			String index = prop.getProperty("index");

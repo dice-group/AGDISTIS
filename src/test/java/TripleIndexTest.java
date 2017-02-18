@@ -3,6 +3,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
 import org.apache.lucene.search.spell.NGramDistance;
@@ -42,20 +43,20 @@ public class TripleIndexTest {
 
 	@Test
 	public void testRedirects() {
-		String candidateURL = "http://dbpedia.org/resource/JS_Bach";
+		String candidateURL = "http://dbpedia.org/resource/Barack_H_Obama_Junior";
 		List<Triple> redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
 		for (Triple t : redirect) {
 			log.debug(t.toString());
 		}
 		assertTrue(redirect.size() == 1);
-		candidateURL = "http://dbpedia.org/resource/Johann_Sebastian_Bach";
+		candidateURL = "http://dbpedia.org/resource/Barack_Obama";
 		redirect = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageRedirects", null);
 		assertTrue(redirect.size() == 0);
 	}
 
 	@Test
 	public void testDisambiguation() {
-		String candidateURL = "http://dbpedia.org/resource/JSB";
+		String candidateURL = "http://dbpedia.org/resource/Bama";
 		List<Triple> dis = index.search(candidateURL, "http://dbpedia.org/ontology/wikiPageDisambiguates", null);
 		assertTrue(dis.size() > 0);
 		for (Triple t : dis) {
@@ -65,7 +66,7 @@ public class TripleIndexTest {
 
 	@Test
 	public void testType() {
-		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
+		String candidateURL = "http://dbpedia.org/resource/Barack_Obama";
 		List<Triple> type = index.search(candidateURL, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", null);
 		assertTrue(type.size() > 0);
 		for (Triple t : type) {
@@ -76,7 +77,7 @@ public class TripleIndexTest {
 	@Test
 	public void testRdfsLabel() {
 		// String candidateURL = "http://dbpedia.org/resource/Berlin";
-		String candidateURL = "http://dbpedia.org/resource/Masaaki_Ōsumi";
+		String candidateURL = "http://dbpedia.org/resource/Barack_Obama";
 		List<Triple> type = index.search(candidateURL, "http://www.w3.org/2000/01/rdf-schema#label", null);
 		assertTrue(type.size() > 0);
 		for (Triple t : type) {
@@ -94,18 +95,14 @@ public class TripleIndexTest {
 		}
 	}
 
-	@Test
-	public void testAcronym() {
-		List<Triple> type = index.search(null, "http://dbpedia.org/property/acronym", null);
-		assertTrue(type.size() > 0);
-		for (Triple t : type) {
-			log.debug(t.toString());
-		}
-	}
-
+	/*
+	 * @Test public void testAcronym() { List<Triple> type = index.search(null,
+	 * "http://dbpedia.org/property/acronym", null); assertTrue(type.size() >
+	 * 0); for (Triple t : type) { log.debug(t.toString()); } }
+	 */
 	@Test
 	public void testMultipleTermsPerField() {
-		String candidate = "Leipzig";
+		String candidate = "Berlin";
 		List<Triple> type = index.search(null, null, candidate);
 		assertTrue(type.size() > 1);
 		for (Triple t : type) {
@@ -126,7 +123,7 @@ public class TripleIndexTest {
 
 	@Test
 	public void testSurfaceFormsDistance() {
-		String candidateURL = "http://dbpedia.org/resource/Tim_Burton";
+		String candidateURL = "http://dbpedia.org/resource/Barack_Obama";
 		List<Triple> label = index.search(candidateURL, "http://www.w3.org/2000/01/rdf-schema#label", null);
 		List<Triple> surfaceForms = index.search(candidateURL, "http://www.w3.org/2004/02/skos/core#altLabel", null);
 		log.debug(" * " + surfaceForms.size());

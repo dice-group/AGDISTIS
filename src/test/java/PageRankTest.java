@@ -1,12 +1,13 @@
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.graph.PageRank;
 import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import java.io.IOException;
 
 public class PageRankTest {
 
@@ -32,11 +33,11 @@ public class PageRankTest {
 		PageRank pr = new PageRank();
 		pr.runPr(g, 100, 0.001);
 
-		System.out.println(m + "  ( = 1/5 * 0.15 + 0.85)");
-		System.out.println(s1 + "  ( = 1/5 * 0.15)");
-		System.out.println(s2 + " (usw.)");
-		System.out.println(s3);
-		System.out.println(s4);
+		// System.out.println(m + " ( = 1/5 * 0.15 + 0.85)");
+		// System.out.println(s1 + " ( = 1/5 * 0.15)");
+		// System.out.println(s2 + " (usw.)");
+		// System.out.println(s3);
+		// System.out.println(s4);
 	}
 
 	@Test
@@ -62,7 +63,7 @@ public class PageRankTest {
 		assertTrue(n2.getPageRank() == n3.getPageRank());
 		assertTrue(n3.getPageRank() == n4.getPageRank());
 		assertTrue(n4.getPageRank() == n1.getPageRank());
-		System.out.println("EQUAL1: " + n1);
+		// System.out.println("EQUAL1: " + n1);
 
 	}
 
@@ -90,7 +91,7 @@ public class PageRankTest {
 		assertTrue(n3.getPageRank() == n4.getPageRank());
 		assertTrue(n4.getPageRank() == n1.getPageRank());
 
-		System.out.println("EQUAL2: " + n1);
+		// System.out.println("EQUAL2: " + n1);
 	}
 
 }

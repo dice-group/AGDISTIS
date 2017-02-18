@@ -1,10 +1,11 @@
+import java.io.IOException;
+
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
 import org.junit.Test;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import java.io.IOException;
 
 public class HitsTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -59,10 +60,5 @@ public class HitsTest {
 		HITS algo = new HITS();
 		int k = 20;
 		algo.runHits(g, k);
-		// for (Object m : g.getVertices()) {
-		// Node mm = (Node) m;
-		// System.out.println(mm.getCandidateURI() + " x: " +
-		// mm.getAuthorityWeight() + " y: " + mm.getHubWeight());
-		// }
 	}
 }

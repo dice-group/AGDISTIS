@@ -31,7 +31,8 @@ public class SPARQLLabelFinder {
 
 			// qef =
 			// FluentQueryExecutionFactory.http("http://139.18.2.164:3030/ds/sparql").config().withCache(cacheFrontend).end().create();
-			qef = FluentQueryExecutionFactory.http("http://dbpedia.org/sparql").config().withCache(cacheFrontend).end().create();
+			qef = FluentQueryExecutionFactory.http("http://dbpedia.org/sparql").config().withCache(cacheFrontend).end()
+					.create();
 
 		} catch (RuntimeException e) {
 			log.error("Could not create SPARQL interface! ", e);
@@ -76,37 +77,41 @@ public class SPARQLLabelFinder {
 				return p;
 			}).collect(Collectors.toList());
 
-//			for (String[] p : list) {
-//				if (p[0].startsWith("http://dbpedia.org/resource")) {
-//					SPARQLLabelFinder sqb = new SPARQLLabelFinder();
-//					String label = p[1].replaceAll("\"", "\\\"");
-//					String query = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj {?proj rdfs:label \"" + label + "\"@en}";
-//					Set<RDFNode> set = sqb.sparql(query);
-//					boolean matchFound = false;
-//					for (RDFNode item : set) {
-//						String uri = item.asResource().getURI().toString();
-//						if (uri.startsWith("http://dbpedia.org/resource")) {
-//							System.out.println(p[0] + " => " + uri);
-//							if (uri.equals(p[0])) {
-//								matchFound = true;
-//							}
-//						}
-//					}
-//					if (matchFound) {
-//						match++;
-//					} else {
-//						nomatch++;
-//					}
-//				}
-//			}
-//			System.out.println("Accuracy rdfs:label: " + match / (match + nomatch));
-			//Accuracy rdfs:label: 0.2834343896579339
+			// for (String[] p : list) {
+			// if (p[0].startsWith("http://dbpedia.org/resource")) {
+			// SPARQLLabelFinder sqb = new SPARQLLabelFinder();
+			// String label = p[1].replaceAll("\"", "\\\"");
+			// String query = "PREFIX
+			// rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj
+			// {?proj rdfs:label \"" + label + "\"@en}";
+			// Set<RDFNode> set = sqb.sparql(query);
+			// boolean matchFound = false;
+			// for (RDFNode item : set) {
+			// String uri = item.asResource().getURI().toString();
+			// if (uri.startsWith("http://dbpedia.org/resource")) {
+			// System.out.println(p[0] + " => " + uri);
+			// if (uri.equals(p[0])) {
+			// matchFound = true;
+			// }
+			// }
+			// }
+			// if (matchFound) {
+			// match++;
+			// } else {
+			// nomatch++;
+			// }
+			// }
+			// }
+			// System.out.println("Accuracy rdfs:label: " + match / (match +
+			// nomatch));
+			// Accuracy rdfs:label: 0.2834343896579339
 
 			for (String[] p : list) {
 				if (p[0].startsWith("http://dbpedia.org/resource")) {
 					SPARQLLabelFinder sqb = new SPARQLLabelFinder();
 					String label = p[1].replaceAll("\"", "\\\"");
-					String query = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj {?proj ?p \"" + label + "\"@en}";
+					String query = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj {?proj ?p \""
+							+ label + "\"@en}";
 					Set<RDFNode> set = sqb.sparql(query);
 					boolean matchFound = false;
 					for (RDFNode item : set) {
@@ -126,7 +131,7 @@ public class SPARQLLabelFinder {
 				}
 			}
 			System.out.println("Accuracy rdfs:label: " + match / (match + nomatch));
-//Accuracy rdfs:label: 0.3457842352133623
+			// Accuracy rdfs:label: 0.3457842352133623
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

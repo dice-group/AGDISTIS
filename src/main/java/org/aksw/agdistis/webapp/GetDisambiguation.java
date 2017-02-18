@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.DocumentText;

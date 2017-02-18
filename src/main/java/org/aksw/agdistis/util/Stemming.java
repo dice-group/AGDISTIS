@@ -16,6 +16,7 @@
  */
 package org.aksw.agdistis.util;
 
+import java.io.IOException;
 /**
  *
  * @author diegomoussallem
@@ -23,6 +24,7 @@ package org.aksw.agdistis.util;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -31,8 +33,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
-import java.util.regex.Pattern;
-import java.io.IOException;
 import smile.nlp.stemmer.LancasterStemmer;
 
 public class Stemming {

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.aksw.agdistis.datatypes.Document;
@@ -13,14 +15,12 @@ import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.graph.PageRank;
+import org.aksw.agdistis.model.CandidatesScore;
 import org.aksw.agdistis.util.TripleIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import java.util.List;
-import java.util.Map;
-import org.aksw.agdistis.model.CandidatesScore;
 
 public class NEDAlgo_HITS {
 

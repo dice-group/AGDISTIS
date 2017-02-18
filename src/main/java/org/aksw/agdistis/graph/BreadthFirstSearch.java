@@ -1,5 +1,6 @@
 package org.aksw.agdistis.graph;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,13 +11,12 @@ import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import java.io.IOException;
 
 public class BreadthFirstSearch {
 	private static HashMap<String, Node> findNode = new HashMap<String, Node>();
 	private TripleIndex index;
 
-	public BreadthFirstSearch(TripleIndex index)  {
+	public BreadthFirstSearch(TripleIndex index) {
 		this.index = index;
 	}
 
