@@ -42,7 +42,6 @@ build-docker:
     - docker build --pull -t $TEST_IMAGE .
     - docker push $TEST_IMAGE
 
-TODO: re-enable once we have small test index
 test-docker:
   image: docker
   stage: test-docker
