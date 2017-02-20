@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
-import org.aksw.jena_sparql_api.cache.h2.CacheUtilsH2;
-import org.aksw.jena_sparql_api.core.FluentQueryExecutionFactory;
-import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
+import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.RDFNode;
 import org.slf4j.Logger;
@@ -22,36 +20,24 @@ import com.google.common.collect.Sets;
 
 public class SPARQLLabelFinder {
 	Logger log = LoggerFactory.getLogger(SPARQLLabelFinder.class);
-	public QueryExecutionFactory qef;
 
 	public SPARQLLabelFinder() {
-		try {
-			long timeToLive = 360l * 24l * 60l * 60l * 1000l;
-			CacheFrontend cacheFrontend = CacheUtilsH2.createCacheFrontend("./sparql", true, timeToLive);
-
-			// qef =
-			// FluentQueryExecutionFactory.http("http://139.18.2.164:3030/ds/sparql").config().withCache(cacheFrontend).end().create();
-			qef = FluentQueryExecutionFactory.http("http://dbpedia.org/sparql").config().withCache(cacheFrontend).end()
-					.create();
-
-		} catch (RuntimeException e) {
-			log.error("Could not create SPARQL interface! ", e);
-			System.exit(0);
-		}
 	}
 
 	/**
 	 * using the AKSW library for wrapping Jena API
 	 * 
 	 */
-	public Set<RDFNode> sparql(final String query) {
+	public Set<RDFNode> sparql(final String q) {
 		Set<RDFNode> set = Sets.newHashSet();
-		try {
-			QueryExecution qe = qef.createQueryExecution(query);
-			if (qe != null && query.toString() != null) {
-				ResultSet results = qe.execSelect();
+		Query query = QueryFactory.create(q);
+		try (QueryExecution qexec = org.apache.jena.query.QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query)) {
+
+			if (qexec != null && query.toString() != null) {
+				ResultSet results = qexec.execSelect();
 				while (results.hasNext()) {
-					set.add(results.next().get("proj"));
+					set.add(results.next()
+					               .get("proj"));
 				}
 			}
 		} catch (Exception e) {
@@ -72,10 +58,12 @@ public class SPARQLLabelFinder {
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
 
 			// br returns as stream and convert it into a List
-			list = br.lines().map((line) -> {
-				String[] p = line.split("\t");
-				return p;
-			}).collect(Collectors.toList());
+			list = br.lines()
+			         .map((line) -> {
+				         String[] p = line.split("\t");
+				         return p;
+			         })
+			         .collect(Collectors.toList());
 
 			// for (String[] p : list) {
 			// if (p[0].startsWith("http://dbpedia.org/resource")) {
@@ -110,12 +98,13 @@ public class SPARQLLabelFinder {
 				if (p[0].startsWith("http://dbpedia.org/resource")) {
 					SPARQLLabelFinder sqb = new SPARQLLabelFinder();
 					String label = p[1].replaceAll("\"", "\\\"");
-					String query = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj {?proj ?p \""
-							+ label + "\"@en}";
+					String query = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>" + "SELECT ?proj {?proj ?p \"" + label + "\"@en}";
 					Set<RDFNode> set = sqb.sparql(query);
 					boolean matchFound = false;
 					for (RDFNode item : set) {
-						String uri = item.asResource().getURI().toString();
+						String uri = item.asResource()
+						                 .getURI()
+						                 .toString();
 						if (uri.startsWith("http://dbpedia.org/resource")) {
 							System.out.println(p[0] + " => " + uri);
 							if (uri.equals(p[0])) {
