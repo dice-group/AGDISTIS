@@ -25,14 +25,8 @@ test:
   stage: test
   only:
     - master
-  # download index if it's not cached yet
-  before_script:
-    - apt-get update &&
-      apt-get install -y p7zip-full &&
-      wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-      7z x indexdbpedia_en_2014.7z &&
-      mv indexdbpedia_en_2014 index
   script:
+    - cp -r indextest index
     - mvn test
 
 build-docker:
@@ -48,26 +42,19 @@ build-docker:
     - docker build --pull -t $TEST_IMAGE .
     - docker push $TEST_IMAGE
 
-# TODO: re-enable once we have small test index
-#test-docker:
-#  image: docker
-#  stage: test-docker
-#  only:
-#    - master
-#  services:
-#    - docker:dind
-  # download index
-#  before_script:
-#    - apk update &&
-#      apk add wget p7zip &&
-#      wget http://titan.informatik.uni-leipzig.de/rusbeck/agdistis/en/indexdbpedia_en_2014.7z &&
-#      7z x indexdbpedia_en_2014.7z &&
-#      mv indexdbpedia_en_2014 index/
-#  script:
-#    - docker pull $TEST_IMAGE
-#    - docker run -d --name agdistis -v /cache/aksw/AGDISTIS/index:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
-#    - sleep 30
-#    - docker exec agdistis sh /usr/local/tomcat/test-docker.sh
+TODO: re-enable once we have small test index
+test-docker:
+  image: docker
+  stage: test-docker
+  only:
+    - master
+  services:
+    - docker:dind
+  script:
+    - docker pull $TEST_IMAGE
+    - docker run -d --name agdistis -v `pwd`/testindex:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
+    - sleep 30
+    - docker exec agdistis sh /usr/local/tomcat/test-docker.sh
 
 release:
   image: docker:latest
