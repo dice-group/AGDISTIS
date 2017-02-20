@@ -45,6 +45,8 @@ public class GetDisambiguation extends ServerResource {
 		NEDAlgo_HITS agdistis = null;
 		log.info("Start working on Request for AGDISTIS");
 		String result = "";
+		String text = "";
+		String type = "";
 		InputStream input = entity.getStream();
 		// here the inputStream is duplicated due to it can be read only once.
 		// Therefore, we do it for checking if the input is from gerbil or not.
@@ -60,63 +62,60 @@ public class GetDisambiguation extends ServerResource {
 					e);
 			System.exit(0);
 		}
-		result = NIFGerbil(input1, agdistis); // This part is created to work
-												// along with GERBIL, because
-												// GERBIL only sends the NIF
-												// files without taking care of
-												// more than one parameter. So,
-												// GERBIL is not capable to send
-												// the nif in the text parameter
-												// making
-												// AGDISTIS?type=nif&text= not
-												// work.
 
-		if (!(result.equals(""))) {
+		String string = IOUtils.toString(input1);
+		// Parse the given representation and retrieve data
+		Form form = new Form(string);
+		text = form.getFirstValue("text");
+		type = form.getFirstValue("type");
+		log.info("text: " + text);
+		log.info("type: " + type);
+
+		if (text == null) {
+			result = NIFGerbil(input2, agdistis); // This part is created to
+													// work
+			// along with GERBIL, because
+			// GERBIL only sends the NIF
+			// files without taking care of
+			// more than one parameter. So,
+			// GERBIL is not capable to send
+			// the nif in the text parameter
+			// making
+			// AGDISTIS?type=nif&text= not
+			// work.
 			return result;
-		} else {
-
-			String string = IOUtils.toString(input2);
-			// Parse the given representation and retrieve data
-			Form form = new Form(string);
-			String text = form.getFirstValue("text");
-			String type = form.getFirstValue("type");
-			log.info("text: " + text);
-			log.info("type: " + type);
-
-			// evaluationOptionalParameters(form, agdistis);
-			if (type == null) {
-				type = "agdistis";
-			}
-
-			if (type.equals("agdistis")) {
-				return standardAG(text, agdistis); // This type is the standard
-													// and in case the user
-													// doesn't send the type
-													// parameter, it is
-													// considered as the main
-													// one(e.g
-													// AGDISTIS?type=agdistis&text=<entity>Barack
-													// Obama</entity>).
-
-			} else if (type.equals("nif")) {
-				return NIFType(text, agdistis); // This type is for AGDISTIS
-												// works beyond the GERBIL, this
-												// part is in case of user wants
-												// to check just a certain NIF
-												// file(e.g
-												// AGDISTIS?type=nif&text=@prefix....)
-
-			} else if (type.equals("candidates")) {
-				return candidateType(text, agdistis); // Here is to let us know
-														// about all candidates
-														// for each mention and
-														// its respective
-														// HITS/PageRank score.
-			} else {
-				return "ERROR";
-			}
+		}
+		if (type == null) {
+			type = "agdistis";
 		}
 
+		if (type.equals("agdistis")) {
+			return standardAG(text, agdistis); // This type is the standard
+												// and in case the user
+												// doesn't send the type
+												// parameter, it is
+												// considered as the main
+												// one(e.g
+												// AGDISTIS?type=agdistis&text=<entity>Barack
+												// Obama</entity>).
+
+		} else if (type.equals("nif")) {
+			return NIFType(text, agdistis); // This type is for AGDISTIS
+											// works beyond the GERBIL, this
+											// part is in case of user wants
+											// to check just a certain NIF
+											// file(e.g
+											// AGDISTIS?type=nif&text=@prefix....)
+
+		} else if (type.equals("candidates")) {
+			return candidateType(text, agdistis); // Here is to let us know
+													// about all candidates
+													// for each mention and
+													// its respective
+													// HITS/PageRank score.
+		} else {
+			return "ERROR";
+		}
 	}
 
 	public static Document textToDocument(String preAnnotatedText) {
@@ -161,9 +160,6 @@ public class GetDisambiguation extends ServerResource {
 				String disambiguatedURL = namedEntity.getNamedEntityUri();
 
 				if (disambiguatedURL == null) {
-					// annotations.add(new NamedEntity((int)
-					// namedEntity.getStartPos(), (int) namedEntity.getLength(),
-					// new HashSet<String>()));
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), URLDecoder
 							.decode("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel(), "UTF-8")));
 				} else {
