@@ -2,7 +2,7 @@ stages:
 - build
 - test
 - build-docker
-#- test-docker
+- test-docker
 - release
 
 variables:
