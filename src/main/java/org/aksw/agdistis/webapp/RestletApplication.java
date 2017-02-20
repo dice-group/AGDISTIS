@@ -16,7 +16,7 @@ public class RestletApplication extends Application {
 		final Router router = new Router(getContext());
 
 		// Defines only one route
-		router.attach("/NED", GetDisambiguation.class);
+		router.attach("/AGDISTIS", GetDisambiguation.class);
 		// System.gc();
 		return router;
 	}
