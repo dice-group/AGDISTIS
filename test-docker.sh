@@ -4,7 +4,7 @@ echo $RESULT > expected.txt
 
 # get response
 curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:4445/AGDISTIS > response.txt
-echo -e "" >> response.txt
+echo "" >> response.txt
 
 # log response
 echo "Got response:"
