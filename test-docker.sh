@@ -3,7 +3,7 @@ RESULT="[{\"disambiguatedURL\":\"http:\/\/dbpedia.org\/resource\/Leipzig_Univers
 echo $RESULT > expected.txt
 
 # get response
-curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://localhost:8080/AGDISTIS > response.txt
+curl -s --data-urlencode "text='The <entity>University of Leipzig</entity> in <entity>Barack Obama</entity>.'" -d type='agdistis' http://http://139.18.2.164:8080/AGDISTIS > response.txt
 
 # log response
 echo "Got response:"
