@@ -1,16 +1,15 @@
 package org.aksw.agdistis.graph;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.HashSet;
-import java.util.Properties;
 
 public class Node implements Comparable<Node> {
 
 	private HashSet<Integer> ids;
 	private double activation;
 	private String candidateURI;
+	private String algo;
 	private int level;
 	private double hubWeightForCalculation = 1;
 	private double authorityWeightForCalculation = 1;
@@ -20,12 +19,11 @@ public class Node implements Comparable<Node> {
 	private double authorityWeight;
 	private double pageRank;
 	private double pageRankNew;
-	private String algorithm;
 
 	private HashSet<Node> predecessors;
 	private HashSet<Node> successors;
 
-	public Node(String uri, double activation, int level) throws IOException {
+	public Node(String uri, double activation, int level, String algo) throws IOException {
 		this.candidateURI = uri;
 		this.activation = activation;
 		this.level = level;
@@ -35,10 +33,7 @@ public class Node implements Comparable<Node> {
 		this.successors = new HashSet<Node>();
 		this.predecessors = new HashSet<Node>();
 		this.pageRank = 0;
-		Properties prop = new Properties();
-		InputStream input = Node.class.getResourceAsStream("/config/agdistis.properties");
-		prop.load(input);
-		this.algorithm = prop.getProperty("algorithm");
+		this.algo = algo;
 	}
 
 	@Override
@@ -68,7 +63,7 @@ public class Node implements Comparable<Node> {
 	// change to hub score
 	public int compareTo(Node m) {
 
-		if (algorithm.equals("hits")) {
+		if (m.algo.equals("hits")) {
 			// System.out.println("AuthorityWeight");
 			if (m.getAuthorityWeight() == this.getAuthorityWeight()) {
 				return 0;
@@ -77,7 +72,7 @@ public class Node implements Comparable<Node> {
 			} else {
 				return -1;
 			}
-		} else if (algorithm.equals("pagerank")) {
+		} else if (m.algo.equals("pagerank")) {
 			// System.out.println("PageRank compareTo");
 			if (m.getPageRank() == this.getPageRank()) {
 				return 0;
@@ -98,18 +93,6 @@ public class Node implements Comparable<Node> {
 		// return -1;
 		// }
 
-		// AuthorityWeight && PageRank
-		// if (m.getPageRank() * (2*(m.getAuthorityWeight() + m.getHubWeight()))
-		// == this.getPageRank() * (2*(this.getAuthorityWeight() +
-		// this.getHubWeight()))) {
-		// return 0;
-		// } else if (m.getPageRank() * (2*(m.getAuthorityWeight() +
-		// m.getHubWeight())) > this.getPageRank() *
-		// (2*(this.getAuthorityWeight() + this.getHubWeight()))) {
-		// return 1;
-		// } else {
-		// return -1;
-		// }
 	}
 
 	public boolean containsId(int id) {

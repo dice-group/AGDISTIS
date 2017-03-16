@@ -12,21 +12,21 @@ public class HitsTest {
 	@Test
 	public void testSimpleHITS() throws InterruptedException, IOException {
 		Graph g = new DirectedSparseMultigraph<Node, String>();
-		Node a = new Node("dbpedia:Barack_Obama,_Sr.", 0, 0);
-		Node b = new Node("dbpedia:Barack_Obama", 0, 0);
-		Node c = new Node("dbpedia:Washington,_D.C.", 0, 0);
-		Node d = new Node("dbpedia:Washington,_D.C._(novel)", 0, 0);
+		Node a = new Node("dbpedia:Barack_Obama,_Sr.", 0, 0, "hits");
+		Node b = new Node("dbpedia:Barack_Obama", 0, 0,"hits");
+		Node c = new Node("dbpedia:Washington,_D.C.", 0, 0,"hits");
+		Node d = new Node("dbpedia:Washington,_D.C._(novel)", 0, 0,"hits");
 
-		Node e1 = new Node("dbpedia:Ann_Dunham", 0, 1);
-		Node e2 = new Node("dbpedia:University_of_Hawaii", 0, 1);
-		Node e3 = new Node("dbpedia:Hawaii", 0, 1);
-		Node e4 = new Node("dbpedia:White_House", 0, 1);
-		Node e5 = new Node("dbpedia:Federal_district", 0, 1);
-		Node e6 = new Node("dbpedia:Elizabeth_II", 0, 1);
-		Node e7 = new Node("dbpedia:London", 0, 1);
-		Node e8 = new Node("dbpedia:New_York", 0, 1);
-		Node e9 = new Node("dbpedia:United_Kingdom", 0, 1);
-		Node e10 = new Node("dbpedia:Gore_Vidal", 0, 1);
+		Node e1 = new Node("dbpedia:Ann_Dunham", 0, 1,"hits");
+		Node e2 = new Node("dbpedia:University_of_Hawaii", 0, 1,"hits");
+		Node e3 = new Node("dbpedia:Hawaii", 0, 1,"hits");
+		Node e4 = new Node("dbpedia:White_House", 0, 1,"hits");
+		Node e5 = new Node("dbpedia:Federal_district", 0, 1,"hits");
+		Node e6 = new Node("dbpedia:Elizabeth_II", 0, 1,"hits");
+		Node e7 = new Node("dbpedia:London", 0, 1,"hits");
+		Node e8 = new Node("dbpedia:New_York", 0, 1,"hits");
+		Node e9 = new Node("dbpedia:United_Kingdom", 0, 1,"hits");
+		Node e10 = new Node("dbpedia:Gore_Vidal", 0, 1,"hits");
 
 		g.addEdge("dbpedia:Barack_Obama,_Sr.", a, b);
 		g.addEdge("dbpedia:Barack_Obama,_Sr.1", a, e1);

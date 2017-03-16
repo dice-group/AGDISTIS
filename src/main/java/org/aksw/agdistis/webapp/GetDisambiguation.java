@@ -43,6 +43,14 @@ public class GetDisambiguation extends ServerResource {
 	@Post
 	public String postText(Representation entity) throws IOException, Exception {
 		NEDAlgo_HITS agdistis = null;
+		try {
+			agdistis = new NEDAlgo_HITS();
+		} catch (IOException e) {
+			log.error(
+					"Can not load index due to either wrong properties in agdistis.properties or missing index at location",
+					e);
+			System.exit(0);
+		}
 		log.info("Start working on Request for AGDISTIS");
 		String result = "";
 		String text = "";
@@ -53,15 +61,6 @@ public class GetDisambiguation extends ServerResource {
 		byte[] byteArray = IOUtils.toByteArray(input);
 		InputStream input1 = new ByteArrayInputStream(byteArray);
 		InputStream input2 = new ByteArrayInputStream(byteArray);
-
-		try {
-			agdistis = new NEDAlgo_HITS();
-		} catch (IOException e) {
-			log.error(
-					"Can not load index due to either wrong properties in agdistis.properties or missing index at location",
-					e);
-			System.exit(0);
-		}
 
 		String string = IOUtils.toString(input1);
 		// Parse the given representation and retrieve data
@@ -179,7 +178,7 @@ public class GetDisambiguation extends ServerResource {
 
 		return nifDocument;
 	}
-
+	@SuppressWarnings("unchecked")
 	public String standardAG(String text, NEDAlgo_HITS agdistis) {
 		JSONArray arr = new org.json.simple.JSONArray();
 
@@ -234,6 +233,7 @@ public class GetDisambiguation extends ServerResource {
 		return nifDocument;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String candidateType(String text, NEDAlgo_HITS agdistis) {
 		JSONArray arr = new org.json.simple.JSONArray();
 		Document d = textToDocument(text);

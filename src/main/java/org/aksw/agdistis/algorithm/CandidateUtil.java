@@ -37,6 +37,7 @@ public class CandidateUtil {
 	private boolean context;
 	private boolean acronym;
 	private boolean commonEntities;
+	private String algorithm;
 
 	public CandidateUtil() throws IOException {
 		Properties prop = new Properties();
@@ -55,10 +56,11 @@ public class CandidateUtil {
 		this.popularity = Boolean.valueOf(prop.getProperty("popularity"));
 		this.acronym = Boolean.valueOf(prop.getProperty("acronym"));
 		this.commonEntities = Boolean.valueOf(prop.getProperty("commonEntities"));
+		this.algorithm = prop.getProperty("algorithm");
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document,
-			double threshholdTrigram, Boolean heuristicExpansionOn) throws IOException {
+		double threshholdTrigram, Boolean heuristicExpansionOn) throws IOException {
 		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		String text = document.DocumentText().getText();
 		HashMap<String, Node> nodes = new HashMap<String, Node>();
@@ -115,7 +117,7 @@ public class CandidateUtil {
 
 	public void addNodeToGraph(DirectedSparseGraph<Node, String> graph, HashMap<String, Node> nodes,
 			NamedEntityInText entity, Triple c, String candidateURL) throws IOException {
-		Node currentNode = new Node(candidateURL, 0, 0);
+		Node currentNode = new Node(candidateURL, 0, 0, algorithm);
 		log.debug("CandidateURL: " + candidateURL);
 		// candidates are connected to a specific label in the text via their
 		// start position

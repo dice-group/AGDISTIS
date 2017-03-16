@@ -1,3 +1,4 @@
+/*
 package org.aksw.agdistis.experiments;
 
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ public class SPARQLLabelFinder {
 	 * using the AKSW library for wrapping Jena API
 	 * 
 	 */
+/*
 	public Set<RDFNode> sparql(final String q) {
 		Set<RDFNode> set = Sets.newHashSet();
 		Query query = QueryFactory.create(q);
@@ -126,3 +128,4 @@ public class SPARQLLabelFinder {
 		}
 	}
 }
+*/

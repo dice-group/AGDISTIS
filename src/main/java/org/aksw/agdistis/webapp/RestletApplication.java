@@ -17,7 +17,7 @@ public class RestletApplication extends Application {
 
 		// Defines only one route
 		router.attachDefault(GetDisambiguation.class);
-		// System.gc();
+		//System.gc();
 		return router;
 	}
 }

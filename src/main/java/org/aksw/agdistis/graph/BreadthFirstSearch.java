@@ -15,10 +15,13 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 public class BreadthFirstSearch {
 	private static HashMap<String, Node> findNode = new HashMap<String, Node>();
 	private TripleIndex index;
+	private String algo;
 
-	public BreadthFirstSearch(TripleIndex index) {
+	public BreadthFirstSearch(TripleIndex index, String algo) {
 		this.index = index;
+		this.algo = algo;
 	}
+
 
 	public void run(int maxDepth, DirectedSparseGraph<Node, String> graph, String edgeType, String nodeType)
 			throws UnsupportedEncodingException, IOException {
@@ -46,7 +49,7 @@ public class BreadthFirstSearch {
 						if (findNode.containsKey(targetNode)) {
 							Node = findNode.get(targetNode);
 						} else {
-							Node = new Node(targetNode.getObject(), 0, levelNow);
+							Node = new Node(targetNode.getObject(), 0, levelNow, algo);
 							findNode.put(targetNode.getObject(), Node);
 							q.add(Node);
 						}

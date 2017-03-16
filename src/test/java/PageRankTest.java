@@ -17,11 +17,11 @@ public class PageRankTest {
 
 		Graph g = new DirectedSparseMultigraph<Node, String>();
 
-		Node m = new Node("Master", 0, 0);
-		Node s1 = new Node("Slave1", 0, 0);
-		Node s2 = new Node("Slave2", 0, 0);
-		Node s3 = new Node("Slave3", 0, 0);
-		Node s4 = new Node("Slave4", 0, 0);
+		Node m = new Node("Master", 0, 0,"pagerank");
+		Node s1 = new Node("Slave1", 0, 0,"pagerank");
+		Node s2 = new Node("Slave2", 0, 0,"pagerank");
+		Node s3 = new Node("Slave3", 0, 0,"pagerank");
+		Node s4 = new Node("Slave4", 0, 0,"pagerank");
 
 		g.addEdge("e1", s1, m);
 		g.addEdge("e2", s2, m);
@@ -46,10 +46,10 @@ public class PageRankTest {
 
 		Graph g = new DirectedSparseMultigraph<Node, String>();
 
-		Node n1 = new Node("N1", 0, 0);
-		Node n2 = new Node("N2", 0, 0);
-		Node n3 = new Node("N3", 0, 0);
-		Node n4 = new Node("N4", 0, 0);
+		Node n1 = new Node("N1", 0, 0,"pagerank");
+		Node n2 = new Node("N2", 0, 0,"pagerank");
+		Node n3 = new Node("N3", 0, 0,"pagerank");
+		Node n4 = new Node("N4", 0, 0,"pagerank");
 
 		g.addEdge("e1", n1, n2);
 		g.addEdge("e2", n2, n3);
@@ -73,10 +73,10 @@ public class PageRankTest {
 
 		Graph g = new DirectedSparseMultigraph<Node, String>();
 
-		Node n1 = new Node("N1", 0, 0);
-		Node n2 = new Node("N2", 0, 0);
-		Node n3 = new Node("N3", 0, 0);
-		Node n4 = new Node("N4", 0, 0);
+		Node n1 = new Node("N1", 0, 0,"pagerank");
+		Node n2 = new Node("N2", 0, 0,"pagerank");
+		Node n3 = new Node("N3", 0, 0,"pagerank");
+		Node n4 = new Node("N4", 0, 0,"pagerank");
 
 		g.addVertex(n1);
 		g.addVertex(n2);

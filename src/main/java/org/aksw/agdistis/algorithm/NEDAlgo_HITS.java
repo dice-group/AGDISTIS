@@ -27,7 +27,6 @@ public class NEDAlgo_HITS {
 	private Logger log = LoggerFactory.getLogger(NEDAlgo_HITS.class);
 	private String edgeType;
 	private String nodeType;
-	// private CandidateBKP cu;
 	private CandidateUtil cu;
 	private TripleIndex index;
 	// needed for the experiment about which properties increase accuracy
@@ -47,13 +46,10 @@ public class NEDAlgo_HITS {
 		int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
 		this.heuristicExpansionOn = Boolean.valueOf(prop.getProperty("heuristicExpansionOn"));
 		this.algorithm = prop.getProperty("algorithm");
-
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
 		this.threshholdTrigram = threshholdTrigram;
 		this.maxDepth = maxDepth;
-
-		// this.cu = new CandidateBKP();
 		this.cu = new CandidateUtil();
 		this.index = cu.getIndex();
 	}
@@ -69,7 +65,7 @@ public class NEDAlgo_HITS {
 
 			// 1) let spread activation/ breadth first search run
 			log.info("\tGraph size before BFS: " + graph.getVertexCount());
-			BreadthFirstSearch bfs = new BreadthFirstSearch(index);
+			BreadthFirstSearch bfs = new BreadthFirstSearch(index, algorithm);
 			bfs.run(maxDepth, graph, edgeType, nodeType);
 			log.info("\tGraph size after BFS: " + graph.getVertexCount());
 
