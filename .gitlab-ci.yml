@@ -1,6 +1,6 @@
 stages:
-- build
 - test
+- build
 - build-docker
 - test-docker
 - release
@@ -8,6 +8,15 @@ stages:
 variables:
   TEST_IMAGE: aksw/agdistis:$CI_BUILD_REF_NAME
   IMAGE: aksw/agdistis:latest
+
+test:
+  image: maven
+  stage: test
+  only:
+    - master
+  script:
+    - cp -r indextest index
+    - mvn clean test
 
 build:
   image: maven
@@ -19,15 +28,6 @@ build:
   artifacts:
     paths:
     - target/*.war
-
-test:
-  image: maven
-  stage: test
-  only:
-    - master
-  script:
-    - cp -r indextest index
-    - mvn clean test
 
 build-docker:
   image: docker:latest
