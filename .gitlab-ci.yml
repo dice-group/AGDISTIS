@@ -15,7 +15,7 @@ build:
   only:
     - master
   script:
-    - mvn package -Dmaven.test.skip=true
+    - mvn clean package -Dmaven.test.skip=true
   artifacts:
     paths:
     - target/*.war
@@ -27,7 +27,7 @@ test:
     - master
   script:
     - cp -r indextest index
-    - mvn test
+    - mvn clean test
 
 build-docker:
   image: docker:latest
