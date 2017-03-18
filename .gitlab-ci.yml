@@ -51,9 +51,8 @@ test-docker:
     - docker:dind
   script:
     - docker pull $TEST_IMAGE
-    - docker run -d --name agdistis -v `pwd`/testindex:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
-    - sleep 120
-    - docker logs agdistis
+    - docker run -d --name agdistis -v `pwd`/indextest:/usr/local/tomcat/index -v `pwd`/test-docker.sh:/usr/local/tomcat/test-docker.sh $TEST_IMAGE
+    - sleep 30
     - docker exec agdistis sh /usr/local/tomcat/test-docker.sh
 
 release:
