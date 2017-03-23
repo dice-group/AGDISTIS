@@ -12,6 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.riot.WebContent;
+import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -38,6 +46,7 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
+
 import info.aduna.io.FileUtil;
 
 public class TripleIndexCreatorContext {
@@ -55,6 +64,8 @@ public class TripleIndexCreatorContext {
 	private static MMapDirectory directory;
 	private static IndexSearcher isearcher;
 	private static String nodeType;
+	private static String baseURI;
+	private static String endpoint;
 	public static final String FIELD_NAME_CONTEXT = "CONTEXT";
 	public static final String FIELD_NAME_SURFACE_FORM = "SURFACE_FORM";
 	public static final String FIELD_NAME_URI = "URI";
@@ -98,10 +109,10 @@ public class TripleIndexCreatorContext {
 				}
 			}
 
-			String baseURI = prop.getProperty("baseURI");
+			baseURI = prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
 
-			String endpoint = prop.getProperty("endpoint");
+			endpoint = prop.getProperty("endpoint");
 			log.info("Setting Endpoint to: " + baseURI);
 
 			TripleIndexCreatorContext ic = new TripleIndexCreatorContext();
@@ -192,8 +203,13 @@ public class TripleIndexCreatorContext {
 			String docID = triples.get(0).subject;
 			log.info(triples.toString());
 			if (isUri) {
-		    object = object.replace(nodeType, "");
-		    //add SPARQL queries here!
+				if (endpoint.isEmpty()) {
+					log.info("endpoint empty");
+					object = object.replace(nodeType, "");
+				} else {
+					object = sparql(subject);
+					log.info("endpoint working");
+				}
 			}
 			String remainContext = triples.get(0).object.concat(" " + object);
 			log.info(remainContext);
@@ -268,6 +284,27 @@ public class TripleIndexCreatorContext {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public String sparql(String subject) {
+
+		// First query takes the most specific class from a given resource.
+		String ontology_service = endpoint;
+
+		String endpointsSparql = "select ?label where {<" + subject
+				+ "> <http://www.w3.org/2000/01/rdf-schema#label> ?label FILTER (lang(?label) = 'en')} LIMIT 100";
+
+		Query sparqlQuery = QueryFactory.create(endpointsSparql, Syntax.syntaxARQ);
+		QueryEngineHTTP qexec = (QueryEngineHTTP) QueryExecutionFactory.sparqlService(ontology_service, sparqlQuery);
+		qexec.setModelContentType(WebContent.contentTypeRDFXML);
+		ResultSet results = qexec.execSelect();
+		String property = null;
+		while (results.hasNext()) {
+			QuerySolution qs = results.next();
+			property = qs.getLiteral("?label").getLexicalForm();
+		}
+		return property;
+
 	}
 
 	public void close() throws IOException {
