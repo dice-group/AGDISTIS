@@ -3,7 +3,7 @@
 > AGDISTIS - Agnostic Named Entity Disambiguation.
 
 [![Build Status](https://gitlab.com/aksw/AGDISTIS/badges/master/build.svg)](https://gitlab.com/aksw/AGDISTIS/pipelines)
-<script type='text/javascript' src='https://www.openhub.net/p/AGDISTIS/widgets/project_thin_badge?format=js'></script>
+[![Project Stats](https://www.openhub.net/p/AGDISTIS/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/AGDISTIS)
 
 
 This projects aimes at delivering a framework for disambiguating a priori annotated named entities.
