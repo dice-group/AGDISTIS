@@ -1,9 +1,8 @@
-# AGDISTIS
-
-> AGDISTIS - Agnostic Named Entity Disambiguation.
+# AGDISTIS - Agnostic Named Entity Disambiguation
 
 [![Build Status](https://gitlab.com/aksw/AGDISTIS/badges/master/build.svg)](https://gitlab.com/aksw/AGDISTIS/pipelines)
 [![Project Stats](https://www.openhub.net/p/AGDISTIS/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/AGDISTIS)
+[![BCH compliance](https://bettercodehub.com/edge/badge/AKSW/AGDISTIS)](https://bettercodehub.com/)
 
 
 This projects aimes at delivering a framework for disambiguating a priori annotated named entities.
