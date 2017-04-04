@@ -151,9 +151,9 @@ public class TripleIndexContext {
 
 		if (triples.size() < 500) {
 			return triples.subList(0, triples.size());
-		}
+		} else {
 		return triples.subList(0, 500);
-		// return triples;
+		}
 	}
 
 	public void close() throws IOException {
