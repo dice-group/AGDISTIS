@@ -186,6 +186,9 @@ public class GetDisambiguation extends ServerResource {
 		agdistis.run(d, null);
 
 		for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
+			if(!namedEntity.getNamedEntityUri().contains("http")){
+				namedEntity.setNamedEntity("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel());
+			}
 			JSONObject obj = new JSONObject();
 			obj.put("namedEntity", namedEntity.getLabel());
 			obj.put("start", namedEntity.getStartPos());
@@ -216,8 +219,8 @@ public class GetDisambiguation extends ServerResource {
 				String disambiguatedURL = namedEntity.getNamedEntityUri();
 
 				if (disambiguatedURL == null) {
-					annotations.add(
-							new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), new HashSet<String>()));
+					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), URLDecoder
+							.decode("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel(), "UTF-8")));
 				} else {
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
 							URLDecoder.decode(disambiguatedURL, "UTF-8")));
