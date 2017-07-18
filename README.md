@@ -28,8 +28,8 @@ If you need help or you have questions do not hesitate to write an email to  <a 
 ```
 
 ### Acknowlegements
-The initial version of 2013/14 work has been supported by the ESF and the Free State of Saxony.
-The current version as of now has been supported by the German Federal Ministry of Education and Research and the Eurostars EU project.
+The first version of this work was supported by the ESF and the Free State of Saxony.
+AGDISTIS is now supported by the German Federal Ministry of Education and Research and EuroStars.
 
 
 ### Annotation Tool
