@@ -60,7 +60,7 @@ public class CandidateUtil {
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document,
-		double threshholdTrigram, Boolean heuristicExpansionOn) throws IOException {
+			double threshholdTrigram, Boolean heuristicExpansionOn) throws IOException {
 		NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
 		String text = document.DocumentText().getText();
 		HashMap<String, Node> nodes = new HashMap<String, Node>();
@@ -160,12 +160,12 @@ public class CandidateUtil {
 							entity.getType());
 					for (Triple triple2 : acronymCandidatesTemp2) {
 						if (nGramDistance.getDistance(triple.getSubject(), triple2.getObject()) > threshholdTrigram) {
+							// follow redirect
+							triple2.setSubject(redirect(triple2.getSubject()));
 							// iff it is a disambiguation resource, skip it
 							if (isDisambiguationResource(triple2.getSubject())) {
 								continue;
 							}
-							// follow redirect
-							triple2.setSubject(redirect(triple2.getSubject()));
 							if (commonEntities == true) {
 								addNodeToGraph(graph, nodes, entity, triple2, triple2.getSubject());
 								countFinalCandidates++;
@@ -217,12 +217,13 @@ public class CandidateUtil {
 			// Here starts the similarity by trigram
 			boolean added = false;
 			for (Triple c : candidates) {
-				log.debug("Candidate triple to check: " + c);
+				log.info("Candidate triple to check: " + c);
 				String candidateURL = c.getSubject();
 				String surfaceForm = c.getObject();
 				surfaceForm = nlp.Preprocessing(surfaceForm);
 				// rule of thumb: no year numbers in candidates
 				if (candidateURL.startsWith(nodeType)) {
+					// if it is a disambiguation resource, skip it
 					// trigram similarity
 					if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
 						if (nGramDistance.getDistance(surfaceForm, label) < 1.0) {// Here
@@ -259,12 +260,12 @@ public class CandidateUtil {
 							continue;
 						}
 					}
-					// if it is a disambiguation resource, skip it
-					if (isDisambiguationResource(candidateURL)) {
-						continue;
-					}
 					// follow redirect
 					candidateURL = redirect(candidateURL);
+					if (isDisambiguationResource(candidateURL)) {
+						log.info("CandidateURL" + candidateURL);
+						continue;
+					}
 					if (commonEntities == true) { // Being able to get all kinds
 													// of resource not only
 													// Person, Organization,
@@ -320,12 +321,13 @@ public class CandidateUtil {
 						if (linkedsbyContext.size() < 1) {
 							continue;
 						}
+						// follow redirect
+						candidateURL = redirect(candidateURL);
+
 						// if it is a disambiguation resource, skip it
 						if (isDisambiguationResource(candidateURL)) {
 							continue;
 						}
-						// follow redirect
-						candidateURL = redirect(candidateURL);
 						// Enabling more types of entities as the previous step.
 						if (commonEntities == true) {
 							addNodeToGraph(graph, nodes, entity, c, candidateURL);
