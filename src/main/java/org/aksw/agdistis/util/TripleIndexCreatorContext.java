@@ -88,10 +88,13 @@ public class TripleIndexCreatorContext {
 			InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
 			prop.load(input);
 
-			String index = prop.getProperty("index2");
+			String envIndex = System.getenv("AGDISTIS_INDEX_2");
+			String index = envIndex != null ? envIndex : prop.getProperty("index2");
 			log.info("The index will be here: " + index);
-			nodeType = prop.getProperty("nodeType");
-			String folder = prop.getProperty("folderWithTTLFiles");
+			String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
+			nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
+			String envFolderWithTtlFiles = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES");
+			String folder = envFolderWithTtlFiles != null ? envFolderWithTtlFiles : prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
 			for (File file : new File(folder).listFiles()) {
@@ -100,7 +103,7 @@ public class TripleIndexCreatorContext {
 				}
 			}
 
-			String folderUpdate = prop.getProperty("folderWithTTLFiles") + "/update/";
+			String folderUpdate = folder + "/update/";
 			log.info("Getting triple data from: " + folderUpdate);
 			List<File> listOfFiles2 = new ArrayList<File>();
 			for (File file : new File(folderUpdate).listFiles()) {
@@ -109,10 +112,12 @@ public class TripleIndexCreatorContext {
 				}
 			}
 
-			baseURI = prop.getProperty("baseURI");
+			String envBaseUri = System.getenv("AGDISTIS_BASE_URI");
+			baseURI = envBaseUri != null ? envBaseUri : prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
 
-			endpoint = prop.getProperty("endpoint");
+			String envEndpoint = System.getenv("AGDISTIS_ENDPOINT");
+			endpoint = envEndpoint != null ? envEndpoint : prop.getProperty("endpoint");
 			log.info("Setting Endpoint to: " + baseURI);
 
 			TripleIndexCreatorContext ic = new TripleIndexCreatorContext();

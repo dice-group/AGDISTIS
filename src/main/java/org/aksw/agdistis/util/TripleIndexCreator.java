@@ -67,10 +67,12 @@ public class TripleIndexCreator {
 			InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
 			prop.load(input);
 
-			String index = prop.getProperty("index");
+			String envIndex = System.getenv("AGDISTIS_INDEX");
+			String index = envIndex != null ? envIndex : prop.getProperty("index");
 			log.info("The index will be here: " + index);
 
-			String folder = prop.getProperty("folderWithTTLFiles");
+			String envFolderWithTtlFiles = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES");
+			String folder = envFolderWithTtlFiles != null ? envFolderWithTtlFiles : prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
 			for (File file : new File(folder).listFiles()) {
@@ -79,14 +81,16 @@ public class TripleIndexCreator {
 				}
 			}
 
-			String surfaceFormTSV = prop.getProperty("surfaceFormTSV");
+			String envSurfaceFormTsv = System.getenv("AGDISTIS_SURFACE_FORM_TSV");
+			String surfaceFormTSV = envSurfaceFormTsv != null ? envSurfaceFormTsv : prop.getProperty("surfaceFormTSV");
 			log.info("Getting surface forms from: " + surfaceFormTSV);
 			File file = new File(surfaceFormTSV);
 			if (file.exists()) {
 				listOfFiles.add(file);
 			}
 
-			String baseURI = prop.getProperty("baseURI");
+			String envBaseUri = System.getenv("AGDISTIS_BASE_URI");
+			String baseURI = envBaseUri != null ? envBaseUri : prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
 
 			TripleIndexCreator ic = new TripleIndexCreator();
