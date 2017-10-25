@@ -18,6 +18,17 @@ If you need help or you have questions do not hesitate to write an email to  <a 
 
 ### How to cite
 ```Tex
+
+@InProceedings{Moussallem2017,
+  author       = {Diego Moussallem and Ricardo Usbeck and Michael R{\"o}der and Axel-Cyrille {Ngonga Ngomo}},
+  title        = {{MAG: A Multilingual, Knowledge-base Agnostic and Deterministic Entity Linking Approach}},
+  booktitle    = {K-CAP 2017: Knowledge Capture Conference},
+  year         = {2017},
+  pages        = {8},
+  organization = {ACM},
+  url          = {https://svn.aksw.org/papers/2017/KCAP_MAG/sigconf-main.pdf},
+}
+
 @incollection{AGDISTIS_ISWC,
   author = {Usbeck, Ricardo and {Ngonga Ngomo}, Axel-Cyrille and Auer, S{\"o}ren and Gerber, Daniel and Both, Andreas},
   booktitle = {13th International Semantic Web Conference},
