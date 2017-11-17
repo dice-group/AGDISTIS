@@ -72,7 +72,8 @@ public class TripleIndexCreator {
 			log.info("The index will be here: " + index);
 
 			String envFolderWithTtlFiles = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES");
-			String folder = envFolderWithTtlFiles != null ? envFolderWithTtlFiles : prop.getProperty("folderWithTTLFiles");
+			String folder = envFolderWithTtlFiles != null ? envFolderWithTtlFiles
+					: prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
 			for (File file : new File(folder).listFiles()) {
@@ -140,7 +141,11 @@ public class TripleIndexCreator {
 		OnlineStatementHandler osh = new OnlineStatementHandler();
 		parser.setRDFHandler(osh);
 		parser.setStopAtFirstError(false);
-		parser.parse(new FileReader(file), baseURI);
+		if (baseURI == null) {
+			parser.parse(new FileReader(file), "");
+		} else {
+			parser.parse(new FileReader(file), baseURI);
+		}
 		log.info("Finished parsing: " + file);
 	}
 

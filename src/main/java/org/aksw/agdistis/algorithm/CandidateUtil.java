@@ -28,6 +28,10 @@ public class CandidateUtil {
 
 	private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
 	private String nodeType;
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
+
 	private TripleIndex index;
 	private TripleIndexContext index2;
 	private NGramDistance nGramDistance;
@@ -47,7 +51,8 @@ public class CandidateUtil {
 		String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
 		this.nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
 		String envNgramDistance = System.getenv("AGDISTIS_NGRAM_DISTANCE");
-		this.nGramDistance = new NGramDistance(Integer.valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
+		this.nGramDistance = new NGramDistance(
+				Integer.valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
 		this.index = new TripleIndex();
 		String envContext = System.getenv("AGDISTIS_CONTEXT");
 		this.context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
@@ -61,9 +66,21 @@ public class CandidateUtil {
 		String envAcronym = System.getenv("AGDISTIS_ACRONYM");
 		this.acronym = Boolean.valueOf(envAcronym != null ? envAcronym : prop.getProperty("acronym"));
 		String envCommonEntities = System.getenv("AGDISTIS_COMMON_ENTITIES");
-		this.commonEntities = Boolean.valueOf(envCommonEntities != null ? envCommonEntities : prop.getProperty("commonEntities"));
+		this.commonEntities = Boolean
+				.valueOf(envCommonEntities != null ? envCommonEntities : prop.getProperty("commonEntities"));
 		String envAlgorithm = System.getenv("AGDISTIS_ALGORITHM");
 		this.algorithm = envAlgorithm != null ? envAlgorithm : prop.getProperty("algorithm");
+	}
+
+	public void setIndex(TripleIndex index) {
+		try {
+			this.index = index;
+			this.domainWhiteLister = new DomainWhiteLister(index);
+		} catch (IOException e) {
+			log.error("Could not set new index in Candidate Util due to DomainWhiteLister");
+			e.printStackTrace();
+		}
+
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document,

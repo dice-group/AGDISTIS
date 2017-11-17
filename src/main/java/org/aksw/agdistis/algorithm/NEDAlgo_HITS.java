@@ -147,5 +147,26 @@ public class NEDAlgo_HITS {
 	public void setHeuristicExpansionOn(Boolean value) {
 		this.heuristicExpansionOn = value;
 	}
+	public String getEdgeType() {
+		return edgeType;
+	}
+
+	public void setEdgeType(String edgeType) {
+		this.edgeType = edgeType;
+	}
+
+	public String getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+		this.cu.setNodeType(nodeType);
+	}
+
+	public void setIndex(TripleIndex index) {
+		this.index = index;
+		this.cu.setIndex(index);
+	}
 
 }

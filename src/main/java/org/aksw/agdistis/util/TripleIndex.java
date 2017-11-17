@@ -70,12 +70,19 @@ public class TripleIndex {
 
 		cache = CacheBuilder.newBuilder().maximumSize(50000).build();
 	}
+	
+	public void setIndex(String index) throws IOException {
+		directory = new MMapDirectory(new File(index));
+		ireader = DirectoryReader.open(directory);
+		isearcher = new IndexSearcher(ireader);
+	}
 
 	public List<Triple> search(String subject, String predicate, String object) {
 		return search(subject, predicate, object, defaultMaxNumberOfDocsRetrievedFromIndex);
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
+		System.out.println(predicate +" -> "+object + " : " );
 		BooleanQuery bq = new BooleanQuery();
 		List<Triple> triples = new ArrayList<Triple>();
 
