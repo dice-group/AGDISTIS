@@ -97,7 +97,7 @@ public class TripleIndex {
 			// object));
 			// bq.add(tq, BooleanClause.Occur.MUST);
 			// }
-			if (object != null) {
+			if (object != null && object.length() > 0) {
 				Query q = null;
 				if (urlValidator.isValid(object)) {
 
@@ -141,6 +141,7 @@ public class TripleIndex {
 
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + subject);
+			e.printStackTrace();
 		}
 		return triples;
 	}

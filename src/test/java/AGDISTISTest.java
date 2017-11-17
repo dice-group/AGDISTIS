@@ -80,6 +80,43 @@ public class AGDISTISTest {
 	}
 
 	@Test
+	/**
+	 * This test ensures that entities consiting only of punctations, which are
+	 * later reduced to a string of length 0 by
+	 * https://github.com/dice-group/AGDISTIS/blob/master/src/main/java/org/aksw/agdistis/util/Stemming.java#L91
+	 * are not causing exceptions
+	 * 
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
+	public void testinterpunctation() throws InterruptedException, IOException {
+		String question = "???";
+		String questionURL = "???";
+
+		HashMap<String, String> correct = new HashMap<String, String>();
+		correct.put(question, questionURL);
+
+		String preAnnotatedText = "<entity>???</entity>.";
+
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+		agdistis.run(d, null);
+
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
+		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = namedEntity.getNamedEntityUri();
+			results.put(namedEntity, disambiguatedURL);
+		}
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = namedEntity.getNamedEntityUri();
+			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
+			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+		}
+
+	}
+
+	@Test
 	public void testContext() throws InterruptedException, IOException {
 		String angelina = "Angelina";
 		String angelinaURL = "http://dbpedia.org/resource/Angelina_Jolie";
