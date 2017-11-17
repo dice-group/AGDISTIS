@@ -19,7 +19,8 @@ public class DomainWhiteLister {
 		Properties prop = new Properties();
 		InputStream input = DomainWhiteLister.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
-		String file = prop.getProperty("whiteList");
+		String envWhiteList = System.getenv("AGDISTIS_WHITELIST");
+		String file = envWhiteList != null ? envWhiteList : prop.getProperty("whiteList");
 
 		loadWhiteDomains(file);
 

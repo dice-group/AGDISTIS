@@ -40,12 +40,18 @@ public class NEDAlgo_HITS {
 		InputStream input = NEDAlgo_HITS.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
-		String nodeType = prop.getProperty("nodeType");
-		String edgeType = prop.getProperty("edgeType");
-		double threshholdTrigram = Double.valueOf(prop.getProperty("threshholdTrigram"));
-		int maxDepth = Integer.valueOf(prop.getProperty("maxDepth"));
-		this.heuristicExpansionOn = Boolean.valueOf(prop.getProperty("heuristicExpansionOn"));
-		this.algorithm = prop.getProperty("algorithm");
+		String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
+		String nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
+		String envEdgeType = System.getenv("AGDISTIS_EDGE_TYPE");
+		String edgeType = envEdgeType != null ? envEdgeType : prop.getProperty("edgeType");
+		String envThresholdTrigram = System.getenv("AGDISTIS_THRESHHOLD_TRIGRAM");
+		double threshholdTrigram = Double.valueOf(envThresholdTrigram != null ? envThresholdTrigram : prop.getProperty("threshholdTrigram"));
+		String envMaxDepth = System.getenv("AGDISTIS_MAX_DEPTH");
+		int maxDepth = Integer.valueOf(envMaxDepth != null ? envMaxDepth : prop.getProperty("maxDepth"));
+		String envHeuristicExpansion = System.getenv("AGDISTIS_HEURISTIC_EXPANSION_ON");
+		this.heuristicExpansionOn = Boolean.valueOf(envHeuristicExpansion != null ? envHeuristicExpansion : prop.getProperty("heuristicExpansionOn"));
+		String envAlgorithm = System.getenv("AGDISTIS_ALGORITHM");
+		this.algorithm = envAlgorithm != null ? envAlgorithm : prop.getProperty("algorithm");
 		this.nodeType = nodeType;
 		this.edgeType = edgeType;
 		this.threshholdTrigram = threshholdTrigram;

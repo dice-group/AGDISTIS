@@ -15,7 +15,8 @@ public class CorporationAffixCleaner {
 		Properties prop = new Properties();
 		InputStream input = CorporationAffixCleaner.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
-		String file = prop.getProperty("corporationAffixes");
+		String envCorpAffixes = System.getenv("AGDISTIS_CORPORATION_AFFIXES");
+		String file = envCorpAffixes != null ? envCorpAffixes : prop.getProperty("corporationAffixes");
 
 		loadCorporationAffixes(file);
 	}

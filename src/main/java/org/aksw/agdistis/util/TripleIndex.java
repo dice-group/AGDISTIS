@@ -59,7 +59,8 @@ public class TripleIndex {
 		InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
-		String index = prop.getProperty("index");
+		String envIndex = System.getenv("AGDISTIS_INDEX");
+		String index = envIndex != null ? envIndex : prop.getProperty("index");
 		log.info("The index will be here: " + index);
 
 		directory = new MMapDirectory(new File(index));

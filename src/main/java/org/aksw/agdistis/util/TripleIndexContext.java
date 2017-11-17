@@ -52,7 +52,8 @@ public class TripleIndexContext {
 		InputStream input = TripleIndexContext.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
-		String index = prop.getProperty("index2");
+		String envIndex = System.getenv("AGDISTIS_INDEX_2");
+		String index = envIndex != null ? envIndex : prop.getProperty("index2");
 		log.info("The index will be here: " + index);
 
 		directory = new MMapDirectory(new File(index));
@@ -93,7 +94,7 @@ public class TripleIndexContext {
 				// Query q = null;
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
 				/*
-				 * 
+				 *
 				 * Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 				 * //KeywordAnalyzer analyzer = new KeywordAnalyzer();
 				 * QueryParser parser = new QueryParser(LUCENE44,

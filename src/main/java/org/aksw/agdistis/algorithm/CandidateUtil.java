@@ -44,19 +44,26 @@ public class CandidateUtil {
 		InputStream input = CandidateUtil.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
-		this.nodeType = prop.getProperty("nodeType");
-		this.nGramDistance = new NGramDistance(Integer.valueOf(prop.getProperty("ngramDistance")));
+		String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
+		this.nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
+		String envNgramDistance = System.getenv("AGDISTIS_NGRAM_DISTANCE");
+		this.nGramDistance = new NGramDistance(Integer.valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
 		this.index = new TripleIndex();
-		this.context = Boolean.valueOf(prop.getProperty("context"));
+		String envContext = System.getenv("AGDISTIS_CONTEXT");
+		this.context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
 		if (context == true) { // in case the index by context exist
 			this.index2 = new TripleIndexContext();
 		}
 		this.corporationAffixCleaner = new CorporationAffixCleaner();
 		this.domainWhiteLister = new DomainWhiteLister(index);
-		this.popularity = Boolean.valueOf(prop.getProperty("popularity"));
-		this.acronym = Boolean.valueOf(prop.getProperty("acronym"));
-		this.commonEntities = Boolean.valueOf(prop.getProperty("commonEntities"));
-		this.algorithm = prop.getProperty("algorithm");
+		String envPopularity = System.getenv("AGDISTIS_POPULARITY");
+		this.popularity = Boolean.valueOf(envPopularity != null ? envPopularity : prop.getProperty("popularity"));
+		String envAcronym = System.getenv("AGDISTIS_ACRONYM");
+		this.acronym = Boolean.valueOf(envAcronym != null ? envAcronym : prop.getProperty("acronym"));
+		String envCommonEntities = System.getenv("AGDISTIS_COMMON_ENTITIES");
+		this.commonEntities = Boolean.valueOf(envCommonEntities != null ? envCommonEntities : prop.getProperty("commonEntities"));
+		String envAlgorithm = System.getenv("AGDISTIS_ALGORITHM");
+		this.algorithm = envAlgorithm != null ? envAlgorithm : prop.getProperty("algorithm");
 	}
 
 	public void insertCandidatesIntoText(DirectedSparseGraph<Node, String> graph, Document document,
