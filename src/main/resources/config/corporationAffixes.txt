@@ -1,8 +1,8 @@
-corp
-Corp
-ltd
-Ltd
-inc
-Inc
-co
-Co
+ corp
+ Corp
+ ltd
+ Ltd
+ inc
+ Inc
+ co
+ Co
