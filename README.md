@@ -5,6 +5,17 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/AKSW/AGDISTIS)](https://bettercodehub.com/)
 
 
+>The new web services are available here:
+>```
+>en http://akswnc9.informatik.uni-leipzig.de:8113/AGDISTIS
+>de http://akswnc9.informatik.uni-leipzig.de:8114/AGDISTIS
+>es http://akswnc9.informatik.uni-leipzig.de:8115/AGDISTIS
+>fr http://akswnc9.informatik.uni-leipzig.de:8116/AGDISTIS
+>it http://akswnc9.informatik.uni-leipzig.de:8117/AGDISTIS
+>ja http://akswnc9.informatik.uni-leipzig.de:8118/AGDISTIS
+>nl http://akswnc9.informatik.uni-leipzig.de:8119/AGDISTIS
+>```
+
 This projects aimes at delivering a framework for disambiguating a priori annotated named entities.
 
 More information about the project can be found <a href="http://aksw.org/projects/AGDISTIS">here</a> and in our <a href="https://github.com/AKSW/AGDISTIS/wiki">Wiki</a>.
@@ -14,7 +25,7 @@ Supplementary material can be found in the documents folder.
 We hope you will enjoy using AGDISTIS!
 
 ### Support and Feedback
-If you need help or you have questions do not hesitate to write an email to  <a href="mailto:usbeck@informatik.uni-leipzig.de">Ricardo Usbeck</a>. Or use the issue tracker in the right sidebar.
+If you need help or you have questions do not hesitate to write an email to  <a href="mailto:usbeck@uni-paderborn.de"> Dr. Ricardo Usbeck</a>. Or use the issue tracker in the right sidebar.
 
 ### How to cite
 ```Tex
