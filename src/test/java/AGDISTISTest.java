@@ -2,12 +2,16 @@
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Properties;
 
+import org.aksw.agdistis.algorithm.CandidateUtil;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
+import org.aksw.agdistis.util.TripleIndexContext;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
@@ -125,28 +129,38 @@ public class AGDISTISTest {
 		String jon = "Jon";
 		String jonURL = "http://dbpedia.org/resource/Jon_Voight";
 
-		HashMap<String, String> correct = new HashMap<String, String>();
-		correct.put(angelina, angelinaURL);
-		correct.put(jon, jonURL);
-		correct.put(brad, bradURL);
+		// load properties to see if the context index exists
+		Properties prop = new Properties();
+		InputStream input = CandidateUtil.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
+		String envContext = System.getenv("AGDISTIS_CONTEXT");
+		Boolean context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
+		if (context == true) { // in case the index by context exist
 
-		String preAnnotatedText = "<entity>" + angelina + "</entity>, her father <entity>" + jon
-				+ "</entity>, and her partner <entity>" + brad + "</entity> never played together in the same movie.";
+			HashMap<String, String> correct = new HashMap<String, String>();
+			correct.put(angelina, angelinaURL);
+			correct.put(jon, jonURL);
+			correct.put(brad, bradURL);
 
-		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
-		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
-		agdistis.run(d, null);
+			String preAnnotatedText = "<entity>" + angelina + "</entity>, her father <entity>" + jon
+					+ "</entity>, and her partner <entity>" + brad
+					+ "</entity> never played together in the same movie.";
 
-		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
-		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = namedEntity.getNamedEntityUri();
-			results.put(namedEntity, disambiguatedURL);
-		}
-		for (NamedEntityInText namedEntity : namedEntities) {
-			String disambiguatedURL = namedEntity.getNamedEntityUri();
-			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
-			assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+			NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+			Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+			agdistis.run(d, null);
+
+			NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
+			HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+			for (NamedEntityInText namedEntity : namedEntities) {
+				String disambiguatedURL = namedEntity.getNamedEntityUri();
+				results.put(namedEntity, disambiguatedURL);
+			}
+			for (NamedEntityInText namedEntity : namedEntities) {
+				String disambiguatedURL = namedEntity.getNamedEntityUri();
+				System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
+				assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+			}
 		}
 	}
 
