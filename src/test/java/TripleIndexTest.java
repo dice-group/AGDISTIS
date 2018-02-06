@@ -21,7 +21,7 @@ public class TripleIndexTest {
   @Before
   public void init() {
     try {
-      index = new TripleIndex();
+      index = new TripleIndex(AGDISTISTest.CFG);
 
     } catch (final IOException e) {
       log.error(

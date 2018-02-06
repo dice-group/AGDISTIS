@@ -15,6 +15,7 @@ import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
 public class AGDISTISTest {
+  static String CFG = "config/agdistis.properties";
 
   @Test
   public void testUmlaute() throws InterruptedException, IOException {
@@ -29,7 +30,7 @@ public class AGDISTISTest {
     final String preAnnotatedText =
         "<entity>" + taisho + "</entity> was the 123rd Emperor of <entity>" + japan + "</entity>.";
 
-    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS(AGDISTISTest.CFG);
     final Document d = GetDisambiguation.textToDocument(preAnnotatedText);
     agdistis.run(d, null);
 
@@ -64,7 +65,7 @@ public class AGDISTISTest {
     final String preAnnotatedText = "<entity>" + obama + "</entity> visits <entity>" + merkel
         + "</entity> in <entity>" + city + "</entity>.";
 
-    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS(AGDISTISTest.CFG);
     final Document d = GetDisambiguation.textToDocument(preAnnotatedText);
     agdistis.run(d, null);
 
@@ -101,7 +102,7 @@ public class AGDISTISTest {
 
     final String preAnnotatedText = "<entity>???</entity>.";
 
-    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS(AGDISTISTest.CFG);
     final Document d = GetDisambiguation.textToDocument(preAnnotatedText);
     agdistis.run(d, null);
 
@@ -147,7 +148,7 @@ public class AGDISTISTest {
           + "</entity>, and her partner <entity>" + brad
           + "</entity> never played together in the same movie.";
 
-      final NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+      final NEDAlgo_HITS agdistis = new NEDAlgo_HITS(AGDISTISTest.CFG);
       final Document d = GetDisambiguation.textToDocument(preAnnotatedText);
       agdistis.run(d, null);
 

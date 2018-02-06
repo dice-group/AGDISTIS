@@ -26,7 +26,7 @@ public class TripleIndexCreatorTest {
   @Before
   public void init() {
     try {
-      index = new TripleIndex();
+      index = new TripleIndex(AGDISTISTest.CFG);
 
     } catch (final IOException e) {
       log.error(
@@ -50,7 +50,7 @@ public class TripleIndexCreatorTest {
   /**
    * tests https://github.com/dice-group/AGDISTIS/issues/46 if we need to return URIs from two
    * different KBs AGDISTIS returns breaks
-   * 
+   *
    * @throws IOException
    */
   public void testMinimalOntologyExample() throws IOException {
@@ -65,7 +65,7 @@ public class TripleIndexCreatorTest {
 
     // set the properties correctly
 
-    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+    final NEDAlgo_HITS agdistis = new NEDAlgo_HITS(AGDISTISTest.CFG);
     agdistis.setNodeType("http://fairhair.ai/kg/resource/");
     agdistis.setEdgeType("http://dbpedia.org/ontology/");
 
@@ -96,7 +96,7 @@ public class TripleIndexCreatorTest {
       results.put(namedEntity, disambiguatedURL);
     }
     for (final NamedEntityInText namedEntity : results.keySet()) {
-      final String disambiguatedURL = namedEntity.getNamedEntityUri();
+      namedEntity.getNamedEntityUri();
       System.out.println(namedEntity.getLabel() + " -> " + results.get(namedEntity));
       // TODO comment that line in
       // assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
@@ -116,7 +116,7 @@ public class TripleIndexCreatorTest {
       results.put(namedEntity, disambiguatedURL);
     }
     for (final NamedEntityInText namedEntity : results.keySet()) {
-      final String disambiguatedURL = namedEntity.getNamedEntityUri();
+      namedEntity.getNamedEntityUri();
       System.out.println(namedEntity.getLabel() + " -> " + results.get(namedEntity));
       // TODO comment that line in
       // assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
