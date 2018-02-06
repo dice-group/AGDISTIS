@@ -44,18 +44,19 @@ public class CandidateUtil {
   private final boolean commonEntities;
   private final String algorithm;
 
-  public CandidateUtil() throws IOException {
+  public CandidateUtil(final String file) throws IOException {
+    final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    final InputStream is = loader.getResourceAsStream(file);
+
     final Properties prop = new Properties();
-    final InputStream input =
-        CandidateUtil.class.getResourceAsStream("/config/agdistis.properties");
-    prop.load(input);
+    prop.load(is);
 
     final String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
     nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
     final String envNgramDistance = System.getenv("AGDISTIS_NGRAM_DISTANCE");
     nGramDistance = new NGramDistance(Integer
         .valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
-    index = new TripleIndex();
+    index = new TripleIndex(file);
     final String envContext = System.getenv("AGDISTIS_CONTEXT");
     context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
     if (context == true) { // in case the index by context exist

@@ -54,10 +54,12 @@ public class TripleIndex {
   private final Cache<BooleanQuery, List<Triple>> cache;
   StringUtils isInt = new StringUtils();
 
-  public TripleIndex() throws IOException {
+  public TripleIndex(final String file) throws IOException {
+    final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    final InputStream is = loader.getResourceAsStream(file);
+
     final Properties prop = new Properties();
-    final InputStream input = TripleIndex.class.getResourceAsStream("/config/agdistis.properties");
-    prop.load(input);
+    prop.load(is);
 
     final String envIndex = System.getenv("AGDISTIS_INDEX");
     final String index = envIndex != null ? envIndex : prop.getProperty("index");

@@ -35,10 +35,12 @@ public class NEDAlgo_HITS {
   private Boolean heuristicExpansionOn;
   private final String algorithm;
 
-  public NEDAlgo_HITS() throws IOException {
+  public NEDAlgo_HITS(final String file) throws IOException {
+    final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    final InputStream is = loader.getResourceAsStream(file);
+
     final Properties prop = new Properties();
-    final InputStream input = NEDAlgo_HITS.class.getResourceAsStream("/config/agdistis.properties");
-    prop.load(input);
+    prop.load(is);
 
     final String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
     final String nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
@@ -59,7 +61,7 @@ public class NEDAlgo_HITS {
     this.edgeType = edgeType;
     this.threshholdTrigram = threshholdTrigram;
     this.maxDepth = maxDepth;
-    cu = new CandidateUtil();
+    cu = new CandidateUtil(file);
     index = cu.getIndex();
   }
 

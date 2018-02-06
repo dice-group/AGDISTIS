@@ -43,7 +43,8 @@ public class GetDisambiguation extends ServerResource {
   public String postText(final Representation entity) throws IOException, Exception {
     NEDAlgo_HITS agdistis = null;
     try {
-      agdistis = new NEDAlgo_HITS();
+      final String cfg = "config/agdistis.properties";
+      agdistis = new NEDAlgo_HITS(cfg);
     } catch (final IOException e) {
       log.error(
           "Can not load index due to either wrong properties in agdistis.properties or missing index at location",
