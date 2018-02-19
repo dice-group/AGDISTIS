@@ -34,7 +34,6 @@ public class PageRank {
 			n = (Node) o;
 			n.setPageRank(pr);
 			n.setPageRankNew(0);
-			// System.out.println("INITIALIZE NODE: "+ n + "WITH PR: " + pr);
 		}
 
 		// Update Pagerank while distance between graphs is higher than
@@ -49,7 +48,6 @@ public class PageRank {
 
 				// if n has outgoing edges, spread the weight
 				succ = g.getSuccessors(n);
-				// System.out.println("SUCCESSORS FOR " + n + " ARE " + succ);
 				if (!succ.isEmpty()) {
 
 					// weight to be spread is current weight divided by outgoing
@@ -64,19 +62,14 @@ public class PageRank {
 					}
 				} else {
 					randomWalker += n.getPageRank() / numNodes;
-					// System.out.println("ADDED TO RW: " + randomWalker);
 				}
 			}
-
 			// distribute randomWalker
 			for (Object o : g.getVertices()) {
 				n = (Node) o;
 				n.setPageRankNew((w * (n.getPageRankNew() + randomWalker)) + ((1 - w) / numNodes));
 			}
-
-			// get Distance
 			distance = computeDistance(g);
-			// System.out.println("Distance: "+distance);
 
 			// update Graph and get sum of Values
 			sumPr = 0;
@@ -85,18 +78,13 @@ public class PageRank {
 				n.setPageRank(n.getPageRankNew());
 				n.setPageRankNew(0);
 				sumPr += n.getPageRank();
-				// System.out.println("NODE AFTER ITERATION: " + numIteration
-				// +": " +n);
-
 			}
 
-			// normalize
 			for (Object o : g.getVertices()) {
 				n = (Node) o;
 				n.setPageRank(n.getPageRank() / sumPr);
 
 			}
-
 			// inkrement iteration
 			numIteration += 1;
 
@@ -111,7 +99,6 @@ public class PageRank {
 		for (Object o : g.getVertices()) {
 			n = (Node) o;
 			distance += Math.abs(n.getPageRank() - n.getPageRankNew());
-			// System.out.println("DIST: " + distance);
 		}
 		return distance;
 	}

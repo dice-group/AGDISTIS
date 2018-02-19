@@ -28,12 +28,13 @@ public class CandidateUtil {
 
 	private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
 	private String nodeType;
+
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
 	}
 
 	private TripleIndex index;
-	private TripleIndexContext index2;
+	private TripleIndexContext indexByContext;
 	private NGramDistance nGramDistance;
 	private CorporationAffixCleaner corporationAffixCleaner;
 	private DomainWhiteLister domainWhiteLister;
@@ -57,7 +58,7 @@ public class CandidateUtil {
 		String envContext = System.getenv("AGDISTIS_CONTEXT");
 		this.context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
 		if (context == true) { // in case the index by context exist
-			this.index2 = new TripleIndexContext();
+			this.indexByContext = new TripleIndexContext();
 		}
 		this.corporationAffixCleaner = new CorporationAffixCleaner();
 		this.domainWhiteLister = new DomainWhiteLister(index);
@@ -456,14 +457,14 @@ public class CandidateUtil {
 
 	ArrayList<Triple> searchCandidatesByContext(String entities, String label) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
-		tmp.addAll(index2.search(entities, label, null, 100));
+		tmp.addAll(indexByContext.search(entities, label, null, 100));
 
 		return tmp;
 	}
 
 	ArrayList<Triple> searchCandidatesByScore(String label) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
-		tmp.addAll(index2.search(null, label, null));
+		tmp.addAll(indexByContext.search(null, label, null));
 
 		return tmp;
 	}

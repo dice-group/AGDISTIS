@@ -88,8 +88,8 @@ public class TripleIndexCreatorContext {
 			InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
 			prop.load(input);
 
-			String envIndex = System.getenv("AGDISTIS_INDEX_2");
-			String index = envIndex != null ? envIndex : prop.getProperty("index2");
+			String envIndex = System.getenv("AGDISTIS_INDEX_BY_CONTEXT");
+			String index = envIndex != null ? envIndex : prop.getProperty("index_bycontext");
 			log.info("The index will be here: " + index);
 			String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
 			nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");

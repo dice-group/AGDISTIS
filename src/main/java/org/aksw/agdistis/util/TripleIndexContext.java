@@ -52,8 +52,8 @@ public class TripleIndexContext {
 		InputStream input = TripleIndexContext.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);
 
-		String envIndex = System.getenv("AGDISTIS_INDEX_2");
-		String index = envIndex != null ? envIndex : prop.getProperty("index2");
+		String envIndex = System.getenv("AGDISTIS_INDEX_BY_CONTEXT");
+		String index = envIndex != null ? envIndex : prop.getProperty("index_bycontext");
 		log.info("The index will be here: " + index);
 
 		directory = new MMapDirectory(new File(index));
@@ -77,12 +77,7 @@ public class TripleIndexContext {
 						"A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
 			}
 			if (subject != null) {
-				// TermQuery tq = new TermQuery(new Term(FIELD_NAME_CONTEXT,
-				// subject));
-				// bq.add(tq, BooleanClause.Occur.MUST);
 				Query q = null;
-				// TermQuery tq = new TermQuery(new
-				// Term(FIELD_NAME_SURFACE_FORM, predicate));
 				Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 				QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_CONTEXT, analyzer);
 				parser.setDefaultOperator(QueryParser.Operator.AND);
@@ -91,20 +86,7 @@ public class TripleIndexContext {
 			}
 			if (predicate != null) {
 
-				// Query q = null;
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
-				/*
-				 *
-				 * Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-				 * //KeywordAnalyzer analyzer = new KeywordAnalyzer();
-				 * QueryParser parser = new QueryParser(LUCENE44,
-				 * FIELD_NAME_URI, analyzer);
-				 * parser.setDefaultOperator(QueryParser.Operator.OR); q =
-				 * parser.parse(QueryParserBase.escape(predicate)); bq.add(q,
-				 * BooleanClause.Occur.MUST);
-				 */
-				// TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI,
-				// predicate));
 				bq.add(tq, BooleanClause.Occur.SHOULD);
 			}
 			if (object != null) {
@@ -128,9 +110,7 @@ public class TripleIndexContext {
 	}
 
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
-		// log.debug("\t start asking index...");
-		// Similarity BM25Similarity = new BM25Similarity();
-		// isearcher.setSimilarity(BM25Similarity);
+		 log.debug("\t start asking index by context...");
 		ScoreDoc[] hits = isearcher.search(bq, null, maxNumberOfResults).scoreDocs;
 
 		if (hits.length == 0) {

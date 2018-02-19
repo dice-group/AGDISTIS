@@ -42,7 +42,6 @@ public class TripleIndex {
 	public static final String FIELD_NAME_PREDICATE = "predicate";
 	public static final String FIELD_NAME_OBJECT_URI = "object_uri";
 	public static final String FIELD_NAME_OBJECT_LITERAL = "object_literal";
-	// public static final String FIELD_URI_COUNT = "uri_counts";
 	public static final String FIELD_FREQ = "freq";
 
 	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
@@ -82,7 +81,6 @@ public class TripleIndex {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		System.out.println(predicate +" -> "+object + " : " );
 		BooleanQuery bq = new BooleanQuery();
 		List<Triple> triples = new ArrayList<Triple>();
 
@@ -100,11 +98,6 @@ public class TripleIndex {
 				bq.add(tq, BooleanClause.Occur.MUST);
 			}
 
-			// if (object != null) {
-			// Query tq = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL,
-			// object));
-			// bq.add(tq, BooleanClause.Occur.MUST);
-			// }
 			if (object != null && object.length() > 0) {
 				Query q = null;
 				if (urlValidator.isValid(object)) {
@@ -113,7 +106,6 @@ public class TripleIndex {
 					bq.add(q, BooleanClause.Occur.MUST);
 
 				} else if (StringUtils.isNumeric(object)) {
-					// System.out.println("here numeric");
 					int tempInt = Integer.parseInt(object);
 					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
 					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
@@ -121,16 +113,6 @@ public class TripleIndex {
 					bq.add(q, BooleanClause.Occur.MUST);
 
 				}
-				// for index from 2014 comment the "else if" below.
-				// else if (!object.contains(" ")) {
-				//
-				// // System.out.println("here regex");
-				// KeywordAnalyzer kanalyzer = new KeywordAnalyzer();
-				// q = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL,
-				// kanalyzer).parse(object);
-				//
-				// bq.add(q, BooleanClause.Occur.MUST);
-				// }
 				else {
 					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
@@ -138,14 +120,11 @@ public class TripleIndex {
 					q = parser.parse(QueryParserBase.escape(object));
 					bq.add(q, BooleanClause.Occur.MUST);
 				}
-				// bq.add(q, BooleanClause.Occur.MUST);
 			}
 
 			// use the cache
-			// if (null == (triples = cache.getIfPresent(bq))) {
 			triples = getFromIndex(maxNumberOfResults, bq);
 			cache.put(bq, triples);
-			// }
 
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + subject);
@@ -157,8 +136,6 @@ public class TripleIndex {
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		log.debug("\t start asking index...");
 		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
-		// Similarity BM25Similarity = new BM25Similarity();
-		// isearcher.setSimilarity(BM25Similarity);
 		isearcher.search(bq, collector);
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
