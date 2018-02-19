@@ -49,6 +49,8 @@ public class TripleIndexCreator {
 	private DirectoryReader ireader;
 	private IndexWriter iwriter;
 	private MMapDirectory directory;
+	private HashMap<String,String>blankNodeMatcher;
+	private  Boolean blankNodeMatching;
 
 	public static void main(String args[]) {
 		if (args.length > 0) {
@@ -93,8 +95,11 @@ public class TripleIndexCreator {
 			String envBaseUri = System.getenv("AGDISTIS_BASE_URI");
 			String baseURI = envBaseUri != null ? envBaseUri : prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
+			String blankNodeMatching = System.getenv("blankNodeMatching");
 
 			TripleIndexCreator ic = new TripleIndexCreator();
+			ic.blankNodeMatching = Boolean.valueOf(blankNodeMatching != null ? blankNodeMatching : prop.getProperty("useBlankNodeMatching"));
+			ic.blankNodeMatcher=new HashMap<String,String>();
 			ic.createIndex(listOfFiles, index, baseURI);
 			ic.close();
 		} catch (IOException e) {
@@ -198,6 +203,10 @@ public class TripleIndexCreator {
 			String subject = st.getSubject().stringValue();
 			String predicate = st.getPredicate().stringValue();
 			String object = st.getObject().stringValue();
+			if(object.startsWith("node"))
+				blankNodeMatcher.put(object,subject);
+			if(subject.startsWith("node"))
+				subject=blankNodeMatcher.get(subject);
 			try {
 				addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
 			} catch (IOException e) {
