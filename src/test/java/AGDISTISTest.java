@@ -47,7 +47,27 @@ public class AGDISTISTest {
 		}
 
 	}
+	@Test
+	public void testMinExample()throws InterruptedException, IOException{
+		//String preAnnotatedText = "45907,,,,D,<entity>Schiffbau Matchbox</entity>,<entity>Fratelli</entity>,,,,,STS Leiter Dokumentation,04/09/2017,\"Wiederaufnahme: 23.2.2015, 22.10.2015, 15.09.2017\",* Monatsplakat Juni; Z: Zeitung Nr. 8; Postkarte,,1,<entity>Antonio Vigano</entity>,,,,\"<entity>Silvan Kappeler</entity>, <entity>Fabian Müller</entity>\",,,\"<entity>Enrico Beeler</entity>, <entity>Petra Fischer</entity>\",Regula,11/04/2013,1,\"S, Ju\",,\"<entity>Nicolas Dauwalder</entity>, <entity>Rasmus Stahel</entity>\",,,,1,0,,,,,SE,01/06/2013,1,<entity>CH: Zürich: Schauspielhaus</entity>,,<entity>Antonio Vigano</entity>,,80002201306011,<entity>Zürich: Schauspielhaus Schiffbau Matchbox</entity>,2012/13,,<entity>Antonio Vigano</entity>; <entity>Michele Fiocchi</entity>; <entity>Remo Rostagno</entity>; <entity>Carmelo Samonà</entity>,80002,,,,";
+		String preAnnotatedText="<entity>Silvan Kappeler</entity>";
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
+		agdistis.run(d, null);
 
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
+		HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = namedEntity.getNamedEntityUri();
+			results.put(namedEntity, disambiguatedURL);
+		}
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = namedEntity.getNamedEntityUri();
+			System.out.println(namedEntity.getLabel() + " -> " + disambiguatedURL);
+			//assertTrue(correct.get(namedEntity.getLabel()).equals(disambiguatedURL));
+		}
+		assertTrue(true);
+	}
 	@Test
 	public void testMinimalExample() throws InterruptedException, IOException {
 		String obama = "Barack Obama";

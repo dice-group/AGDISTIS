@@ -1,7 +1,6 @@
 package org.aksw.agdistis.algorithm;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +17,7 @@ import org.aksw.agdistis.util.Stemming;
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
 import org.aksw.agdistis.util.TripleIndexContext;
+import org.apache.jena.base.Sys;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,8 @@ public class CandidateUtil {
 	private boolean acronym;
 	private boolean commonEntities;
 	private String algorithm;
+	private boolean usePredicateList;
+	private List<String>predicatesToSearch;
 
 	public CandidateUtil() throws IOException {
 		Properties prop = new Properties();
@@ -70,8 +72,42 @@ public class CandidateUtil {
 				.valueOf(envCommonEntities != null ? envCommonEntities : prop.getProperty("commonEntities"));
 		String envAlgorithm = System.getenv("AGDISTIS_ALGORITHM");
 		this.algorithm = envAlgorithm != null ? envAlgorithm : prop.getProperty("algorithm");
+		String envUsePropertiesFile = System.getenv("AGDISTIS_UsePredicateFile");
+		this.usePredicateList = Boolean.valueOf(envUsePropertiesFile !=null ? envUsePropertiesFile : prop.getProperty("usePredicateList"));
+		if(this.usePredicateList)
+			readPropertiesToSearch(prop.getProperty("predicateList").toString());
 	}
+	private void readPropertiesToSearch( String list){
+		predicatesToSearch=new ArrayList<String>();
+		String[]predicates=list.split(",");
+		for(int i=0;i<predicates.length;i++)
+			predicatesToSearch.add(predicates[i]);
+		/*FileInputStream fstream = null;
+		BufferedReader br;
+		try {
+			fstream = new FileInputStream("src/main/resources/config/predicatesToSearch.txt");
+			 br= new BufferedReader(new InputStreamReader(fstream));
 
+			String strLine;
+			while ((strLine = br.readLine()) != null)   {
+				// Print the content on the console
+				predicatesToSearch.add(strLine);
+			}
+			br.close();
+			if (predicatesToSearch.size()==0){
+				log.info("No properties defined in File usePropertiesList is set to false");
+				this.usePredicateList=false;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			log.error("Properties File Not Found");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
+
+//Close the input stream
+	}
 	public void setIndex(TripleIndex index) {
 		try {
 			this.index = index;
@@ -375,6 +411,78 @@ public class CandidateUtil {
 			}
 
 		}
+		if (countFinalCandidates == 0&&this.usePredicateList){
+			candidates = serachByLabelAndPredicate(label,predicatesToSearch);
+			boolean added = false;
+			for (Triple c : candidates) {
+				log.info("Candidate triple to check: " + c);
+				String candidateURL = c.getSubject();
+				String surfaceForm = c.getObject();
+				surfaceForm = nlp.Preprocessing(surfaceForm);
+				// rule of thumb: no year numbers in candidates
+				if (candidateURL.startsWith(nodeType)) {
+					// if it is a disambiguation resource, skip it
+					// trigram similarity
+					/*if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
+						if (nGramDistance.getDistance(surfaceForm, label) < 1.0) {// Here
+							// we
+							// set
+							// the
+							// similarity
+							// as
+							// maximum
+							// because
+							// rfds:label
+							// refers
+							// to
+							// the
+							// main
+							// reference
+							// of
+							// a
+							// given
+							// resource
+							continue;
+						}
+					} else if (!c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) { // Here
+						// the
+						// similarity
+						// is
+						// in
+						// accordance
+						// with
+						// the
+						// user's
+						// choice.
+						System.out.println(nGramDistance.getDistance(surfaceForm, label));
+						if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
+							continue;
+						}
+					}*/
+					// follow redirect
+					candidateURL = redirect(candidateURL);
+					if (isDisambiguationResource(candidateURL)) {
+						log.info("CandidateURL" + candidateURL);
+						continue;
+					}
+					if (commonEntities == true) { // Being able to get all kinds
+						// of resource not only
+						// Person, Organization,
+						// Location
+						addNodeToGraph(graph, nodes, entity, c, candidateURL);
+						added = true;
+						countFinalCandidates++;
+					} else {
+						if (domainWhiteLister.fitsIntoDomain(candidateURL)) {
+							addNodeToGraph(graph, nodes, entity, c, candidateURL);
+							added = true;
+							countFinalCandidates++;
+						}
+					}
+				}
+			}
+
+		}
 		log.info("\t\tnumber of final candidates " + countFinalCandidates);
 	}
 
@@ -441,7 +549,13 @@ public class CandidateUtil {
 			return tmp;
 		}
 	}
-
+	private ArrayList<Triple>serachByLabelAndPredicate(String label, List<String>predicates){
+		ArrayList<Triple> tmp = new ArrayList<Triple>();
+		for(String predicate:predicates){
+			tmp.addAll(index.search(null, predicate, label, 100));
+		}
+		return tmp;
+	}
 	public ArrayList<Triple> searchbyAcronym(String label, boolean searchInSurfaceFormsToo, String type) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		tmp.addAll(index.search(null, "http://dbpedia.org/property/acronym", label, 100));
