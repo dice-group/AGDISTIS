@@ -1,18 +1,14 @@
 package org.aksw.agdistis.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 
+import org.apache.jena.atlas.io.InStreamUTF8;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -27,6 +23,7 @@ import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
+import org.openrdf.rio.ParserConfig;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
@@ -42,6 +39,7 @@ public class TripleIndexCreator {
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
 	public static final String TSV = "tsv";
+	private static Boolean readFromGz;
 	public static final Version LUCENE_VERSION = Version.LUCENE_44;
 
 	private Analyzer urlAnalyzer;
@@ -51,7 +49,6 @@ public class TripleIndexCreator {
 	private MMapDirectory directory;
 	private HashMap<String,String>blankNodeMatcher;
 	private  Boolean blankNodeMatching;
-
 	public static void main(String args[]) {
 		if (args.length > 0) {
 			log.error("TripleIndexCreator works without parameters. Please use agdistis.properties File");
@@ -78,8 +75,11 @@ public class TripleIndexCreator {
 					: prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
+			String useGz = System.getenv("UseGZ");
+			readFromGz = Boolean.valueOf(useGz != null ? useGz : prop.getProperty("readFromGz"));
 			for (File file : new File(folder).listFiles()) {
-				if (file.getName().endsWith("ttl")) {
+
+				if (file.getName().endsWith("ttl")||(readFromGz&&file.getName().endsWith("gz"))) {
 					listOfFiles.add(file);
 				}
 			}
@@ -98,7 +98,7 @@ public class TripleIndexCreator {
 			String blankNodeMatching = System.getenv("blankNodeMatching");
 
 			TripleIndexCreator ic = new TripleIndexCreator();
-			ic.blankNodeMatching = Boolean.valueOf(blankNodeMatching != null ? blankNodeMatching : prop.getProperty("useBlankNodeMatching"));
+			ic.blankNodeMatching = Boolean.valueOf(blankNodeMatching != null ? blankNodeMatching : prop.getProperty("blankNodeMatching"));
 			ic.blankNodeMatcher=new HashMap<String,String>();
 			ic.createIndex(listOfFiles, index, baseURI);
 			ic.close();
@@ -126,7 +126,7 @@ public class TripleIndexCreator {
 			iwriter.commit();
 			for (File file : files) {
 				String type = FileUtil.getFileExtension(file.getName());
-				if (type.equals(TTL))
+				if (type.equals(TTL)||(readFromGz&&type.equals("gz")))
 					indexTTLFile(file, baseURI);
 				if (type.equals(TSV))
 					indexTSVFile(file);
@@ -143,20 +143,33 @@ public class TripleIndexCreator {
 			throws RDFParseException, RDFHandlerException, FileNotFoundException, IOException {
 		log.info("Start parsing: " + file);
 		RDFParser parser = new TurtleParser();
+		ParserConfig c=new ParserConfig();
 		OnlineStatementHandler osh = new OnlineStatementHandler();
 		parser.setRDFHandler(osh);
 		parser.setStopAtFirstError(false);
-		if (baseURI == null) {
-			parser.parse(new FileReader(file), "");
-		} else {
-			parser.parse(new FileReader(file), baseURI);
+		if(readFromGz){
+			if (baseURI == null) {
+				parser.parse (new GZIPInputStream(new FileInputStream(file)),"");
+			} else {
+				parser.parse(new GZIPInputStream(new FileInputStream(file)), baseURI);
+			}
+		}
+		else {
+			if (baseURI == null) {
+				parser.parse(new FileReader(file), "");
+			} else {
+				parser.parse(new FileReader(file), baseURI);
+			}
 		}
 		log.info("Finished parsing: " + file);
 	}
 
 	private void indexTSVFile(File file) throws IOException {
 		log.info("Start parsing: " + file);
-		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br;
+		if(readFromGz)
+			br=new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+		else br = new BufferedReader(new FileReader(file));
 		while (br.ready()) {
 			String[] line = br.readLine().split("\t");
 			String subject = line[0];
@@ -203,10 +216,12 @@ public class TripleIndexCreator {
 			String subject = st.getSubject().stringValue();
 			String predicate = st.getPredicate().stringValue();
 			String object = st.getObject().stringValue();
-			if(object.startsWith("node"))
-				blankNodeMatcher.put(object,subject);
-			if(subject.startsWith("node"))
-				subject=blankNodeMatcher.get(subject);
+			if(blankNodeMatching) {
+				if (object.startsWith("node"))
+					blankNodeMatcher.put(object, subject);
+				if (subject.startsWith("node"))
+					subject = blankNodeMatcher.get(subject);
+			}
 			try {
 				addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
 			} catch (IOException e) {
