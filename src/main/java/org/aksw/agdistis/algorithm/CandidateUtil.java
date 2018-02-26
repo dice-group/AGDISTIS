@@ -82,31 +82,7 @@ public class CandidateUtil {
 		String[]predicates=list.split(",");
 		for(int i=0;i<predicates.length;i++)
 			predicatesToSearch.add(predicates[i]);
-		/*FileInputStream fstream = null;
-		BufferedReader br;
-		try {
-			fstream = new FileInputStream("src/main/resources/config/predicatesToSearch.txt");
-			 br= new BufferedReader(new InputStreamReader(fstream));
 
-			String strLine;
-			while ((strLine = br.readLine()) != null)   {
-				// Print the content on the console
-				predicatesToSearch.add(strLine);
-			}
-			br.close();
-			if (predicatesToSearch.size()==0){
-				log.info("No properties defined in File usePropertiesList is set to false");
-				this.usePredicateList=false;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			log.error("Properties File Not Found");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-
-
-//Close the input stream
 	}
 	public void setIndex(TripleIndex index) {
 		try {
