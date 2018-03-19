@@ -50,7 +50,8 @@ public class AGDISTISTest {
 	@Test
 	public void testMinExample()throws InterruptedException, IOException{
 		//String preAnnotatedText = "45907,,,,D,<entity>Schiffbau Matchbox</entity>,<entity>Fratelli</entity>,,,,,STS Leiter Dokumentation,04/09/2017,\"Wiederaufnahme: 23.2.2015, 22.10.2015, 15.09.2017\",* Monatsplakat Juni; Z: Zeitung Nr. 8; Postkarte,,1,<entity>Antonio Vigano</entity>,,,,\"<entity>Silvan Kappeler</entity>, <entity>Fabian Müller</entity>\",,,\"<entity>Enrico Beeler</entity>, <entity>Petra Fischer</entity>\",Regula,11/04/2013,1,\"S, Ju\",,\"<entity>Nicolas Dauwalder</entity>, <entity>Rasmus Stahel</entity>\",,,,1,0,,,,,SE,01/06/2013,1,<entity>CH: Zürich: Schauspielhaus</entity>,,<entity>Antonio Vigano</entity>,,80002201306011,<entity>Zürich: Schauspielhaus Schiffbau Matchbox</entity>,2012/13,,<entity>Antonio Vigano</entity>; <entity>Michele Fiocchi</entity>; <entity>Remo Rostagno</entity>; <entity>Carmelo Samonà</entity>,80002,,,,";
-		String preAnnotatedText="<entity>Silvan Kappeler</entity>";
+		String preAnnotatedText="49357,3,,1,D,<entity>Stadttheater</entity>,<entity>Ränke und Schwänke. Lebensbilder mit Gesang in drei Akten</entity>,,,,,STS Leiter Dokumentation,04/09/2017,,\"* Weiss, <entity>Das Basler Stadttheater</entity> 1834 - 1934 (5.3.2: Base 1 (1))\",,,,,,,,,,,Regula,25/01/2013,,Sm,,,<entity>Eduard Stiegmann</entity>,,,0,0,,,,,,9.10.1854,1,<entity>CH: Basel: Stadttheater</entity>,,,,40001185410091,<entity>Basel: Stadttheater Stadttheater</entity>,1854/55,,<entity>Georg Starke</entity>,40001,,,,";
+		//String preAnnotatedText="<entity>Otto Müller</entity>";
 		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
 		Document d = GetDisambiguation.textToDocument(preAnnotatedText);
 		agdistis.run(d, null);

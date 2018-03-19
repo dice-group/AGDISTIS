@@ -59,7 +59,13 @@ public class NEDAlgo_HITS {
 		this.cu = new CandidateUtil();
 		this.index = cu.getIndex();
 	}
-
+	private void printGraphSize(DirectedSparseGraph g){
+		ArrayList<Node>nodes=new ArrayList<Node>();
+		nodes.addAll(g.getVertices());
+		for(Node node:nodes){
+			node.getCandidateURI();
+		}
+	}
 	public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {
 		try {
 			NamedEntitiesInText namedEntities = document.getNamedEntitiesInText();
@@ -68,13 +74,12 @@ public class NEDAlgo_HITS {
 			// 0) insert candidates into Text
 			log.debug("\tinsert candidates");
 			cu.insertCandidatesIntoText(graph, document, threshholdTrigram, heuristicExpansionOn);
-
 			// 1) let spread activation/ breadth first search run
 			log.info("\tGraph size before BFS: " + graph.getVertexCount());
 			BreadthFirstSearch bfs = new BreadthFirstSearch(index, algorithm);
 			bfs.run(maxDepth, graph, edgeType, nodeType);
 			log.info("\tGraph size after BFS: " + graph.getVertexCount());
-
+			printGraphSize(graph);
 			if (algorithm.equals("hits")) {
 				// 2.1) let HITS run
 				log.info("\trun HITS");

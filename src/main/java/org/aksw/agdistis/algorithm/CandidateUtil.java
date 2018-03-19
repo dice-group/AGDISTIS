@@ -17,7 +17,6 @@ import org.aksw.agdistis.util.Stemming;
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
 import org.aksw.agdistis.util.TripleIndexContext;
-import org.apache.jena.base.Sys;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,7 +168,35 @@ public class CandidateUtil {
 			nodes.put(candidateURL, currentNode);
 		}
 	}
-
+	private String labelReduction(String label, boolean forward){
+		String[]tokens=label.split(" ");
+		if(tokens.length<3)
+			return label;
+		else {
+			String resultLabel = "";
+			if (forward) {
+				for (int i = 1; i < tokens.length-1; i++)
+					resultLabel += tokens[i]+" ";
+				resultLabel+=tokens[tokens.length-1];
+			} else {
+				for (int i = 0; i < tokens.length - 2; i++)
+					resultLabel += tokens[i]+" ";
+				resultLabel+=tokens[tokens.length-2];
+			}
+			return resultLabel;
+		}
+	}
+	private String shortTermReplacement(String label){
+		label=label.replaceAll(":","");
+		String[]tokens=label.split(" ");
+		String reducedLabel="";
+		for(int i=0;i<tokens.length-1;i++){
+			if(tokens[i].length()>3)
+				reducedLabel+=tokens[i]+" ";
+		}
+		reducedLabel+=tokens[tokens.length-1];
+		return reducedLabel;
+	}
 	private void checkLabelCandidates(DirectedSparseGraph<Node, String> graph, double threshholdTrigram,
 			HashMap<String, Node> nodes, NamedEntityInText entity, String label, boolean searchInSurfaceForms,
 			String entities) throws IOException {
@@ -388,7 +415,33 @@ public class CandidateUtil {
 
 		}
 		if (countFinalCandidates == 0&&this.usePredicateList){
-			candidates = serachByLabelAndPredicate(label,predicatesToSearch);
+			candidates = searchByLabelAndPredicate(label,predicatesToSearch);
+			if(candidates.isEmpty()){
+				if(label.contains("ü")||label.contains("ö")||label.contains("ä")){
+					label=label.replaceAll("ü","ue");
+					label=label.replaceAll("ä","ae");
+					label=label.replaceAll("ö","oe");
+					candidates = searchByLabelAndPredicate(label,predicatesToSearch);
+				}
+			}
+			if(candidates.isEmpty()){
+
+				String reducedLabel=shortTermReplacement(label);
+				candidates=searchByLabelAndPredicate(reducedLabel,predicatesToSearch);
+				if(candidates.isEmpty()) {
+					boolean reduce = true;
+					while (reduce) {
+						String newReducedLabel = labelReduction(reducedLabel, true);
+						if (newReducedLabel != reducedLabel) {
+							reducedLabel = newReducedLabel;
+							candidates = searchByLabelAndPredicate(reducedLabel, predicatesToSearch);
+							if (!candidates.isEmpty())
+								reduce = false;
+						} else reduce = false;
+
+					}
+				}
+			}
 			boolean added = false;
 			for (Triple c : candidates) {
 				log.info("Candidate triple to check: " + c);
@@ -525,7 +578,7 @@ public class CandidateUtil {
 			return tmp;
 		}
 	}
-	private ArrayList<Triple>serachByLabelAndPredicate(String label, List<String>predicates){
+	private ArrayList<Triple> searchByLabelAndPredicate(String label, List<String>predicates){
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		for(String predicate:predicates){
 			tmp.addAll(index.search(null, predicate, label, 100));

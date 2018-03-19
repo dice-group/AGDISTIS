@@ -39,7 +39,7 @@ public class TripleIndexCreator {
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
 	public static final String TSV = "tsv";
-	private static Boolean readFromGz;
+	//private static Boolean readFromGz;
 	public static final Version LUCENE_VERSION = Version.LUCENE_44;
 
 	private Analyzer urlAnalyzer;
@@ -75,11 +75,11 @@ public class TripleIndexCreator {
 					: prop.getProperty("folderWithTTLFiles");
 			log.info("Getting triple data from: " + folder);
 			List<File> listOfFiles = new ArrayList<File>();
-			String useGz = System.getenv("UseGZ");
-			readFromGz = Boolean.valueOf(useGz != null ? useGz : prop.getProperty("readFromGz"));
+			//String useGz = System.getenv("UseGZ");
+			//readFromGz = Boolean.valueOf(useGz != null ? useGz : prop.getProperty("readFromGz"));
 			for (File file : new File(folder).listFiles()) {
 
-				if (file.getName().endsWith("ttl")||(readFromGz&&file.getName().endsWith("gz"))) {
+				if (file.getName().endsWith("ttl")||(file.getName().endsWith("gz"))) {
 					listOfFiles.add(file);
 				}
 			}
@@ -126,7 +126,7 @@ public class TripleIndexCreator {
 			iwriter.commit();
 			for (File file : files) {
 				String type = FileUtil.getFileExtension(file.getName());
-				if (type.equals(TTL)||(readFromGz&&type.equals("gz")))
+				if (type.equals(TTL)||(type.equals("gz")))
 					indexTTLFile(file, baseURI);
 				if (type.equals(TSV))
 					indexTSVFile(file);
@@ -147,7 +147,7 @@ public class TripleIndexCreator {
 		OnlineStatementHandler osh = new OnlineStatementHandler();
 		parser.setRDFHandler(osh);
 		parser.setStopAtFirstError(false);
-		if(readFromGz){
+		if(file.getName().endsWith("gz")){
 			if (baseURI == null) {
 				parser.parse (new GZIPInputStream(new FileInputStream(file)),"");
 			} else {
@@ -167,7 +167,7 @@ public class TripleIndexCreator {
 	private void indexTSVFile(File file) throws IOException {
 		log.info("Start parsing: " + file);
 		BufferedReader br;
-		if(readFromGz)
+		if(file.getName().endsWith("gz"))
 			br=new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
 		else br = new BufferedReader(new FileReader(file));
 		while (br.ready()) {
