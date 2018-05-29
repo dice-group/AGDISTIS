@@ -14,6 +14,9 @@
 >it http://akswnc9.informatik.uni-leipzig.de:8117/AGDISTIS
 >ja http://akswnc9.informatik.uni-leipzig.de:8118/AGDISTIS
 >nl http://akswnc9.informatik.uni-leipzig.de:8119/AGDISTIS
+>pt http://akswnc9.informatik.uni-leipzig.de:8220/AGDISTIS
+>zh http://139.18.2.164:8080/AGDISTIS_ZH
+>wikidata http://akswnc9.informatik.uni-leipzig.de:8221/AGDISTIS
 >```
 
 This project aims at delivering a framework for disambiguating a priori annotated named entities.
