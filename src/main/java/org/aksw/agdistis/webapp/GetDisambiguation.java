@@ -158,7 +158,7 @@ public class GetDisambiguation extends ServerResource {
 			for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
 				String disambiguatedURL = namedEntity.getNamedEntityUri();
 
-				if(!namedEntity.getNamedEntityUri().contains("http")){
+				if (disambiguatedURL == null || !namedEntity.getNamedEntityUri().contains("http")) {
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), URLDecoder
 							.decode("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel(), "UTF-8")));
 				} else {
