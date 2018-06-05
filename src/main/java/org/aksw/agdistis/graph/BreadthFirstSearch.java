@@ -21,7 +21,12 @@ public class BreadthFirstSearch {
 		this.index = index;
 		this.algo = algo;
 	}
-
+	private boolean startsWith(String url,String[]set){
+		for(int i=0;i<set.length;i++)
+			if(url.startsWith(set[i]))
+				return true;
+		return false;
+	}
 
 	public void run(int maxDepth, DirectedSparseGraph<Node, String> graph, String edgeType, String nodeType)
 			throws UnsupportedEncodingException, IOException {
@@ -43,7 +48,8 @@ public class BreadthFirstSearch {
 					if (targetNode.getPredicate() == null && targetNode.getObject() == null) {
 						continue;
 					}
-					if (targetNode.getPredicate().startsWith(edgeType) && targetNode.getObject().startsWith(nodeType)) {
+					//if (targetNode.getPredicate().startsWith(edgeType) && targetNode.getObject().startsWith(nodeType)) {
+					if (startsWith(targetNode.getPredicate(),edgeType.split(",")) && startsWith(targetNode.getObject(),nodeType.split(","))) {
 						int levelNow = level + 1;
 						Node Node = null;
 						if (findNode.containsKey(targetNode)) {

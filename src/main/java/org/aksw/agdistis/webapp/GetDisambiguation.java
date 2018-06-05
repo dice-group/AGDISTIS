@@ -4,11 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
@@ -17,6 +13,10 @@ import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.model.CandidatesScore;
 import org.aksw.agdistis.util.NIFParser;
+import org.aksw.agdistis.util.Triple;
+import org.aksw.agdistis.util.TripleIndex;
+import org.aksw.gerbil.io.nif.NIFWriter;
+import org.aksw.gerbil.io.nif.impl.TurtleNIFWriter;
 import org.aksw.gerbil.transfer.nif.Marking;
 import org.aksw.gerbil.transfer.nif.MeaningSpan;
 import org.aksw.gerbil.transfer.nif.Span;
@@ -39,6 +39,29 @@ public class GetDisambiguation extends ServerResource {
 	private TurtleNIFDocumentParser parser = new TurtleNIFDocumentParser();
 	private TurtleNIFDocumentCreator creator = new TurtleNIFDocumentCreator();
 	private NIFParser nifParser = new NIFParser();
+	private String sameAsEdge;
+	private String nodeType;
+	private TripleIndex index;
+	public GetDisambiguation(){
+		super();
+		try {
+			Properties prop = new Properties();
+			InputStream input = NEDAlgo_HITS.class.getResourceAsStream("/config/agdistis.properties");
+			prop.load(input);
+			String envSameAsEdge = System.getenv("sameAsEdge");
+			String sameAsEdge = envSameAsEdge != null ? envSameAsEdge : prop.getProperty("sameAsEdge");
+			String envnodeType = System.getenv("nodeType");
+			String nodeType = envnodeType != null ? envnodeType : prop.getProperty("nodeType");
+			this.sameAsEdge=sameAsEdge;
+			this.nodeType=nodeType;
+			index=new TripleIndex();
+
+		} catch (IOException e) {
+			log.error("Could not find index");
+			System.exit(0);
+			e.printStackTrace();
+		}
+	}
 
 	@Post
 	public String postText(Representation entity) throws IOException, Exception {
@@ -158,13 +181,27 @@ public class GetDisambiguation extends ServerResource {
 			for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
 				String disambiguatedURL = namedEntity.getNamedEntityUri();
 
-				if (disambiguatedURL == null) {
+				//if (disambiguatedURL == null) {
+				if (!startsWith(disambiguatedURL,nodeType.split(","))) {
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), URLDecoder
-							.decode("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel(), "UTF-8")));
-				} else {
+							.decode("http://aksw.org/notInWiki/"/*+namedEntity.getSingleWordLabel()*/ , "UTF-8")));
+				} else if (sameAsEdge!=null) {
+					String sameAs=null;
+					List<Triple> triples = index.search(namedEntity.getNamedEntityUri(), sameAsEdge, null);
+					if (triples.size()>0)
+						sameAs=triples.get(0).getObject();
+					Set<String> set = new HashSet<String>();
+					set.add(URLDecoder.decode(disambiguatedURL,"UTF-8"));
+					if(sameAs!=null)
+						set.add(URLDecoder.decode(sameAs,"UTF-8"));
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
-							URLDecoder.decode(namedEntity.getNamedEntityUri(), "UTF-8")));
+							set));
+
+
+
 				}
+				else annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
+						URLDecoder.decode(disambiguatedURL, "UTF-8")));
 			}
 			document.setMarkings(new ArrayList<Marking>(annotations));
 			log.debug("Result: " + document.toString());
@@ -175,7 +212,6 @@ public class GetDisambiguation extends ServerResource {
 			log.error("Exception while reading request.", e);
 			return "";
 		}
-
 		return nifDocument;
 	}
 	@SuppressWarnings("unchecked")
@@ -186,14 +222,23 @@ public class GetDisambiguation extends ServerResource {
 		agdistis.run(d, null);
 
 		for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
+			String sameAs=null;
 			if(!namedEntity.getNamedEntityUri().contains("http")){
-				namedEntity.setNamedEntity("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel());
+				namedEntity.setNamedEntity("http://aksw.org/notInWiki/");
+			}
+			else if (sameAsEdge!=null) {
+				//"http://www.wikidata.org/prop/direct-normalized/P227"
+				List<Triple> triples = index.search(namedEntity.getNamedEntityUri(),sameAsEdge, null);
+				if (triples.size()>0)
+					sameAs=triples.get(0).getObject();
 			}
 			JSONObject obj = new JSONObject();
 			obj.put("namedEntity", namedEntity.getLabel());
 			obj.put("start", namedEntity.getStartPos());
 			obj.put("offset", namedEntity.getLength());
 			obj.put("disambiguatedURL", namedEntity.getNamedEntityUri());
+			if(sameAs!=null)
+				obj.put("sameAs",sameAs);
 			arr.add(obj);
 		}
 		log.info("\t" + arr.toString());
@@ -220,11 +265,22 @@ public class GetDisambiguation extends ServerResource {
 
 				if (disambiguatedURL == null) {
 					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(), URLDecoder
-							.decode("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel(), "UTF-8")));
-				} else {
-					annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
-							URLDecoder.decode(disambiguatedURL, "UTF-8")));
+							.decode("http://aksw.org/notInWiki/" , "UTF-8")));
+				} else if(sameAsEdge!=null) {
+					String sameAs=null;
+					List<Triple> triples = index.search(namedEntity.getNamedEntityUri(), sameAsEdge, null);
+					if (triples.size()>0)
+						sameAs=triples.get(0).getObject();
+					if(sameAs!=null){
+						Set<String> set = new HashSet<String>();
+						set.add(URLDecoder.decode(disambiguatedURL,"UTF-8"));
+						set.add(URLDecoder.decode(sameAs,"UTF-8"));
+						annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
+								set));
+					}
 				}
+				else annotations.add(new NamedEntity(namedEntity.getStartPos(), namedEntity.getLength(),
+						URLDecoder.decode(disambiguatedURL, "UTF-8")));
 			}
 			document.setMarkings(new ArrayList<Marking>(annotations));
 			log.debug("Result: " + document.toString());
@@ -233,6 +289,7 @@ public class GetDisambiguation extends ServerResource {
 			log.error("Exception while reading request.", e);
 			return "";
 		}
+		System.out.println(nifDocument);
 		return nifDocument;
 	}
 
@@ -254,5 +311,11 @@ public class GetDisambiguation extends ServerResource {
 		log.info("Finished Request");
 		return arr.toString();
 
+	}
+	private boolean startsWith(String url,String[]set){
+		for(int i=0;i<set.length;i++)
+			if(url.startsWith(set[i]))
+				return true;
+		return false;
 	}
 }

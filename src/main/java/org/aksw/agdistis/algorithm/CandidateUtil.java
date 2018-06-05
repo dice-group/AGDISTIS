@@ -26,8 +26,8 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 public class CandidateUtil {
 
 	private static Logger log = LoggerFactory.getLogger(CandidateUtil.class);
-	private String nodeType;
-	public void setNodeType(String nodeType) {
+	private String nodeType[];
+	public void setNodeType(String[] nodeType) {
 		this.nodeType = nodeType;
 	}
 
@@ -50,7 +50,8 @@ public class CandidateUtil {
 		prop.load(input);
 
 		String envNodeType = System.getenv("AGDISTIS_NODE_TYPE");
-		this.nodeType = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
+		String nodeTypeString = envNodeType != null ? envNodeType : prop.getProperty("nodeType");
+		this.nodeType=nodeTypeString.split(",");
 		String envNgramDistance = System.getenv("AGDISTIS_NGRAM_DISTANCE");
 		this.nGramDistance = new NGramDistance(
 				Integer.valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
@@ -82,6 +83,12 @@ public class CandidateUtil {
 		for(int i=0;i<predicates.length;i++)
 			predicatesToSearch.add(predicates[i]);
 
+	}
+	private boolean startsWith(String url){
+		for(int i=0;i<nodeType.length;i++)
+			if(url.startsWith(nodeType[i]))
+				return true;
+		return false;
 	}
 	public void setIndex(TripleIndex index) {
 		try {
@@ -285,7 +292,8 @@ public class CandidateUtil {
 				String surfaceForm = c.getObject();
 				surfaceForm = nlp.Preprocessing(surfaceForm);
 				// rule of thumb: no year numbers in candidates
-				if (candidateURL.startsWith(nodeType)) {
+				//if (candidateURL.startsWith(nodeType)) {
+				if (startsWith(candidateURL)) {
 					// if it is a disambiguation resource, skip it
 					// trigram similarity
 					if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
@@ -367,9 +375,16 @@ public class CandidateUtil {
 				for (Triple c : candidatesContextbyLabel) {
 					log.debug("Candidate triple to check: " + c);
 					String candidateURL = c.getSubject();
-					String cleanCandidateURL = candidateURL.replace(nodeType, "");
+					//String cleanCandidateURL = candidateURL.replace(nodeType, "");
+					//String uri = c.getSubject().replace(nodeType, "");
+					String cleanCandidateURL="";
+					for(int i=0;i<nodeType.length;i++) {
+						if (c.getSubject().startsWith(nodeType[0]))
+							cleanCandidateURL=c.getSubject().replace(nodeType[0],"");
+					}
 					cleanCandidateURL = nlp.Preprocessing(cleanCandidateURL);
-					if (candidateURL.startsWith(nodeType)) {
+					//if (candidateURL.startsWith(nodeType)) {
+					if (startsWith(candidateURL)) {
 						// trigram similarity over the URIS
 						if (nGramDistance.getDistance(cleanCandidateURL, label) < 0.3) {
 							continue;
@@ -414,7 +429,7 @@ public class CandidateUtil {
 			}
 
 		}
-		if (countFinalCandidates == 0&&this.usePredicateList){
+		if (this.usePredicateList){
 			candidates = searchByLabelAndPredicate(label,predicatesToSearch);
 			if(candidates.isEmpty()){
 				if(label.contains("ü")||label.contains("ö")||label.contains("ä")){
@@ -449,7 +464,8 @@ public class CandidateUtil {
 				String surfaceForm = c.getObject();
 				surfaceForm = nlp.Preprocessing(surfaceForm);
 				// rule of thumb: no year numbers in candidates
-				if (candidateURL.startsWith(nodeType)) {
+				//if (candidateURL.startsWith(nodeType)) {
+				if (startsWith(candidateURL)) {
 					// if it is a disambiguation resource, skip it
 					// trigram similarity
 					/*if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
@@ -531,7 +547,12 @@ public class CandidateUtil {
 
 			for (Triple c : tmp) {
 				tmp2.add(new Triple(c.getSubject(), c.getPredicate(), c.getObject()));
-				String uri = c.getSubject().replace(nodeType, "");
+				//String uri = c.getSubject().replace(nodeType, "");
+				String uri="";
+				for(int i=0;i<nodeType.length;i++) {
+					if (c.getSubject().startsWith(nodeType[0]))
+						uri=c.getSubject().replace(nodeType[0],"");
+				}
 				candidatesScore = searchCandidatesByScore(uri);
 				c.setPredicate(c.getObject());
 				if (candidatesScore.isEmpty()) {
@@ -629,7 +650,12 @@ public class CandidateUtil {
 
 			for (Triple c : tmp) {
 				tmp2.add(new Triple(c.getSubject(), c.getPredicate(), c.getObject()));
-				String uri = c.getSubject().replace(nodeType, "");
+				//String uri = c.getSubject().replace(nodeType, "");
+				String uri="";
+				for(int i=0;i<nodeType.length;i++) {
+					if (c.getSubject().startsWith(nodeType[0]))
+						uri=c.getSubject().replace(nodeType[0],"");
+				}
 				candidatesScore = searchCandidatesByScore(uri);
 				c.setPredicate(c.getObject());
 				if (candidatesScore.isEmpty()) {

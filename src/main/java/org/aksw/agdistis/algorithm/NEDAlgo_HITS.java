@@ -166,7 +166,7 @@ public class NEDAlgo_HITS {
 
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
-		this.cu.setNodeType(nodeType);
+		this.cu.setNodeType(nodeType.split(","));
 	}
 
 	public void setIndex(TripleIndex index) {

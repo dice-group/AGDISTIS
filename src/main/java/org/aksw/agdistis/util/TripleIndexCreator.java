@@ -1,11 +1,7 @@
 package org.aksw.agdistis.util;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.atlas.io.InStreamUTF8;
@@ -21,6 +17,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.rio.ParserConfig;
@@ -47,8 +44,13 @@ public class TripleIndexCreator {
 	private DirectoryReader ireader;
 	private IndexWriter iwriter;
 	private MMapDirectory directory;
+	String[]languages;
+	boolean indexWikidata;
 	private HashMap<String,String>blankNodeMatcher;
 	private  Boolean blankNodeMatching;
+	private String wds="http://www.wikidata.org/entity/statement/";
+	private String wdata="https://www.wikidata.org/wiki/Special:EntityData/";
+	private String wd="http://www.wikidata.org/entity/";
 	public static void main(String args[]) {
 		if (args.length > 0) {
 			log.error("TripleIndexCreator works without parameters. Please use agdistis.properties File");
@@ -95,9 +97,14 @@ public class TripleIndexCreator {
 			String envBaseUri = System.getenv("AGDISTIS_BASE_URI");
 			String baseURI = envBaseUri != null ? envBaseUri : prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
-			String blankNodeMatching = System.getenv("blankNodeMatching");
+			String envlangs[] = System.getenv(("languages")).split(",");
+			String langs[] = envlangs != null ? envlangs : prop.getProperty("languages").split(",");
 
+			String blankNodeMatching = System.getenv("blankNodeMatching");
+			String indexWikidata = System.getenv("indexWikidata");
 			TripleIndexCreator ic = new TripleIndexCreator();
+			ic.languages=langs;
+			ic.indexWikidata = Boolean.valueOf(indexWikidata!= null ? indexWikidata: prop.getProperty("indexWikidata"));
 			ic.blankNodeMatching = Boolean.valueOf(blankNodeMatching != null ? blankNodeMatching : prop.getProperty("blankNodeMatching"));
 			ic.blankNodeMatcher=new HashMap<String,String>();
 			ic.createIndex(listOfFiles, index, baseURI);
@@ -216,17 +223,28 @@ public class TripleIndexCreator {
 			String subject = st.getSubject().stringValue();
 			String predicate = st.getPredicate().stringValue();
 			String object = st.getObject().stringValue();
-			if(blankNodeMatching) {
-				if (object.startsWith("node"))
-					blankNodeMatcher.put(object, subject);
-				if (subject.startsWith("node"))
-					subject = blankNodeMatcher.get(subject);
+			String lang=null;
+			if(st.getObject() instanceof Literal){
+				Literal l=(Literal)st.getObject();
+				lang=l.getLanguage();
 			}
-			try {
-				addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (lang == null || Arrays.asList(languages).contains(lang)) {
+				//This ignores unwanted triples like linked wikipedia articles when indexing the wikidata ttl dump
+				if (!indexWikidata||(subject.startsWith(wd) && !subject.startsWith(wds) && !object.startsWith(wds) && !subject.startsWith(wdata))) {
+					if (blankNodeMatching) {
+						if (object.startsWith("node"))
+							blankNodeMatcher.put(object, subject);
+						if (subject.startsWith("node"))
+							subject = blankNodeMatcher.get(subject);
+					}
+					try {
+						addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
+
 	}
 }

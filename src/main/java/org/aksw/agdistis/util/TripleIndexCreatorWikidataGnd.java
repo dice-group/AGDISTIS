@@ -29,8 +29,8 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
-public class TripleIndexCreatorLang {
-	private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreatorLang.class);
+public class TripleIndexCreatorWikidataGnd {
+	private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreatorWikidataGnd.class);
 
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
@@ -44,6 +44,13 @@ public class TripleIndexCreatorLang {
 	private IndexWriter iwriter;
 	private MMapDirectory directory;
 	private HashMap<String,String>blankNodeMatcher;
+	private HashMap<String,String>gndToWikidata;
+	private boolean indexWikidata;
+	String[]languages;
+	private String wds="http://www.wikidata.org/entity/statement/";
+	private String wdata="https://www.wikidata.org/wiki/Special:EntityData/";
+	private String wd="http://www.wikidata.org/entity/";
+
 	private  Boolean blankNodeMatching;
 	public static void main(String args[]) {
 		if (args.length > 0) {
@@ -66,44 +73,58 @@ public class TripleIndexCreatorLang {
 			String index = envIndex != null ? envIndex : prop.getProperty("index");
 			log.info("The index will be here: " + index);
 
-			String envFolderWithTtlFiles = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES");
-			String folder = envFolderWithTtlFiles != null ? envFolderWithTtlFiles
-					: prop.getProperty("folderWithTTLFiles");
-			log.info("Getting triple data from: " + folder);
-			List<File> listOfFiles = new ArrayList<File>();
-			//String useGz = System.getenv("UseGZ");
-			//readFromGz = Boolean.valueOf(useGz != null ? useGz : prop.getProperty("readFromGz"));
-			for (File file : new File(folder).listFiles()) {
+			String envFolderWithTtlFilesWikidata = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES_WIKIDATA");
+			String folderWikidata = envFolderWithTtlFilesWikidata != null ? envFolderWithTtlFilesWikidata
+					: prop.getProperty("folderWithTTLFilesWikidata");
+			String envFolderWithTtlFilesGnd = System.getenv("AGDISTIS_FOLDER_WITH_TTL_FILES_GND");
+			String folderGnd = envFolderWithTtlFilesGnd != null ? envFolderWithTtlFilesGnd
+					: prop.getProperty("folderWithTTLFilesGnd");
+			log.info("Getting triple data from: " + folderGnd);
+			List<File> listOfFilesWikidata = new ArrayList<File>();
+
+			for (File file : new File(folderWikidata).listFiles()) {
 
 				if (file.getName().endsWith("ttl")||(file.getName().endsWith("gz"))) {
-					listOfFiles.add(file);
+					listOfFilesWikidata.add(file);
 				}
 			}
+			List<File> listOfFilesGnd = new ArrayList<File>();
 
+			for (File file : new File(folderGnd).listFiles()) {
+
+				if (file.getName().endsWith("ttl")||(file.getName().endsWith("gz"))) {
+					listOfFilesGnd.add(file);
+				}
+			}
 			String envSurfaceFormTsv = System.getenv("AGDISTIS_SURFACE_FORM_TSV");
 			String surfaceFormTSV = envSurfaceFormTsv != null ? envSurfaceFormTsv : prop.getProperty("surfaceFormTSV");
 			log.info("Getting surface forms from: " + surfaceFormTSV);
 			File file = new File(surfaceFormTSV);
 			if (file.exists()) {
-				listOfFiles.add(file);
+				listOfFilesWikidata.add(file);
+				listOfFilesGnd.add(file);
 			}
 
 			String envBaseUri = System.getenv("AGDISTIS_BASE_URI");
 			String baseURI = envBaseUri != null ? envBaseUri : prop.getProperty("baseURI");
 			log.info("Setting Base URI to: " + baseURI);
+			String envlangs[] = System.getenv(("languages")).split(",");
+			String langs[] = envlangs != null ? envlangs : prop.getProperty("languages").split(",");
 			String blankNodeMatching = System.getenv("blankNodeMatching");
 
-			TripleIndexCreatorLang ic = new TripleIndexCreatorLang();
+			TripleIndexCreatorWikidataGnd ic = new TripleIndexCreatorWikidataGnd();
+			ic.languages=langs;
 			ic.blankNodeMatching = Boolean.valueOf(blankNodeMatching != null ? blankNodeMatching : prop.getProperty("blankNodeMatching"));
+			ic.gndToWikidata=new HashMap<String,String>();
 			ic.blankNodeMatcher=new HashMap<String,String>();
-			ic.createIndex(listOfFiles, index, baseURI);
+			ic.createIndex(listOfFilesWikidata,listOfFilesGnd, index, baseURI);
 			ic.close();
 		} catch (IOException e) {
 			log.error("Error while creating index. Maybe the index is corrupt now.", e);
 		}
 	}
 
-	public void createIndex(List<File> files, String idxDirectory, String baseURI) {
+	public void createIndex(List<File> filesWikidata,List<File> filesGnd, String idxDirectory, String baseURI) {
 		try {
 			urlAnalyzer = new SimpleAnalyzer(LUCENE_VERSION);
 			literalAnalyzer = new LiteralAnalyzer(LUCENE_VERSION);
@@ -120,7 +141,18 @@ public class TripleIndexCreatorLang {
 			IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, perFieldAnalyzer);
 			iwriter = new IndexWriter(directory, config);
 			iwriter.commit();
-			for (File file : files) {
+			for (File file : filesWikidata) {
+				indexWikidata=true;
+				String type = FileUtil.getFileExtension(file.getName());
+				if (type.equals(TTL)||(type.equals("gz")))
+					indexTTLFile(file, baseURI);
+				if (type.equals(TSV))
+					indexTSVFile(file);
+				iwriter.commit();
+			}
+			for (File file : filesGnd) {
+				indexWikidata=false;
+				blankNodeMatching=true;
 				String type = FileUtil.getFileExtension(file.getName());
 				if (type.equals(TTL)||(type.equals("gz")))
 					indexTTLFile(file, baseURI);
@@ -219,17 +251,28 @@ public class TripleIndexCreatorLang {
 				Literal l=(Literal)st.getObject();
 				lang=l.getLanguage();
 			}
-			if(lang==null||lang.equals("en")||lang.equals("de")||lang.equals("fr")) {
-				if (blankNodeMatching) {
-					if (object.startsWith("node"))
-						blankNodeMatcher.put(object, subject);
-					if (subject.startsWith("node"))
-						subject = blankNodeMatcher.get(subject);
-				}
-				try {
-					addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
-				} catch (IOException e) {
-					e.printStackTrace();
+			if (lang == null || Arrays.asList(languages).contains(lang)) {
+				if(!indexWikidata||(subject.startsWith(wd)&&!subject.startsWith(wds)&&!object.startsWith(wds)&&!subject.startsWith(wdata))) {
+					if (indexWikidata && predicate.equals("http://www.wikidata.org/prop/direct-normalized/P227"))
+						gndToWikidata.put(object, subject);
+					else if (!indexWikidata) {
+						if (gndToWikidata.containsKey(subject))
+							subject = gndToWikidata.get(subject);
+						if (gndToWikidata.containsKey(object))
+							object = gndToWikidata.get(object);
+					}
+
+					if (blankNodeMatching) {
+						if (object.startsWith("node"))
+							blankNodeMatcher.put(object, subject);
+						if (subject.startsWith("node"))
+							subject = blankNodeMatcher.get(subject);
+					}
+					try {
+						addDocumentToIndex(iwriter, subject, predicate, object, st.getObject() instanceof URI);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
