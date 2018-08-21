@@ -17,6 +17,7 @@ import org.aksw.agdistis.util.Stemming;
 import org.aksw.agdistis.util.Triple;
 import org.aksw.agdistis.util.TripleIndex;
 import org.aksw.agdistis.util.TripleIndexContext;
+import org.apache.jena.base.Sys;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,35 +176,78 @@ public class CandidateUtil {
 			nodes.put(candidateURL, currentNode);
 		}
 	}
-	private String labelReduction(String label, boolean forward){
-		String[]tokens=label.split(" ");
-		if(tokens.length<3)
-			return label;
-		else {
-			String resultLabel = "";
-			if (forward) {
-				for (int i = 1; i < tokens.length-1; i++)
-					resultLabel += tokens[i]+" ";
-				resultLabel+=tokens[tokens.length-1];
-			} else {
-				for (int i = 0; i < tokens.length - 2; i++)
-					resultLabel += tokens[i]+" ";
-				resultLabel+=tokens[tokens.length-2];
+
+	private static List<String> leftOrderedNgrams(String[] tokens,int min){
+		//used to find titles
+		List<String>ngrams=new ArrayList<>();
+
+		for(int k=0;k<tokens.length-1;k++) {
+			for (int i = 0; i < tokens.length; i++) {
+				String ngram = "";
+				int size=0;
+				for (int j = k; j < tokens.length -i; j++) {
+					ngram += tokens[j] + " ";
+					size++;
+				}
+				if(size>=min)
+				ngrams.add(ngram);
 			}
-			return resultLabel;
 		}
+		return ngrams;
 	}
-	private String shortTermReplacement(String label){
+	public static String StringShorting(String label){
+		//used to find places
 		label=label.replaceAll(":","");
-		String[]tokens=label.split(" ");
-		String reducedLabel="";
+		String[] tokens=label.split(" ");
+		//replace double Tokens
 		for(int i=0;i<tokens.length-1;i++){
-			if(tokens[i].length()>3)
-				reducedLabel+=tokens[i]+" ";
+			if(tokens[i].length()<=2)
+				tokens[i]="";
+			else {
+				for (int j = i + 1; j < tokens.length; j++) {
+					if (tokens[i].equals(tokens[j])) {
+						tokens[j] = "";
+					}
+				}
+			}
 		}
-		reducedLabel+=tokens[tokens.length-1];
-		return reducedLabel;
+		String reducedString ="";
+		for(int i=0;i<tokens.length;i++){
+
+			if(!tokens[i].equals("")) {
+				reducedString+= tokens[i]+" ";
+			}
+		}
+		return reducedString;
 	}
+
+
+
+	//new disatnce measure
+	private double alternativeNgramDistance(String[]tokensLabel,String[]tokensCandidate){
+		double distanceCandidates= 0;
+		for(String token:tokensLabel) {
+			double maxdistance = 0;
+			for (String candToken : tokensCandidate) {
+				double ngramDistance = nGramDistance.getDistance(token, candToken);
+				if (ngramDistance > maxdistance)
+					maxdistance = ngramDistance;
+			}
+			distanceCandidates += maxdistance;
+		}
+		double distanceLabel= 0;
+		for(String label:tokensLabel){
+			double maxdistance=0;
+			for (String candLabel:tokensLabel){
+				double ngramDistance=nGramDistance.getDistance(label,candLabel);
+				if(ngramDistance>maxdistance)
+					maxdistance=ngramDistance;
+			}
+			distanceLabel+=maxdistance;
+		}
+		return (distanceCandidates/tokensCandidate.length+distanceLabel/tokensLabel.length)/2;
+	}
+
 	private void checkLabelCandidates(DirectedSparseGraph<Node, String> graph, double threshholdTrigram,
 			HashMap<String, Node> nodes, NamedEntityInText entity, String label, boolean searchInSurfaceForms,
 			String entities) throws IOException {
@@ -255,14 +299,53 @@ public class CandidateUtil {
 		// searchByAcronymFinished
 
 		if (countFinalCandidates == 0) {
+			//dynamic thereshold trigram for titles
+			double dynamicThreshholdTrigram = 0.89;
 			candidates = searchCandidatesByLabel(label, searchInSurfaceForms, "", popularity);
 			if (searchInSurfaceForms) {
 				log.info("\t\tnumber of candidates by SF label: " + candidates.size());
 			} else {
 				log.info("\t\tnumber of candidates by main label: " + candidates.size());
 			}
+			if(candidates.isEmpty()) {
+				//Title Features
+				String[] tokens=label.replaceAll("  "," ").split(" ");
+				dynamicThreshholdTrigram = 1.0-0.15*tokens.length;
+
+				List<String>ngrams;
+				if(tokens.length>4)
+					ngrams= leftOrderedNgrams(tokens,1);
+				else
+				ngrams= leftOrderedNgrams(tokens,2);
+				List<Triple>temp=new ArrayList<Triple>();
+				for(int i=0;i<ngrams.size();i++){
+					temp.addAll(searchCandidatesByLabel(ngrams.get(i), searchInSurfaceForms, "", popularity));
+					if(temp.size()>0){
+						for(Triple t:temp){
+							if(domainWhiteLister.fitsPlay(t.getSubject()))
+								candidates.add(t);
+						}
+						if(candidates.size()>0)
+							break;
+						else temp.clear();
+					}
+				}
+			}
+			if(candidates.size()==0){
+				//Place Features
+				dynamicThreshholdTrigram = 0.89;
+				String reducedLabel=StringShorting(label);
+				List<Triple>temp=new ArrayList<Triple>();
+				temp.addAll(searchCandidatesByLabel(reducedLabel, searchInSurfaceForms, "", popularity));
+				for(Triple t:temp){
+					if(domainWhiteLister.fitsPlace(t.getSubject()))
+						candidates.add(t);
+				}
+			}
+
 
 			if (candidates.size() == 0) {
+				dynamicThreshholdTrigram = 0.89;
 				log.info("\t\t\tNo candidates for: " + label);
 				if (label.endsWith("'s")) {
 					// removing plural s
@@ -297,7 +380,9 @@ public class CandidateUtil {
 					// if it is a disambiguation resource, skip it
 					// trigram similarity
 					if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
-						if (nGramDistance.getDistance(surfaceForm, label) < 1.0) {// Here
+						double distance = alternativeNgramDistance(label.split(" "),surfaceForm.split(" "));
+						if(distance<dynamicThreshholdTrigram){
+						//if (nGramDistance.getDistance(surfaceForm, label) < 1) /*dynamicThreshholdTrigram)*/ {// Here
 																					// we
 																					// set
 																					// the
@@ -327,7 +412,9 @@ public class CandidateUtil {
 																											// the
 																											// user's
 																											// choice.
-						if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
+						double distance = alternativeNgramDistance(label.split(" "),surfaceForm.split(" "));
+						if(distance<dynamicThreshholdTrigram){
+						//if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
 							continue;
 						}
 					}
@@ -429,32 +516,37 @@ public class CandidateUtil {
 			}
 
 		}
-		if (this.usePredicateList){
+		/*if (this.usePredicateList){
 			candidates = searchByLabelAndPredicate(label,predicatesToSearch);
-			if(candidates.isEmpty()){
-				if(label.contains("ü")||label.contains("ö")||label.contains("ä")){
-					label=label.replaceAll("ü","ue");
-					label=label.replaceAll("ä","ae");
-					label=label.replaceAll("ö","oe");
-					candidates = searchByLabelAndPredicate(label,predicatesToSearch);
-				}
-			}
+			double dynamicThreshholdTrigram = threshholdTrigram;
 			if(candidates.isEmpty()){
 
-				String reducedLabel=shortTermReplacement(label);
-				candidates=searchByLabelAndPredicate(reducedLabel,predicatesToSearch);
+				//String reducedLabel=shortTermReplacement(label);
+				//candidates=searchByLabelAndPredicate(reducedLabel,predicatesToSearch);
 				if(candidates.isEmpty()) {
-					boolean reduce = true;
-					while (reduce) {
-						String newReducedLabel = labelReduction(reducedLabel, true);
-						if (newReducedLabel != reducedLabel) {
-							reducedLabel = newReducedLabel;
-							candidates = searchByLabelAndPredicate(reducedLabel, predicatesToSearch);
-							if (!candidates.isEmpty())
-								reduce = false;
-						} else reduce = false;
-
+					String[] tokens=label.split(" ");
+					dynamicThreshholdTrigram = 1.0/0.15*tokens.length;
+					//boolean foundCandidatesByNgrams=false;
+					//int tokenLength=tokens.length-1;
+					//while(!foundCandidatesByNgrams&&tokenLength>1){
+					//	List<String>ngrams=ngramBuilder(tokens,tokenLength);
+					//	for(String ngram:ngrams)
+					//	candidates.addAll(searchByLabelAndPredicate(ngram,predicatesToSearch));
+					//	if(candidates.size()>0)
+					//		foundCandidatesByNgrams=true;
+					//	else tokenLength--;
+					//}
+					List<String>ngrams;
+					if(tokens.length>4)
+						ngrams= leftOrderedNgrams(tokens,1);
+					else
+						ngrams= leftOrderedNgrams(tokens,2);
+					for(int i=0;i<ngrams.size();i++){
+						candidates.addAll(searchByLabelAndPredicate(ngrams.get(i),predicatesToSearch));
+						if(candidates.size()>0)
+							break;
 					}
+
 				}
 			}
 			boolean added = false;
@@ -466,44 +558,15 @@ public class CandidateUtil {
 				// rule of thumb: no year numbers in candidates
 				//if (candidateURL.startsWith(nodeType)) {
 				if (startsWith(candidateURL)) {
-					// if it is a disambiguation resource, skip it
-					// trigram similarity
-					/*if (c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) {
-						if (nGramDistance.getDistance(surfaceForm, label) < 1.0) {// Here
-							// we
-							// set
-							// the
-							// similarity
-							// as
-							// maximum
-							// because
-							// rfds:label
-							// refers
-							// to
-							// the
-							// main
-							// reference
-							// of
-							// a
-							// given
-							// resource
-							continue;
-						}
-					} else if (!c.getPredicate().equals("http://www.w3.org/2000/01/rdf-schema#label")) { // Here
-						// the
-						// similarity
-						// is
-						// in
-						// accordance
-						// with
-						// the
-						// user's
-						// choice.
+						//Similarity by users choice
 						System.out.println(nGramDistance.getDistance(surfaceForm, label));
-						if (nGramDistance.getDistance(surfaceForm, label) < threshholdTrigram) {
+
+						double distance = alternativeNgramDistance(label.split(" "),surfaceForm.split(" "));
+						if(distance<dynamicThreshholdTrigram){
+						//if (nGramDistance.getDistance(surfaceForm, label) < dynamicThreshholdTrigram) {
 							continue;
 						}
-					}*/
+
 					// follow redirect
 					candidateURL = redirect(candidateURL);
 					if (isDisambiguationResource(candidateURL)) {
@@ -527,7 +590,7 @@ public class CandidateUtil {
 				}
 			}
 
-		}
+		}*/
 		log.info("\t\tnumber of final candidates " + countFinalCandidates);
 	}
 
@@ -543,6 +606,11 @@ public class CandidateUtil {
 			if (searchInSurfaceFormsToo) {
 				tmp.clear();
 				tmp.addAll(index.search(null, "http://www.w3.org/2004/02/skos/core#altLabel", label, 500));
+			}
+			if(usePredicateList){
+				for(String predicate:predicatesToSearch){
+					tmp.addAll(index.search(null, predicate, label, 500));
+				}
 			}
 
 			for (Triple c : tmp) {
@@ -595,6 +663,11 @@ public class CandidateUtil {
 			if (searchInSurfaceFormsToo) {
 				tmp.clear();
 				tmp.addAll(index.search(null, "http://www.w3.org/2004/02/skos/core#altLabel", label));
+			}
+			if(usePredicateList){
+				for(String predicate:predicatesToSearch){
+					tmp.addAll(index.search(null, predicate, label));
+				}
 			}
 			return tmp;
 		}

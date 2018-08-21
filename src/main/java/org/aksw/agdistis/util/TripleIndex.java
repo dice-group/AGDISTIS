@@ -82,7 +82,7 @@ public class TripleIndex {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		System.out.println(predicate +" -> "+object + " : " );
+		//System.out.println(predicate +" -> "+object + " : " );
 		BooleanQuery bq = new BooleanQuery();
 		List<Triple> triples = new ArrayList<Triple>();
 
@@ -135,6 +135,8 @@ public class TripleIndex {
 					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
 					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.AND);
+					//System.out.println(predicate);
+					//System.out.println(object);
 					q = parser.parse(QueryParserBase.escape(object));
 					bq.add(q, BooleanClause.Occur.MUST);
 				}
