@@ -557,6 +557,7 @@ public class CandidateUtil {
 
 	public void close() throws IOException {
 		index.close();
+		indexByContext.close();
 	}
 
 	public TripleIndex getIndex() {
