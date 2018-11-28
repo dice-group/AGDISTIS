@@ -71,9 +71,8 @@ public class GetDisambiguation extends ServerResource {
 		log.info("type: " + type);
 
 		if (text == null) {
-			agdistis.close();
 			result = NIFGerbil(input2, agdistis); // This part is created to
-													// work
+			// work
 			// along with GERBIL, because
 			// GERBIL only sends the NIF
 			// files without taking care of
@@ -90,7 +89,6 @@ public class GetDisambiguation extends ServerResource {
 		}
 
 		if (type.equals("agdistis")) {
-			agdistis.close();
 			return standardAG(text, agdistis); // This type is the standard
 												// and in case the user
 												// doesn't send the type
@@ -101,7 +99,6 @@ public class GetDisambiguation extends ServerResource {
 												// Obama</entity>).
 
 		} else if (type.equals("nif")) {
-			agdistis.close();
 			return NIFType(text, agdistis); // This type is for AGDISTIS
 											// works beyond the GERBIL, this
 											// part is in case of user wants
@@ -110,7 +107,6 @@ public class GetDisambiguation extends ServerResource {
 											// AGDISTIS?type=nif&text=@prefix....)
 
 		} else if (type.equals("candidates")) {
-			agdistis.close();
 			return candidateType(text, agdistis); // Here is to let us know
 													// about all candidates
 													// for each mention and
@@ -179,11 +175,11 @@ public class GetDisambiguation extends ServerResource {
 			log.error("Exception while reading request.", e);
 			return "";
 		}
-
+		agdistis.close();
 		return nifDocument;
 	}
 	@SuppressWarnings("unchecked")
-	public String standardAG(String text, NEDAlgo_HITS agdistis) {
+	public String standardAG(String text, NEDAlgo_HITS agdistis) throws IOException {
 		JSONArray arr = new org.json.simple.JSONArray();
 
 		Document d = textToDocument(text);
@@ -202,6 +198,7 @@ public class GetDisambiguation extends ServerResource {
 		}
 		log.info("\t" + arr.toString());
 		log.info("Finished Request");
+		agdistis.close();
 		return arr.toString();
 
 	}
@@ -237,11 +234,12 @@ public class GetDisambiguation extends ServerResource {
 			log.error("Exception while reading request.", e);
 			return "";
 		}
+		agdistis.close();
 		return nifDocument;
 	}
 
 	@SuppressWarnings("unchecked")
-	public String candidateType(String text, NEDAlgo_HITS agdistis) {
+	public String candidateType(String text, NEDAlgo_HITS agdistis) throws IOException {
 		JSONArray arr = new org.json.simple.JSONArray();
 		Document d = textToDocument(text);
 		Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE = new HashMap<>();
@@ -256,6 +254,7 @@ public class GetDisambiguation extends ServerResource {
 
 		log.info("\t" + arr.toString());
 		log.info("Finished Request");
+		agdistis.close();
 		return arr.toString();
 
 	}
