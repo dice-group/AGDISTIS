@@ -17,6 +17,7 @@ import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.graph.PageRank;
 import org.aksw.agdistis.model.CandidatesScore;
 import org.aksw.agdistis.util.TripleIndex;
+import org.aksw.agdistis.util.TripleIndexContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +30,13 @@ public class NEDAlgo_HITS {
 	private String nodeType;
 	private CandidateUtil cu;
 	private TripleIndex index;
+	private TripleIndexContext indexByContext;
 	// needed for the experiment about which properties increase accuracy
 	private double threshholdTrigram;
 	private int maxDepth;
 	private Boolean heuristicExpansionOn;
 	private String algorithm;
+	private boolean context;
 
 	public NEDAlgo_HITS() throws IOException {
 		Properties prop = new Properties();
@@ -58,6 +61,11 @@ public class NEDAlgo_HITS {
 		this.maxDepth = maxDepth;
 		this.cu = new CandidateUtil();
 		this.index = cu.getIndex();
+		String envContext = System.getenv("AGDISTIS_CONTEXT");
+		this.context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
+		if (context == true) { // in case the index by context exist
+			this.indexByContext = cu.getIndexContext();
+		}
 	}
 
 	public void run(Document document, Map<NamedEntityInText, List<CandidatesScore>> candidatesPerNE) {
@@ -133,7 +141,10 @@ public class NEDAlgo_HITS {
 	}
 
 	public void close() throws IOException {
-		cu.close();
+		index.close();
+		if (context == true) {
+		indexByContext.close();
+		}
 	}
 
 	public void setThreshholdTrigram(double threshholdTrigram) {

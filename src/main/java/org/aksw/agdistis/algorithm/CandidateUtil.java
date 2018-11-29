@@ -563,5 +563,8 @@ public class CandidateUtil {
 	public TripleIndex getIndex() {
 		return index;
 	}
+	public TripleIndexContext getIndexContext() {
+		return indexByContext;
+	}
 
 }
