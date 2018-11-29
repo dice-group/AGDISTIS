@@ -12,7 +12,7 @@ variables:
   IMAGE_DICE: dicegroup/agdistis:latest
 
 test:
-  image: maven
+  image: maven:3.5.3-jdk-10
   stage: test
   only:
     - master
