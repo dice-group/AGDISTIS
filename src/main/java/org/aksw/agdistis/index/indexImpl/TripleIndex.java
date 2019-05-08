@@ -1,17 +1,24 @@
-package org.aksw.agdistis.util;
+package org.aksw.agdistis.index.indexImpl;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
+import info.aduna.io.FileUtil;
+import org.aksw.agdistis.index.Index;
+import org.aksw.agdistis.util.LiteralAnalyzer;
+import org.aksw.agdistis.util.Triple;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.QueryParserBase;
@@ -24,17 +31,14 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.NumericUtils;
-import org.apache.lucene.util.Version;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-public class TripleIndex {
+public class TripleIndex implements Index {
 
-	private static final Version LUCENE44 = Version.LUCENE_44;
+	//private static final Version LUCENE44 = Version.LUCENE_44;
 
 	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndex.class);
 
@@ -45,7 +49,6 @@ public class TripleIndex {
 	public static final String FIELD_FREQ = "freq";
 
 	private int defaultMaxNumberOfDocsRetrievedFromIndex = 100;
-
 	private Directory directory;
 	private IndexSearcher isearcher;
 	private DirectoryReader ireader;
@@ -62,7 +65,7 @@ public class TripleIndex {
 		String index = envIndex != null ? envIndex : prop.getProperty("index");
 		log.info("The index will be here: " + index);
 
-		directory = new MMapDirectory(new File(index));
+		directory = new MMapDirectory(new File(index).toPath());
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 		this.urlValidator = new UrlValidator();
@@ -71,7 +74,7 @@ public class TripleIndex {
 	}
 	
 	public void setIndex(String index) throws IOException {
-		directory = new MMapDirectory(new File(index));
+		directory = new MMapDirectory(new File(index).toPath());
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 	}
@@ -81,7 +84,7 @@ public class TripleIndex {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		BooleanQuery bq = new BooleanQuery();
+		BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
 		List<Triple> triples = new ArrayList<Triple>();
 
 		try {
@@ -91,11 +94,11 @@ public class TripleIndex {
 			}
 			if (subject != null) {
 				Query tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(tq, BooleanClause.Occur.MUST);
 			}
 			if (predicate != null) {
 				Query tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(tq, BooleanClause.Occur.MUST);
 			}
 
 			if (object != null && object.length() > 0) {
@@ -103,26 +106,29 @@ public class TripleIndex {
 				if (urlValidator.isValid(object)) {
 
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
-					bq.add(q, BooleanClause.Occur.MUST);
+					booleanQueryBuilder.add(q, BooleanClause.Occur.MUST);
 
 				} else if (StringUtils.isNumeric(object)) {
 					int tempInt = Integer.parseInt(object);
+					/*IntPoint i =new IntPoint(object);
 					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
-					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
-					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
-					bq.add(q, BooleanClause.Occur.MUST);
+					intToPrefixCoded(tempInt, 0, bytes);
+					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));*/
+					q = IntPoint.newExactQuery(FIELD_NAME_OBJECT_LITERAL,tempInt);
+					booleanQueryBuilder.add(q, BooleanClause.Occur.MUST);
 
 				}
 				else {
-					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
+					Analyzer analyzer = new LiteralAnalyzer();
+					QueryParser parser = new QueryParser(FIELD_NAME_OBJECT_LITERAL, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.AND);
 					q = parser.parse(QueryParserBase.escape(object));
-					bq.add(q, BooleanClause.Occur.MUST);
+					booleanQueryBuilder.add(q, BooleanClause.Occur.MUST);
 				}
 			}
 
 			// use the cache
+			BooleanQuery bq = booleanQueryBuilder.build();
 			triples = getFromIndex(maxNumberOfResults, bq);
 			cache.put(bq, triples);
 
@@ -135,7 +141,7 @@ public class TripleIndex {
 
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		log.debug("\t start asking index...");
-		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
+		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults);
 		isearcher.search(bq, collector);
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

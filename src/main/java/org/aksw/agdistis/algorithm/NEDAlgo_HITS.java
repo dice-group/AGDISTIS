@@ -15,9 +15,10 @@ import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.graph.PageRank;
+import org.aksw.agdistis.index.ContextIndex;
+import org.aksw.agdistis.index.Index;
 import org.aksw.agdistis.model.CandidatesScore;
-import org.aksw.agdistis.util.TripleIndex;
-import org.aksw.agdistis.util.TripleIndexContext;
+import org.aksw.agdistis.index.indexImpl.TripleIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +30,8 @@ public class NEDAlgo_HITS {
 	private String edgeType;
 	private String nodeType;
 	private CandidateUtil cu;
-	private TripleIndex index;
-	private TripleIndexContext indexByContext;
+	private Index index;
+	private ContextIndex indexByContext;
 	// needed for the experiment about which properties increase accuracy
 	private double threshholdTrigram;
 	private int maxDepth;

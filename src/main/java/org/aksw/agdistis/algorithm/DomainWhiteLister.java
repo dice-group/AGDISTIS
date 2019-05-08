@@ -8,14 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
+import org.aksw.agdistis.index.Index;
 import org.aksw.agdistis.util.Triple;
-import org.aksw.agdistis.util.TripleIndex;
+//import org.aksw.agdistis.index.indexImpl.TripleIndex;
 
 public class DomainWhiteLister {
-	private TripleIndex index;
+	private Index index;
 	HashSet<String> whiteList = new HashSet<String>();
 
-	public DomainWhiteLister(TripleIndex index) throws IOException {
+	public DomainWhiteLister(Index index) throws IOException {
 		Properties prop = new Properties();
 		InputStream input = DomainWhiteLister.class.getResourceAsStream("/config/agdistis.properties");
 		prop.load(input);

@@ -11,7 +11,6 @@ import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
-import org.aksw.agdistis.util.TripleIndexContext;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.Test;
 
@@ -47,7 +46,20 @@ public class AGDISTISTest {
 		}
 
 	}
+	@Test
+	public void minEx() throws IOException {
+		String testStr="<entity>Am Golfplatz 1</entity>";
+		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
+		Document d = GetDisambiguation.textToDocument(testStr);
+		agdistis.run(d, null);
 
+		NamedEntitiesInText namedEntities = d.getNamedEntitiesInText();
+		//HashMap<NamedEntityInText, String> results = new HashMap<NamedEntityInText, String>();
+		for (NamedEntityInText namedEntity : namedEntities) {
+			String disambiguatedURL = namedEntity.getNamedEntityUri();
+			System.out.println(namedEntity+": "+ disambiguatedURL);
+		}
+	}
 	@Test
 	public void testMinimalExample() throws InterruptedException, IOException {
 		String obama = "Barack Obama";

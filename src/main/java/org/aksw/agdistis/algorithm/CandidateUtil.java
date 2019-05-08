@@ -13,11 +13,12 @@ import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
 import org.aksw.agdistis.graph.Node;
+import org.aksw.agdistis.index.Index;
+import org.aksw.agdistis.index.indexImpl.*;
+import org.aksw.agdistis.util.ContextDocument;
 import org.aksw.agdistis.util.PreprocessingNLP;
 import org.aksw.agdistis.util.Stemming;
 import org.aksw.agdistis.util.Triple;
-import org.aksw.agdistis.util.TripleIndex;
-import org.aksw.agdistis.util.TripleIndexContext;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,8 @@ public class CandidateUtil {
 		this.nodeType = nodeType;
 	}
 
-	private TripleIndex index;
-	private TripleIndexContext indexByContext;
+	private Index index;
+	private org.aksw.agdistis.index.ContextIndex indexByContext;
 	private NGramDistance nGramDistance;
 	private CorporationAffixCleaner corporationAffixCleaner;
 	private DomainWhiteLister domainWhiteLister;
@@ -54,12 +55,18 @@ public class CandidateUtil {
 		String envNgramDistance = System.getenv("AGDISTIS_NGRAM_DISTANCE");
 		this.nGramDistance = new NGramDistance(
 				Integer.valueOf(envNgramDistance != null ? envNgramDistance : prop.getProperty("ngramDistance")));
-		this.index = new TripleIndex();
+		String envIndexType = System.getenv("useElasticsearch");
+		Boolean useElasticsearch = Boolean.valueOf(envIndexType != null ? envIndexType : prop.getProperty("useElasticsearch"));
+		if(useElasticsearch)
+			this.index = new ElasticSearchTripleIndex();
+		else this.index = new TripleIndex();
 		String envContext = System.getenv("AGDISTIS_CONTEXT");
 		this.context = Boolean.valueOf(envContext != null ? envContext : prop.getProperty("context"));
-		if (context == true) { // in case the index by context exist
-			this.indexByContext = new TripleIndexContext();
+		if (context == true&&useElasticsearch) { // in case the index by context exist
+			this.indexByContext = new ElasticSearchContextIndex();
 		}
+		else if(context)
+			this.indexByContext = new ContextIndex();
 		this.corporationAffixCleaner = new CorporationAffixCleaner();
 		this.domainWhiteLister = new DomainWhiteLister(index);
 		String envPopularity = System.getenv("AGDISTIS_POPULARITY");
@@ -165,7 +172,7 @@ public class CandidateUtil {
 		List<Triple> candidates = new ArrayList<Triple>();
 		List<Triple> acronymCandidatesTemp = new ArrayList<Triple>();
 		List<Triple> acronymCandidatesTemp2 = new ArrayList<Triple>();
-		List<Triple> candidatesContext = new ArrayList<Triple>();
+		List<ContextDocument> candidatesContext = new ArrayList<>();
 		List<Triple> candidatesContextbyLabel = new ArrayList<Triple>();
 		List<Triple> linkedsbyContext = new ArrayList<Triple>();
 		int countFinalCandidates = 0;
@@ -319,8 +326,8 @@ public class CandidateUtil {
 
 				// taking all possibles SF for each resource found.
 				if (candidatesContext != null) {
-					for (Triple triple : candidatesContext) {
-						String url = nodeType + triple.getPredicate();
+					for (ContextDocument doc : candidatesContext) {
+						String url = doc.getUri();
 						candidatesContextbyLabel.addAll(searchCandidatesByUrl(url, searchInSurfaceForms));
 					}
 				}
@@ -333,12 +340,14 @@ public class CandidateUtil {
 					cleanCandidateURL = nlp.Preprocessing(cleanCandidateURL);
 					if (candidateURL.startsWith(nodeType)) {
 						// trigram similarity over the URIS
-						if (nGramDistance.getDistance(cleanCandidateURL, label) < 0.3) {
+
+						//if (nGramDistance.getDistance(cleanCandidateURL, label) < 0.3) {
+						if (nGramDistance.getDistance(c.getObject(), label) < 0.3) {
 							continue;
 						}
 						// finding direct connections
-						for (Triple temp : candidatesContext) {
-							String candidateTemp = nodeType + temp.getPredicate();
+						for (ContextDocument temp : candidatesContext) {
+							String candidateTemp = temp.getUri();
 							linkedsbyContext.addAll(searchbyConnections(candidateURL, candidateTemp));
 						}
 						// Only resources which have connections with others are
@@ -384,7 +393,7 @@ public class CandidateUtil {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		ArrayList<Triple> tmp2 = new ArrayList<Triple>();
 		ArrayList<Triple> finalTmp = new ArrayList<Triple>();
-		ArrayList<Triple> candidatesScore = new ArrayList<Triple>();
+		ArrayList<ContextDocument> candidatesScore = new ArrayList<>();
 
 		if (popularity) { // Frequency of entities.
 			tmp.addAll(index.search(null, "http://www.w3.org/2000/01/rdf-schema#label", label, 500));
@@ -401,7 +410,7 @@ public class CandidateUtil {
 				if (candidatesScore.isEmpty()) {
 					c.setObject("1");
 				} else {
-					c.setObject(candidatesScore.get(0).getObject());
+					c.setObject(""+candidatesScore.get(0).getUriCount());
 				}
 			}
 
@@ -455,16 +464,16 @@ public class CandidateUtil {
 		return tmp;
 	}
 
-	ArrayList<Triple> searchCandidatesByContext(String entities, String label) {
-		ArrayList<Triple> tmp = new ArrayList<Triple>();
-		tmp.addAll(indexByContext.search(entities, label, null, 100));
+	ArrayList<ContextDocument> searchCandidatesByContext(String entities, String label) {
+		ArrayList<ContextDocument> tmp = new ArrayList<ContextDocument>();
+		tmp.addAll(indexByContext.search(entities, label));
 
 		return tmp;
 	}
 
-	ArrayList<Triple> searchCandidatesByScore(String label) {
-		ArrayList<Triple> tmp = new ArrayList<Triple>();
-		tmp.addAll(indexByContext.search(null, label, null));
+	ArrayList<ContextDocument> searchCandidatesByScore(String label) {
+		ArrayList<ContextDocument> tmp = new ArrayList<>();
+		tmp.addAll(indexByContext.search(null, label));
 
 		return tmp;
 	}
@@ -472,6 +481,7 @@ public class CandidateUtil {
 	ArrayList<Triple> searchbyConnections(String uri, String uri2) {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		tmp.addAll(index.search(uri, null, uri2));
+		tmp.addAll(index.search(uri2,null,uri));
 
 		return tmp;
 	}
@@ -480,7 +490,7 @@ public class CandidateUtil {
 		ArrayList<Triple> tmp = new ArrayList<Triple>();
 		ArrayList<Triple> tmp2 = new ArrayList<Triple>();
 		ArrayList<Triple> finalTmp = new ArrayList<Triple>();
-		ArrayList<Triple> candidatesScore = new ArrayList<Triple>();
+		ArrayList<ContextDocument> candidatesScore = new ArrayList<>();
 
 		if (popularity) {
 			tmp.addAll(index.search(url, "http://www.w3.org/2000/01/rdf-schema#label", null, 500));
@@ -493,7 +503,7 @@ public class CandidateUtil {
 				if (candidatesScore.isEmpty()) {
 					c.setObject("1");
 				} else {
-					c.setObject(candidatesScore.get(0).getObject());
+					c.setObject(""+candidatesScore.get(0).getUriCount());
 				}
 			}
 
@@ -560,10 +570,10 @@ public class CandidateUtil {
 		indexByContext.close();
 	}
 
-	public TripleIndex getIndex() {
+	public Index getIndex() {
 		return index;
 	}
-	public TripleIndexContext getIndexContext() {
+	public org.aksw.agdistis.index.ContextIndex getIndexContext() {
 		return indexByContext;
 	}
 

@@ -6,16 +6,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.aksw.agdistis.index.Index;
 import org.aksw.agdistis.util.Triple;
-import org.aksw.agdistis.util.TripleIndex;
+
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class BreadthFirstSearch {
-	private TripleIndex index;
+	private Index index;
 	private String algo;
 
-	public BreadthFirstSearch(TripleIndex index, String algo) {
+	public BreadthFirstSearch(Index index, String algo) {
 		this.index = index;
 		this.algo = algo;
 	}

@@ -3,19 +3,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
 
-import org.aksw.agdistis.algorithm.CandidateUtil;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
 import org.aksw.agdistis.datatypes.NamedEntityInText;
-import org.aksw.agdistis.util.Triple;
-import org.aksw.agdistis.util.TripleIndex;
-import org.aksw.agdistis.util.TripleIndexCreator;
+import org.aksw.agdistis.index.indexImpl.TripleIndex;
+import org.aksw.agdistis.indexWriter.TripleIndexCreator;
 import org.aksw.agdistis.webapp.GetDisambiguation;
 import org.junit.After;
 import org.junit.Before;
@@ -68,7 +63,7 @@ public class TripleIndexCreatorTest {
 		if (folder.exists()) {
 			folder.delete();
 		}
-		tic.createIndex(Lists.newArrayList(file), folder.getAbsolutePath(), null);
+		tic.createIndex(Lists.newArrayList(file), folder.getAbsolutePath(), null,false);
 
 		// set the properties correctly
 

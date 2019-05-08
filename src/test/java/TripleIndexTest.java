@@ -4,8 +4,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.List;
 
+import org.aksw.agdistis.index.Index;
+import org.aksw.agdistis.index.indexImpl.ElasticSearchTripleIndex;
 import org.aksw.agdistis.util.Triple;
-import org.aksw.agdistis.util.TripleIndex;
+import org.aksw.agdistis.index.indexImpl.TripleIndex;
 import org.apache.lucene.search.spell.NGramDistance;
 import org.junit.After;
 import org.junit.Before;
@@ -16,17 +18,16 @@ import org.slf4j.LoggerFactory;
 public class TripleIndexTest {
 
 	Logger log = LoggerFactory.getLogger(TripleIndexTest.class);
-	private TripleIndex index;
+	private Index index;
 
 	@Before
 	public void init() {
+		//try {
 		try {
-			index = new TripleIndex();
-
+			index =new TripleIndex();
+			//index = new ElasticSearchTripleIndex();
 		} catch (IOException e) {
-			log.error(
-					"Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location",
-					e);
+			e.printStackTrace();
 		}
 	}
 
@@ -39,6 +40,15 @@ public class TripleIndexTest {
 					"Can not load index or DBpedia repository due to either wrong properties in agdistis.properties or missing index at location",
 					e);
 		}
+	}
+	@Test
+	public void test(){
+		String sub="https://portal.limbo-project.org/address/13003-130030000-130030000000-08100-3";
+		String pred="http://www.w3.org/2000/01/rdf-schema#label";
+		String obj="Ea 2";
+		List<Triple> triples= index.search(sub,null,null);
+		for(Triple t:triples)
+			System.out.println(t.getSubject()+" "+t.getPredicate()+" "+t.getObject()+" ");
 	}
 
 	@Test
