@@ -69,7 +69,7 @@ public class ElasticSearchContextIndex implements ContextIndex {
                 booleanQueryBuilder.must(bq);
             }
             if (surfaceForm != null) {
-                QueryBuilder bq= matchQuery(FIELD_NAME_CONTEXT,context).operator(Operator.AND);
+                QueryBuilder bq= matchQuery(FIELD_NAME_SURFACE_FORM,surfaceForm).operator(Operator.AND);
                 booleanQueryBuilder.should(bq);
             }
             contextDocuments = getFromIndex(maxNumberOfResults, booleanQueryBuilder);
