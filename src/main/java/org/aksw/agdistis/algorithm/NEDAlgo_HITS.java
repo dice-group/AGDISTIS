@@ -115,8 +115,8 @@ public class NEDAlgo_HITS {
 			}
 			// To get all candidates along with their scores
 			if (candidatesPerNE != null) {
-				List<CandidatesScore> listCandidates = new ArrayList<>();
 				for (NamedEntityInText entity : namedEntities) {
+					List<CandidatesScore> listCandidates = new ArrayList<>();
 					for (int i = 0; i < orderedList.size(); i++) {
 						Node m = orderedList.get(i);
 
