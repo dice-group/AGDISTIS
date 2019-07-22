@@ -193,6 +193,62 @@ public class WriteElasticsearchIndexContext implements WriteContextIndex {
         indexRequest.id(""+id);
         bulkProcessor.add(indexRequest);
     }
+    public void upsertDocument(String documentUri,String surfaceForm, List<String>context){
+        if(surfaceForm ==null)upsertDocument(documentUri,context);
+        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".addAll(params.context);\n"
+                +"ctx._source."+FIELD_NAME_SURFACE_FORM+" .add(params.surfaceForm);\n"
+                +"ctx._source."+FIELD_NAME_URI_COUNT+" += "+context.size()+";\n";
+        Map<String,Object> m=new HashMap<>();
+        m.put("context",context);
+        m.put("surfaceForm",context);
+        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
+        try {
+            IndexRequest indexRequest = null;
+            indexRequest = new IndexRequest("index", "type", "1")
+                    .source(jsonBuilder()
+                                    .startObject()
+                                    .field(FIELD_NAME_URI, documentUri)
+                                    .array(FIELD_NAME_SURFACE_FORM, surfaceForm)
+                                    .array(FIELD_NAME_CONTEXT, context.toArray())
+                                    .field(FIELD_NAME_URI_COUNT, 1)
+                                    .endObject()
+                    );
+            indexRequest.id(documentUri);
+            UpdateRequest updateRequest = new UpdateRequest(index, "_doc", documentUri)
+                    .script(script)
+                    .upsert(indexRequest);
+
+            bulkProcessor.add(updateRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void upsertDocument(String documentUri,List<String> context){
+        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".addAll(params.context);\n"
+                +"ctx._source."+FIELD_NAME_URI_COUNT+" += "+context.size()+";\n";
+        Map<String,Object> m=new HashMap<>();
+        m.put("context",context);
+        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
+        try {
+            IndexRequest indexRequest = null;
+            indexRequest = new IndexRequest("index", "type", "1")
+                    .source(jsonBuilder()
+                            .startObject()
+                            .field(FIELD_NAME_URI, documentUri)
+                            .array(FIELD_NAME_CONTEXT, context.toArray())
+                            .field(FIELD_NAME_URI_COUNT, 1)
+                            .endObject()
+                    );
+            indexRequest.id(documentUri);
+            UpdateRequest updateRequest = new UpdateRequest(index, "_doc", documentUri)
+                    .script(script)
+                    .upsert(indexRequest);
+
+            bulkProcessor.add(updateRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void updateDocument(String documentUri,String context,long id) throws IOException{
         String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".add(params.context);\n"
                 +"ctx._source."+FIELD_NAME_URI_COUNT+" += 1;\n";

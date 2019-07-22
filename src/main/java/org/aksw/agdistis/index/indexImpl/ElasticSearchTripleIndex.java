@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static org.elasticsearch.index.query.QueryBuilders.existsQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
@@ -96,6 +97,33 @@ public class ElasticSearchTripleIndex implements Index {
                 }
 
             }
+            triples = getFromIndex(maxNumberOfResults, booleanQueryBuilder);
+            //cache.put(bq, triples);
+
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage() + " -> " + subject);
+            e.printStackTrace();
+        }
+        return triples;
+    }
+    //used for context index creation
+    //Search for all documents that contain a literal for a specific subject
+    public List<Triple> search(String subject,int maxNumberOfResults){
+        BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
+        List<Triple> triples = new ArrayList<>();
+
+        try {
+            if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
+                log.error(
+                        "A subject 'http://aksw.org/notInWiki' is searched in the index. That is strange and should not happen");
+            }
+            if (subject != null) {
+                QueryBuilder q = termQuery(FIELD_NAME_SUBJECT, subject);
+                booleanQueryBuilder.must(q);
+            }
+            QueryBuilder lit= existsQuery(FIELD_NAME_OBJECT_LITERAL);
+            booleanQueryBuilder.must(lit);
+
             triples = getFromIndex(maxNumberOfResults, booleanQueryBuilder);
             //cache.put(bq, triples);
 
