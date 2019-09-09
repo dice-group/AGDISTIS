@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -16,6 +18,8 @@ import org.aksw.agdistis.index.indexImpl.TripleIndex;
 import org.aksw.agdistis.indexWriter.impl.WriteElasticSearchIndex;
 import org.aksw.agdistis.indexWriter.impl.WriteLuceneIndex;
 
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
@@ -68,7 +72,7 @@ public class TripleIndexCreator {
             log.info("Getting triple data from: " + folder);
             List<File> listOfFiles = new ArrayList<File>();
             for (File file : new File(folder).listFiles()) {
-                if (file.getName().endsWith("ttl")) {
+                if (file.getName().endsWith("ttl")||file.getName().endsWith("nt")) {
                     listOfFiles.add(file);
                 }
             }
@@ -87,7 +91,8 @@ public class TripleIndexCreator {
             String envIndexType = System.getenv("useElasticsearch");
             Boolean useElasticsearch = Boolean.valueOf(envIndexType != null ? envIndex : prop.getProperty("useElasticsearch"));
             org.aksw.agdistis.indexWriter.TripleIndexCreator ic = new org.aksw.agdistis.indexWriter.TripleIndexCreator();
-            ic.createIndex(listOfFiles, index, baseURI,useElasticsearch);
+            //ic.createIndex(listOfFiles, index, baseURI,useElasticsearch);
+            ic.writeIndexFromFTP(baseURI,useElasticsearch);
             ic.close();
         } catch (IOException e) {
             log.error("Error while creating index. Maybe the index is corrupt now.", e);
@@ -119,7 +124,57 @@ public class TripleIndexCreator {
     void close(){
         writeIndex.close();
     }
+    private void writeIndexFromFTP(String baseURI, Boolean useElaticsearch){
+        List<String>resources=new ArrayList<>();
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/bremen.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/hamburg.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/baden-wuerttemberg.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/bayern.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/brandenburg.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/hessen.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/mecklenburg-vorpommern.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/niedersachsen.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/nordrhein-westfalen.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/rheinland-pfalz.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/saarland.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/sachsen-anhalt.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/sachsen.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/schleswig-holstein.nt");
+        resources.add("https://hobbitdata.informatik.uni-leipzig.de/lgd_de/thueringen.nt");
 
+        try {
+            writeIndex = new WriteElasticSearchIndex();
+            writeIndex.createIndex();
+            for(String urlstring:resources) {
+                URL url = new URL(urlstring);
+                URLConnection conn = url.openConnection();
+                InputStream inputStream = conn.getInputStream();
+                indexTTLFileFromWeb(inputStream,baseURI,NT);
+                inputStream.close();
+                writeIndex.commit();
+            }
+            writeIndex.close();
+        } catch (Exception e) {
+            log.error("Error while creating TripleIndex.", e);
+        }
+    }
+    private void indexTTLFileFromWeb(InputStream inputStream, String baseURI,String type)
+            throws RDFParseException, RDFHandlerException, FileNotFoundException, IOException {
+        //log.info("Start parsing: " + file);
+        RDFParser parser;
+        if(TTL.equals(type))
+            parser= new TurtleParser();
+        else parser=new NTriplesParser();
+        org.aksw.agdistis.indexWriter.TripleIndexCreator.OnlineStatementHandler osh = new org.aksw.agdistis.indexWriter.TripleIndexCreator.OnlineStatementHandler();
+        parser.setRDFHandler(osh);
+        parser.setStopAtFirstError(false);
+        if (baseURI == null) {
+            parser.parse(inputStream, "");
+        } else {
+            parser.parse(inputStream, baseURI);
+        }
+        //log.info("Finished parsing: " + file);
+    }
     private void indexTTLFile(File file, String baseURI,String type)
             throws RDFParseException, RDFHandlerException, FileNotFoundException, IOException {
         log.info("Start parsing: " + file);

@@ -79,7 +79,8 @@ public class WriteElasticSearchIndex implements WriteIndex {
                     .endObject()
                     .startObject("object_literal")
                     .field("type", "text")
-                    .field("analyzer", "literal_analyzer")
+                    .field("analyzer", "standard")
+                    //.field("analyzer", "literal_analyzer")
                     .endObject()
                     .endObject()
                     .endObject();
