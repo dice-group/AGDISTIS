@@ -1,4 +1,5 @@
 import org.aksw.agdistis.index.indexImpl.ContextIndex;
+import org.aksw.agdistis.index.indexImpl.ElasticSearchContextIndex;
 import org.aksw.agdistis.util.ContextDocument;
 import org.junit.After;
 import org.junit.Before;
@@ -6,19 +7,27 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 public class ContextIndexTest {
     Logger log = LoggerFactory.getLogger(TripleIndexTest.class);
-    private ContextIndex index;
+    private org.aksw.agdistis.index.ContextIndex index;
 
     @Before
     public void init() {
-        //try {
         try {
-            //index =new TripleIndex();
-            index = new ContextIndex();
+            Properties prop = new Properties();
+            InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
+            prop.load(input);
+
+            boolean useElasticsearch = Boolean.parseBoolean(prop.getProperty("useElasticsearch"));
+            if(useElasticsearch)
+                index = new ElasticSearchContextIndex();
+            else index =new ContextIndex();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,8 +1,11 @@
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import org.aksw.agdistis.index.Index;
 import org.aksw.agdistis.index.indexImpl.ElasticSearchTripleIndex;
@@ -22,10 +25,16 @@ public class TripleIndexTest {
 
 	@Before
 	public void init() {
-		//try {
 		try {
-			index =new TripleIndex();
-			//index = new ElasticSearchTripleIndex();
+			Properties prop = new Properties();
+			InputStream input = new FileInputStream("src/main/resources/config/agdistis.properties");
+			prop.load(input);
+
+			boolean useElasticsearch = Boolean.parseBoolean(prop.getProperty("useElasticsearch"));
+			if(useElasticsearch)
+				index = new ElasticSearchTripleIndex();
+			else index=new TripleIndex();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

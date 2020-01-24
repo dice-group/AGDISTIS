@@ -6,6 +6,7 @@ import org.aksw.agdistis.index.indexImpl.ElasticSearchTripleIndex;
 import org.aksw.agdistis.index.indexImpl.TripleIndex;
 import org.aksw.agdistis.indexWriter.impl.WriteElasticsearchIndexContext;
 import org.aksw.agdistis.indexWriter.impl.WriteLuceneIndexContext;
+import org.aksw.agdistis.util.ContextDocument;
 import org.aksw.agdistis.util.Triple;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -18,13 +19,10 @@ import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class TripleIndexCreatorContextAllLiterals {
-    private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreatorContext.class);
+    private static org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexCreatorContextAllLiterals.class);
 
     public static final String NT = "nt";
     public static final String TTL = "ttl";
@@ -34,15 +32,19 @@ public class TripleIndexCreatorContextAllLiterals {
     private static String nodeType;
     private static String baseURI;
     private static String endpoint;
-    private static ElasticSearchTripleIndex searchIndex;
+    private static Index searchIndex;
     public static final String FIELD_NAME_CONTEXT = "CONTEXT";
     public static final String FIELD_NAME_SURFACE_FORM = "SURFACE_FORM";
     public static final String FIELD_NAME_URI = "URI";
     public static final String FIELD_NAME_URI_COUNT = "URI_COUNT";
     private HashMap<String,String> knownSubjects;
     private HashMap<String,Long>ids;
-    WriteElasticsearchIndexContext index;
+    WriteContextIndex index;
     private long maxId=0;
+
+    private Map<String, ContextDocument> toIndex = new HashMap<>();
+    private int count = 0;
+
     public static void main(String args[]) {
         if (args.length > 0) {
             log.error("TripleIndexCreator works without parameters. Please use agdistis.properties File");
@@ -80,11 +82,11 @@ public class TripleIndexCreatorContextAllLiterals {
             log.info("Setting Base URI to: " + baseURI);
             String envIndexType = System.getenv("useElasticsearch");
             Boolean useElasticsearch = Boolean.valueOf(envIndexType != null ? envIndexType : prop.getProperty("useElasticsearch"));
-            //if(useElasticsearch)
+            if(useElasticsearch)
             searchIndex = new ElasticSearchTripleIndex();
-            //else searchIndex=new TripleIndex();
+            else searchIndex=new TripleIndex();
             TripleIndexCreatorContextAllLiterals ic = new TripleIndexCreatorContextAllLiterals();
-            ic.createIndex(listOfFiles, baseURI,index);
+            ic.createIndex(listOfFiles, baseURI,index ,useElasticsearch);
             searchIndex.close();
             log.info("Finished");
 
@@ -93,21 +95,22 @@ public class TripleIndexCreatorContextAllLiterals {
         }
     }
 
-    public void createIndex(List<File> files, String baseURI, String idxDirectory) {
+    public void createIndex(List<File> files, String baseURI, String idxDirectory, Boolean useElasticsearch) {
         try {
             knownSubjects=new HashMap<>();
             ids=new HashMap<String,Long>();
-            //if(useElaticsearch)
-            index = new WriteElasticsearchIndexContext();
-            //else index = new WriteLuceneIndexContext(idxDirectory);
+            if(useElasticsearch)
+                index = new WriteElasticsearchIndexContext();
+            else index = new WriteLuceneIndexContext(idxDirectory);
             index.createIndex();
             for (File file : files) {
+                System.out.print("File " + file.getName());
                 String type = FileUtil.getFileExtension(file.getName());
                 if (type.equals(TTL))
                     processTTLFile(file, baseURI,TTL);
                 if(type.equals(NT))
                     processTTLFile(file, baseURI,NT);
-
+                System.out.println(" .. done");
             }
             //indexing
             searchIndex.close();
@@ -129,6 +132,10 @@ public class TripleIndexCreatorContextAllLiterals {
         parser.setRDFHandler(osh);
         parser.setStopAtFirstError(false);
         parser.parse(new FileReader(file), baseURI);
+
+        // for remaining triples
+        pushToIndex();
+
         log.info("Finished parsing: " + file);
     }
 
@@ -144,25 +151,56 @@ public class TripleIndexCreatorContextAllLiterals {
     }
 
     private void processTriple(String subject, String predicate, String object, boolean isUri){
-            if (!isUri) {
-                List<String> context = new ArrayList<>();
-                context.add(object);
-                if ("http://www.w3.org/2000/01/rdf-schema#label".equals(predicate)) {
-                    index.upsertDocument(subject, object, context);
-                } else {
-                    index.upsertDocument(subject, context);
-                }
+        count++;
+
+        ContextDocument contextDocument = toIndex.get(subject);
+        if(contextDocument == null) {
+            contextDocument = new ContextDocument(subject);
+            toIndex.put(subject, contextDocument);
+        }
+
+        if (!isUri) {
+            if ("http://www.w3.org/2000/01/rdf-schema#label".equals(predicate)) {
+                contextDocument.addContext(object);
+                contextDocument.addSurfaceForm(object);
 
             } else {
-                List<Triple> objectLiterals = searchIndex.search(object, 100);
-
-                if (objectLiterals.size() > 0) {
-                    List<String> context = new ArrayList<>();
-                    objectLiterals.forEach(triple -> context.add(triple.getObject()));
-                    index.upsertDocument(subject,context);
-
-                }
+                contextDocument.addContext(object);
             }
 
+        } else {
+            contextDocument.addObject(object);
+        }
+
+        // index once a million triples have been seen
+        if(count == 1000000)
+        {
+            pushToIndex();
+        }
+    }
+
+    private void pushToIndex()
+    {
+        Set<String> allObjects = new HashSet<>();
+        toIndex.values().forEach(contextDocument -> allObjects.addAll(contextDocument.getObjects()));
+
+        Map<String, List<String>> searchresults = new HashMap<>();
+        allObjects.forEach(s -> {
+            List<Triple> objectLiterals = searchIndex.search(s, 100);
+            List<String> context = new ArrayList<>();
+            if (objectLiterals.size() > 0) {
+                objectLiterals.forEach(triple -> context.add(triple.getObject()));
+            }
+            searchresults.put(s, context);
+        });
+
+        for(String documentUri : toIndex.keySet()) {
+            ContextDocument document = toIndex.get(documentUri);
+            document.getObjects().forEach(object -> document.getContext().addAll(searchresults.get(object)));
+            index.upsertDocument(documentUri, document.getSurfaceForm(), document.getContext());
+        }
+        // Reset the count and the Subject2ContextDocument map
+        toIndex.clear();
+        count = 0;
     }
 }

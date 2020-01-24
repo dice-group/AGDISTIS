@@ -4,6 +4,7 @@ import org.aksw.agdistis.indexWriter.WriteIndex;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -50,80 +51,99 @@ public class WriteElasticSearchIndex implements WriteIndex {
     @Override
     public void createIndex() {
         try{
-            XContentBuilder settingsBuilder = null;
+            GetIndexRequest existsRequest = new GetIndexRequest();
+            existsRequest.indices(index);
+            boolean exists = client.indices().exists(existsRequest, RequestOptions.DEFAULT);
+
+            if(!exists) {
+                XContentBuilder settingsBuilder = null;
                 settingsBuilder = jsonBuilder()
                         .startObject()
+                        .startObject("index")
+                        .field("number_of_shards", 5)
+                        .endObject()
                         .startObject("analysis")
                         .startObject("analyzer")
                         .startObject("literal_analyzer")
-                        .field("type","custom")
+                        .field("type", "custom")
                         .field("tokenizer", "lowercase")
-                        .field("filter","asciifolding")
+                        .field("filter", "asciifolding")
                         .endObject()
                         .endObject()
                         .endObject()
                         .endObject();
 
 
-            XContentBuilder mappingsBuilder =jsonBuilder()
-                    .startObject()
-                    .startObject("properties")
-                    .startObject("subject")
-                    .field("type", "keyword")
-                    .endObject()
-                    .startObject("predicate")
-                    .field("type", "keyword")
-                    .endObject()
-                    .startObject("object_uri")
-                    .field("type", "keyword")
-                    .endObject()
-                    .startObject("object_literal")
-                    .field("type", "text")
-                    .field("analyzer", "standard")
-                    //.field("analyzer", "literal_analyzer")
-                    .endObject()
-                    .endObject()
-                    .endObject();
+                XContentBuilder mappingsBuilder = jsonBuilder()
+                        .startObject()
+                        .startObject("properties")
+                        .startObject("subject")
+                        .field("type", "keyword")
+                        .endObject()
+                        .startObject("predicate")
+                        .field("type", "keyword")
+                        .endObject()
+                        .startObject("object_uri")
+                        .field("type", "keyword")
+                        .endObject()
+                        .startObject("object_literal")
+                        .field("type", "text")
+//                    .field("analyzer", "standard")
+                        .field("analyzer", "literal_analyzer")
+                        .endObject()
+                        .endObject()
+                        .endObject();
 
 
-            System.out.println(Strings.toString(settingsBuilder));
-            CreateIndexRequest request = new CreateIndexRequest(index);
-            request.mapping("_doc", mappingsBuilder);
-            request.settings(settingsBuilder);
-            CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
-            System.out.println(createIndexResponse);
+                System.out.println(Strings.toString(settingsBuilder));
+                CreateIndexRequest request = new CreateIndexRequest(index);
+                request.mapping("_doc", mappingsBuilder);
+                request.settings(settingsBuilder);
+                System.out.println(Strings.toString(request));
+                CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+                System.out.println(createIndexResponse);
+            }
+            else{
+                System.out.println(String.format("Index %s already existss", index));
+            }
+
             BulkProcessor.Listener listener = new BulkProcessor.Listener() {
                 @Override
                 public void beforeBulk(long executionId, BulkRequest request) {
-                    System.out.println("before bulk");
+//                    System.out.println("before bulk");
                 }
 
                 @Override
                 public void afterBulk(long executionId, BulkRequest request,
                                       BulkResponse response) {
-                    System.out.println("after bulk1");
+//                    System.out.println("after bulk1");
+                    response.forEach(e->{
+                        if(e.getFailureMessage()!=null) {
+                            System.out.println(e.getId() + " : " + e.getFailureMessage());
+                            System.out.println(e.getFailure().getCause().toString());
+                        }
+                    });
                 }
 
                 @Override
                 public void afterBulk(long executionId, BulkRequest request,
                                       Throwable failure) {
-                    System.out.println("after bulk2");
+//                    System.out.println("after bulk2");
+                    System.out.println(failure.getMessage());
+                    failure.printStackTrace();
                 }
             };
             BulkProcessor.Builder builder = BulkProcessor.builder(
                     (req, bulkListener) ->
                             client.bulkAsync(req, RequestOptions.DEFAULT, bulkListener),
                     listener);
-            builder.setBulkActions(500);
+            builder.setBulkActions(5000);
             builder.setBulkSize(new ByteSizeValue(1L, ByteSizeUnit.MB));
             builder.setConcurrentRequests(0);
             builder.setFlushInterval(TimeValue.timeValueSeconds(10L));
             builder.setBackoffPolicy(BackoffPolicy
                     .constantBackoff(TimeValue.timeValueSeconds(1L), 3));
-            bulkProcessor = BulkProcessor.builder(
-                    (req, bulkListener) ->
-                            client.bulkAsync(req, RequestOptions.DEFAULT, bulkListener),
-                    listener).build();
+            bulkProcessor = builder.build();
         } catch (IOException e) {
             e.printStackTrace();
         }

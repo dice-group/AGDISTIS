@@ -108,6 +108,7 @@ public class ElasticSearchTripleIndex implements Index {
     }
     //used for context index creation
     //Search for all documents that contain a literal for a specific subject
+    @Override
     public List<Triple> search(String subject,int maxNumberOfResults){
         BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
         List<Triple> triples = new ArrayList<>();

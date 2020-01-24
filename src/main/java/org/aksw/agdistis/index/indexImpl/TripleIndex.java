@@ -139,6 +139,11 @@ public class TripleIndex implements Index {
 		return triples;
 	}
 
+	@Override
+	public List<Triple> search(String subject, int numberOfResults) {
+		return this.search(subject, null, null, numberOfResults);
+	}
+
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		log.debug("\t start asking index...");
 		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults);

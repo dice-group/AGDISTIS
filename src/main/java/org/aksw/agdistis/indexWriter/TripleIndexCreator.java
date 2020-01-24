@@ -1,25 +1,10 @@
 package org.aksw.agdistis.indexWriter;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
+import info.aduna.io.FileUtil;
 import org.aksw.agdistis.index.indexImpl.TripleIndex;
 import org.aksw.agdistis.indexWriter.impl.WriteElasticSearchIndex;
 import org.aksw.agdistis.indexWriter.impl.WriteLuceneIndex;
-
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
@@ -34,7 +19,12 @@ import org.openrdf.rio.ntriples.NTriplesParser;
 import org.openrdf.rio.turtle.TurtleParser;
 import org.slf4j.LoggerFactory;
 
-import info.aduna.io.FileUtil;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class TripleIndexCreator {
     private static org.slf4j.Logger log = LoggerFactory.getLogger(org.aksw.agdistis.indexWriter.TripleIndexCreator.class);
@@ -91,8 +81,8 @@ public class TripleIndexCreator {
             String envIndexType = System.getenv("useElasticsearch");
             Boolean useElasticsearch = Boolean.valueOf(envIndexType != null ? envIndex : prop.getProperty("useElasticsearch"));
             org.aksw.agdistis.indexWriter.TripleIndexCreator ic = new org.aksw.agdistis.indexWriter.TripleIndexCreator();
-            //ic.createIndex(listOfFiles, index, baseURI,useElasticsearch);
-            ic.writeIndexFromFTP(baseURI,useElasticsearch);
+            ic.createIndex(listOfFiles, index, baseURI,useElasticsearch);
+//            ic.writeIndexFromFTP(baseURI,useElasticsearch);
             ic.close();
         } catch (IOException e) {
             log.error("Error while creating index. Maybe the index is corrupt now.", e);
@@ -104,9 +94,9 @@ public class TripleIndexCreator {
             if(useElaticsearch)
                 writeIndex = new WriteElasticSearchIndex();
             else writeIndex = new WriteLuceneIndex(idxDirectory);
-            //writeIndex =new WriteLuceneIndex(idxDirectory);
             writeIndex.createIndex();
             for (File file : files) {
+                System.out.print("File " + file.getName());
                 String type = FileUtil.getFileExtension(file.getName());
                 if (type.equals(TTL))
                     indexTTLFile(file, baseURI,TTL);
@@ -115,6 +105,7 @@ public class TripleIndexCreator {
                 if (type.equals(TSV))
                     indexTSVFile(file);
                 writeIndex.commit();
+                System.out.println(" ... done.");
             }
             writeIndex.close();
         } catch (Exception e) {

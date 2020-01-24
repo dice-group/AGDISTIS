@@ -20,10 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.aksw.agdistis.index.indexImpl.ElasticSearchContextIndex.FIELD_NAME_CONTEXT;
-import static org.aksw.agdistis.index.indexImpl.ElasticSearchContextIndex.FIELD_NAME_SURFACE_FORM;
-import static org.aksw.agdistis.indexWriter.TripleIndexCreatorContext.FIELD_NAME_URI;
-import static org.aksw.agdistis.indexWriter.TripleIndexCreatorContext.FIELD_NAME_URI_COUNT;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_CONTEXT;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_SURFACE_FORM;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI_COUNT;
 
 
 public class WriteLuceneIndexContext implements WriteContextIndex {
@@ -60,40 +60,31 @@ public class WriteLuceneIndexContext implements WriteContextIndex {
             e.printStackTrace();
         }
     }
-
-
     @Override
-    public void indexDocument(ContextDocument doc) throws IOException {
-        Document newDoc = new Document();
-        newDoc.add(new StringField(FIELD_NAME_URI, doc.getUri(), Field.Store.YES));
-        for(String surfaceForm:doc.getSurfaceForm())
-            newDoc.add(new TextField(FIELD_NAME_SURFACE_FORM, surfaceForm, Field.Store.YES));
-        newDoc.add(new StringField(FIELD_NAME_URI_COUNT, ""+doc.getUriCount(), Field.Store.YES));
-        for(String context:doc.getContext())
-            newDoc.add(new TextField(FIELD_NAME_CONTEXT, context, Field.Store.YES));
-        iwriter.addDocument(newDoc);
-    }
-    public void indexDocument(String documentUri,String context, List<String> surfaceForm,long id) throws IOException {
-        if(surfaceForm.isEmpty())indexDocument(documentUri,context,id);
-        else {
-            Document newDoc = new Document();
-            newDoc.add(new StringField(FIELD_NAME_URI, documentUri, Field.Store.YES));
-            for(String form:surfaceForm)
-                newDoc.add(new TextField(FIELD_NAME_SURFACE_FORM, form, Field.Store.YES));
-            newDoc.add(new TextField(FIELD_NAME_CONTEXT, context, Field.Store.YES));
-            newDoc.add(new StringField(FIELD_NAME_URI_COUNT, ""+1, Field.Store.YES));
-            iwriter.addDocument(newDoc);
-
+    public void upsertDocument(String documentUri, List<String> surfaceForm, List<String> context) {
+        try {
+            ContextDocument docToUpdate = searchIndex.search(documentUri);
+            if (docToUpdate == null) {
+                this.indexDocument(documentUri, context, surfaceForm);
+            } else {
+                this.updateDocument(documentUri, context, surfaceForm);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-    public void indexDocument(String documentUri,String context,long id) throws IOException {
+
+    public void indexDocument(String documentUri, List<String> context, List<String> surfaceForm) throws IOException {
         Document newDoc = new Document();
         newDoc.add(new StringField(FIELD_NAME_URI, documentUri, Field.Store.YES));
-        newDoc.add(new TextField(FIELD_NAME_CONTEXT, context, Field.Store.YES));
-        newDoc.add(new StringField(FIELD_NAME_URI_COUNT, ""+1, Field.Store.YES));
+        for (String form : surfaceForm)
+            newDoc.add(new TextField(FIELD_NAME_SURFACE_FORM, form, Field.Store.YES));
+        for (String cont : context)
+            newDoc.add(new TextField(FIELD_NAME_CONTEXT, cont, Field.Store.YES));
+        newDoc.add(new StringField(FIELD_NAME_URI_COUNT, "" + context.size(), Field.Store.YES));
         iwriter.addDocument(newDoc);
     }
-    public void updateDocument(String documentUri,String context,long id) throws IOException{
+    public void updateDocument(String documentUri, List<String> context, List<String> surfaceForm) throws IOException{
         commit();
 
         ContextDocument docToUpdate=searchIndex.search(documentUri);
@@ -105,8 +96,18 @@ public class WriteLuceneIndexContext implements WriteContextIndex {
         }
         for(String cont:docToUpdate.getContext())
             newDoc.add(new TextField(FIELD_NAME_CONTEXT, cont, Field.Store.YES));
-        newDoc.add(new TextField(FIELD_NAME_CONTEXT, context, Field.Store.YES));
-        newDoc.add(new StringField(FIELD_NAME_URI_COUNT, ""+(docToUpdate.getUriCount()+1), Field.Store.YES));
+
+        // New surface forms
+        if (surfaceForm != null && !surfaceForm.isEmpty()) {
+            for (String form : surfaceForm)
+                newDoc.add(new TextField(FIELD_NAME_SURFACE_FORM, form, Field.Store.YES));
+        }
+
+        // new context
+        for(String cont:context)
+            newDoc.add(new TextField(FIELD_NAME_CONTEXT, cont, Field.Store.YES));
+
+        newDoc.add(new StringField(FIELD_NAME_URI_COUNT, ""+(docToUpdate.getUriCount()+context.size()), Field.Store.YES));
         iwriter.updateDocument(new Term(FIELD_NAME_URI, documentUri), newDoc);
     }
 

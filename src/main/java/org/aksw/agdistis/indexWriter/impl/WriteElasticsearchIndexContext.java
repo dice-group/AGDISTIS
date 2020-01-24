@@ -1,10 +1,11 @@
 package org.aksw.agdistis.indexWriter.impl;
 
+import com.google.common.collect.Lists;
 import org.aksw.agdistis.indexWriter.WriteContextIndex;
-import org.aksw.agdistis.util.ContextDocument;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -25,10 +26,17 @@ import org.elasticsearch.script.ScriptType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static org.aksw.agdistis.indexWriter.TripleIndexCreatorContext.*;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_CONTEXT;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_SURFACE_FORM;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI_COUNT;
+
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 public class WriteElasticsearchIndexContext implements WriteContextIndex {
@@ -55,69 +63,86 @@ public class WriteElasticsearchIndexContext implements WriteContextIndex {
     }
     @Override
     public void createIndex() {
-        try{
-            XContentBuilder settingsBuilder = null;
-            settingsBuilder = jsonBuilder()
-                    .startObject()
-                    .startObject("analysis")
-                    .startObject("analyzer")
-                    .startObject("literal_analyzer")
-                    .field("type","custom")
-                    .field("tokenizer", "lowercase")
-                    .field("filter","asciifolding")
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject();
+        try {
+            GetIndexRequest existsRequest = new GetIndexRequest();
+            existsRequest.indices(index);
+            boolean exists = client.indices().exists(existsRequest, RequestOptions.DEFAULT);
+
+            if(!exists) {
+                XContentBuilder settingsBuilder = null;
+                settingsBuilder = jsonBuilder()
+                        .startObject()
+                        .startObject("index")
+                        .field("number_of_shards", 5)
+                        .endObject()
+                        .startObject("analysis")
+                        .startObject("analyzer")
+                        .startObject("literal_analyzer")
+                        .field("type", "custom")
+                        .field("tokenizer", "lowercase")
+                        .field("filter", "asciifolding")
+                        .endObject()
+                        .endObject()
+                        .endObject()
+                        .endObject();
 
 
-            XContentBuilder mappingsBuilder =jsonBuilder()
-                    .startObject()
-                    .startObject("properties")
-                    .startObject(FIELD_NAME_URI)
-                    .field("type", "keyword")
-                    .endObject()
-                    .startObject(FIELD_NAME_SURFACE_FORM)
-                    .field("type", "text")
-                    .field("analyzer", "literal_analyzer")
-                    .endObject()
-                    .startObject(FIELD_NAME_CONTEXT)
-                    .field("type", "text")
-                    .field("analyzer", "literal_analyzer")
-                    .endObject()
-                    .startObject(FIELD_NAME_URI_COUNT)
-                    .field("type", "text")
-                    .field("analyzer", "literal_analyzer")
-                    .endObject()
-                    .endObject()
-                    .endObject();
+                XContentBuilder mappingsBuilder = jsonBuilder()
+                        .startObject()
+                        .startObject("properties")
+                        .startObject(FIELD_NAME_URI)
+                        .field("type", "keyword")
+                        .endObject()
+                        .startObject(FIELD_NAME_SURFACE_FORM)
+                        .field("type", "text")
+                        .field("analyzer", "literal_analyzer")
+                        .endObject()
+                        .startObject(FIELD_NAME_CONTEXT)
+                        .field("type", "text")
+                        .field("analyzer", "literal_analyzer")
+                        .endObject()
+                        .startObject(FIELD_NAME_URI_COUNT)
+                        .field("type", "text")
+                        .field("analyzer", "literal_analyzer")
+                        .endObject()
+                        .endObject()
+                        .endObject();
 
 
-            System.out.println(Strings.toString(settingsBuilder));
-            CreateIndexRequest request = new CreateIndexRequest(index);
-            request.mapping("_doc", mappingsBuilder);
-            request.settings(settingsBuilder);
-            CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
-            System.out.println(createIndexResponse);
+                System.out.println("Index settings: " + Strings.toString(settingsBuilder));
+                CreateIndexRequest request = new CreateIndexRequest(index);
+                request.mapping("_doc", mappingsBuilder);
+                request.settings(settingsBuilder);
+                CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+                System.out.println(createIndexResponse);
+            }
+            else{
+                System.out.println(String.format("Index %s already exists", index));
+            }
+
             BulkProcessor.Listener listener = new BulkProcessor.Listener() {
                 @Override
                 public void beforeBulk(long executionId, BulkRequest request) {
-                    System.out.println("starting new bulk request");
+//                    System.out.println("starting new bulk request");
                 }
 
                 @Override
                 public void afterBulk(long executionId, BulkRequest request,
                                       BulkResponse response) {
                     response.forEach(e->{
-                        if(e.getFailureMessage()!=null)
-                            System.out.println(e.getFailureMessage());});
-                    System.out.println("Bulk Finished");
+                        if(e.getFailureMessage()!=null) {
+                            System.out.println(e.getId() + " : " + e.getFailureMessage());
+                            System.out.println(e.getFailure().getCause().toString());
+                        }
+
+                    });
+//                    System.out.println("Bulk Finished");
                 }
 
                 @Override
                 public void afterBulk(long executionId, BulkRequest request,
                                       Throwable failure) {
-                    System.out.println("after bulk2");
+//                    System.out.println("after bulk2");
                 }
             };
             //RequestOptions.Builder optBuilder = RequestOptions.DEFAULT.toBuilder();
@@ -126,117 +151,80 @@ public class WriteElasticsearchIndexContext implements WriteContextIndex {
                     (req, bulkListener) ->
                             client.bulkAsync(req, RequestOptions.DEFAULT, bulkListener),
                     listener);
-            builder.setBulkActions(500);
+            builder.setBulkActions(5000);
             builder.setBulkSize(new ByteSizeValue(1L, ByteSizeUnit.MB));
             builder.setConcurrentRequests(0);
             builder.setFlushInterval(TimeValue.timeValueSeconds(10L));
             builder.setBackoffPolicy(BackoffPolicy
                     .constantBackoff(TimeValue.timeValueSeconds(1L), 3));
 
-            bulkProcessor = BulkProcessor.builder(
-                    (req, bulkListener) ->
-                            client.bulkAsync(req, RequestOptions.DEFAULT, bulkListener),
-                    listener).build();
+            bulkProcessor = builder.build();
         } catch (IOException e) {
+            System.out.println("Bulk Processor Exception: " + e.toString());
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void indexDocument(ContextDocument doc) throws IOException {
-        IndexRequest indexRequest;
-
-            indexRequest = new IndexRequest(index, "_doc")
-                    .source(jsonBuilder()
-                            .startObject()
-                            .field(FIELD_NAME_URI, doc.getUri())
-                            .field(FIELD_NAME_SURFACE_FORM, doc.getSurfaceForm())
-                            .field(FIELD_NAME_CONTEXT, doc.getContext())
-                            .field(FIELD_NAME_URI_COUNT,doc.getUriCount())
-                            .endObject()
-                    );
-
-        bulkProcessor.add(indexRequest);
     }
 
     @Override
     public void commit() {
         bulkProcessor.flush();
     }
-    public void indexDocument(String documentUri,String context, List<String> surfaceForm,long id) throws IOException {
-        if(surfaceForm.isEmpty())indexDocument(documentUri,context,id);
-        else {
-            IndexRequest indexRequest;
-            indexRequest = new IndexRequest(index, "_doc")
-                    .source(jsonBuilder()
-                            .startObject()
-                            .field(FIELD_NAME_URI, documentUri)
-                            .array(FIELD_NAME_SURFACE_FORM, surfaceForm)
-                            .array(FIELD_NAME_CONTEXT, context)
-                            .field(FIELD_NAME_URI_COUNT, 1)
-                            .endObject()
-                    );
-            indexRequest.id("" + id);
-            bulkProcessor.add(indexRequest);
+    public void upsertDocument(String documentUri, List<String> surfaceForm, List<String> context) {
+        if (surfaceForm.isEmpty()) {
+            upsertDocument(documentUri, context);
+            return;
         }
-    }
-    public void indexDocument(String documentUri,String context,long id) throws IOException {
-        IndexRequest indexRequest;
-        indexRequest = new IndexRequest(index, "_doc")
-                .source(jsonBuilder()
-                        .startObject()
-                        .field(FIELD_NAME_URI, documentUri)
-                        .array(FIELD_NAME_CONTEXT,context)
-                        .field(FIELD_NAME_URI_COUNT,1)
-                        .endObject()
-                );
-        indexRequest.id(""+id);
-        bulkProcessor.add(indexRequest);
-    }
-    public void upsertDocument(String documentUri,String surfaceForm, List<String>context){
-        if(surfaceForm ==null)upsertDocument(documentUri,context);
-        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".addAll(params.context);\n"
-                +"ctx._source."+FIELD_NAME_SURFACE_FORM+" .add(params.surfaceForm);\n"
-                +"ctx._source."+FIELD_NAME_URI_COUNT+" += "+context.size()+";\n";
-        Map<String,Object> m=new HashMap<>();
-        m.put("context",context);
-        m.put("surfaceForm",context);
-        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
-        try {
-            IndexRequest indexRequest = null;
-            indexRequest = new IndexRequest("index", "type", "1")
-                    .source(jsonBuilder()
-                                    .startObject()
-                                    .field(FIELD_NAME_URI, documentUri)
-                                    .array(FIELD_NAME_SURFACE_FORM, surfaceForm)
-                                    .array(FIELD_NAME_CONTEXT, context.toArray())
-                                    .field(FIELD_NAME_URI_COUNT, 1)
-                                    .endObject()
-                    );
-            indexRequest.id(documentUri);
-            UpdateRequest updateRequest = new UpdateRequest(index, "_doc", documentUri)
-                    .script(script)
-                    .upsert(indexRequest);
+        String scriptString = "ctx._source." + FIELD_NAME_CONTEXT + ".addAll(params.context);\n"
+                + "ctx._source." + FIELD_NAME_SURFACE_FORM + " .addAll(params.surfaceForm);\n"
+                + "ctx._source." + FIELD_NAME_URI_COUNT + " += params.contextSize;\n";
 
-            bulkProcessor.add(updateRequest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void upsertDocument(String documentUri,List<String> context){
-        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".addAll(params.context);\n"
-                +"ctx._source."+FIELD_NAME_URI_COUNT+" += "+context.size()+";\n";
-        Map<String,Object> m=new HashMap<>();
-        m.put("context",context);
-        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
+        Map<String, Object> m = new HashMap<>();
+        m.put("context", context);
+        m.put("surfaceForm", surfaceForm);
+        m.put("contextSize", context.size());
+
+        Script script = new Script(ScriptType.INLINE, "painless", scriptString, m);
         try {
             IndexRequest indexRequest = null;
             indexRequest = new IndexRequest("index", "type", "1")
                     .source(jsonBuilder()
                             .startObject()
                             .field(FIELD_NAME_URI, documentUri)
+                            .array(FIELD_NAME_SURFACE_FORM, surfaceForm.toArray())
                             .array(FIELD_NAME_CONTEXT, context.toArray())
-                            .field(FIELD_NAME_URI_COUNT, 1)
+                            .field(FIELD_NAME_URI_COUNT, context.size())
+                            .endObject()
+                    );
+            indexRequest.id(documentUri);
+            UpdateRequest updateRequest = new UpdateRequest(index, "_doc", documentUri)
+                    .script(script)
+                    .upsert(indexRequest);
+
+
+
+            bulkProcessor.add(updateRequest);
+        } catch (IOException e) {
+            System.out.println("Upsert exception:" + Strings.toString(script));
+            e.printStackTrace();
+        }
+    }
+
+    private void upsertDocument(String documentUri,List<String> context){
+        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".addAll(params.context);\n"
+                +"ctx._source."+FIELD_NAME_URI_COUNT+" += params.contextSize;\n";
+        Map<String,Object> m=new HashMap<>();
+        m.put("context",context);
+        m.put("contextSize",context.size());
+        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
+        try {
+            IndexRequest indexRequest = null;
+            indexRequest = new IndexRequest("index", "type", "1")
+                    .source(jsonBuilder()
+                            .startObject()
+                            .field(FIELD_NAME_URI, documentUri)
+                            .array(FIELD_NAME_SURFACE_FORM, Lists.newArrayList().toArray())
+                            .array(FIELD_NAME_CONTEXT, context.toArray())
+                            .field(FIELD_NAME_URI_COUNT, context.size())
                             .endObject()
                     );
             indexRequest.id(documentUri);
@@ -249,18 +237,6 @@ public class WriteElasticsearchIndexContext implements WriteContextIndex {
             e.printStackTrace();
         }
     }
-    public void updateDocument(String documentUri,String context,long id) throws IOException{
-        String scriptString="ctx._source."+FIELD_NAME_CONTEXT+".add(params.context);\n"
-                +"ctx._source."+FIELD_NAME_URI_COUNT+" += 1;\n";
-        Map<String,Object> m=new HashMap<>();
-        m.put("context",context);
-        Script script=new Script(ScriptType.INLINE,"painless",scriptString,m);
-
-        UpdateRequest updateRequest = new UpdateRequest(index, "_doc", ""+id)
-                .script(script);
-        bulkProcessor.add(updateRequest);
-    }
-
     @Override
     public void close() {
         try {

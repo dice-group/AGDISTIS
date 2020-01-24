@@ -22,16 +22,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_CONTEXT;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_SURFACE_FORM;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI;
+import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI_COUNT;
+
+
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 public class ElasticSearchContextIndex implements ContextIndex {
     private org.slf4j.Logger log = LoggerFactory.getLogger(ElasticSearchContextIndex.class);
-
-    public static final String FIELD_NAME_CONTEXT = "CONTEXT";
-    public static final String FIELD_NAME_SURFACE_FORM = "SURFACE_FORM";
-    public static final String FIELD_NAME_URI = "URI";
-    public static final String FIELD_NAME_URI_COUNT = "URI_COUNT";
-
     private RestHighLevelClient client;
     String defaultContextIndex;
 

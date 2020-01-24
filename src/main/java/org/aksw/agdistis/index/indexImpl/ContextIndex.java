@@ -78,7 +78,10 @@ public class ContextIndex implements org.aksw.agdistis.index.ContextIndex {
                 queryBuilder.add(tq, BooleanClause.Occur.MUST);
             }
             BooleanQuery bq = queryBuilder.build();
-            doc = getFromIndex(1, bq).get(0);
+            List<ContextDocument> results = getFromIndex(1, bq);
+            if(!results.isEmpty())
+                doc = results.get(0);
+
         } catch (Exception e) {
             log.error(e.getLocalizedMessage() + " -> " + uri);
 
