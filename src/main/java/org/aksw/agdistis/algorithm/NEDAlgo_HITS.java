@@ -15,6 +15,7 @@ import org.aksw.agdistis.graph.BreadthFirstSearch;
 import org.aksw.agdistis.graph.HITS;
 import org.aksw.agdistis.graph.Node;
 import org.aksw.agdistis.graph.PageRank;
+import org.aksw.agdistis.graph.BM25F;
 import org.aksw.agdistis.model.CandidatesScore;
 import org.aksw.agdistis.util.TripleIndex;
 import org.aksw.agdistis.util.TripleIndexContext;
@@ -93,6 +94,11 @@ public class NEDAlgo_HITS {
 				log.info("\trun PageRank");
 				PageRank pr = new PageRank();
 				pr.runPr(graph, 50, 0.1);
+			} else if (algorithm.equals("bm25")) {
+				// 2.2) let Pagerank run
+				log.info("\trun BM25F");
+				BM25F bm25 = new BM25F();
+				bm25.GetDoc(graph);
 			}
 
 			// 3) store the candidate with the highest hub, highest authority
