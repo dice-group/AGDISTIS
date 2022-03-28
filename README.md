@@ -40,7 +40,7 @@ If you need help or you have questions do not hesitate to write an email to  <a 
   year         = {2017},
   pages        = {8},
   organization = {ACM},
-  url          = {https://svn.aksw.org/papers/2017/KCAP_MAG/sigconf-main.pdf},
+  url          = {https://svn.aksw.org/papers/2017/KCAP_MAG/public.pdf},
 }
 
 @incollection{AGDISTIS_ISWC,
