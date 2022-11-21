@@ -3,7 +3,10 @@ package org.aksw.agdistis.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,7 +37,7 @@ import com.google.common.cache.CacheBuilder;
 
 public class TripleIndex {
 
-	private static final Version LUCENE44 = Version.LUCENE_44;
+	private static final Version LUCENE_941 = Version.LUCENE_9_4_1;
 
 	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndex.class);
 
@@ -61,8 +64,8 @@ public class TripleIndex {
 		String envIndex = System.getenv("AGDISTIS_INDEX");
 		String index = envIndex != null ? envIndex : prop.getProperty("index");
 		log.info("The index will be here: " + index);
-
-		directory = new MMapDirectory(new File(index));
+		Path path = Paths.get(index);
+		directory = new MMapDirectory(path);
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 		this.urlValidator = new UrlValidator();
@@ -71,7 +74,7 @@ public class TripleIndex {
 	}
 	
 	public void setIndex(String index) throws IOException {
-		directory = new MMapDirectory(new File(index));
+		directory = new MMapDirectory(Paths.get(index));
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 	}
@@ -81,7 +84,7 @@ public class TripleIndex {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		BooleanQuery bq = new BooleanQuery();
+		BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
 		List<Triple> triples = new ArrayList<Triple>();
 
 		try {
@@ -91,11 +94,11 @@ public class TripleIndex {
 			}
 			if (subject != null) {
 				Query tq = new TermQuery(new Term(FIELD_NAME_SUBJECT, subject));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(new BooleanClause(tq, BooleanClause.Occur.MUST));
 			}
 			if (predicate != null) {
 				Query tq = new TermQuery(new Term(FIELD_NAME_PREDICATE, predicate));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(new BooleanClause(tq, BooleanClause.Occur.MUST));
 			}
 
 			if (object != null && object.length() > 0) {
@@ -103,28 +106,30 @@ public class TripleIndex {
 				if (urlValidator.isValid(object)) {
 
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_URI, object));
-					bq.add(q, BooleanClause.Occur.MUST);
+					booleanQueryBuilder.add(new BooleanClause(q, BooleanClause.Occur.MUST));
 
 				} else if (StringUtils.isNumeric(object)) {
 					int tempInt = Integer.parseInt(object);
-					BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_INT);
-					NumericUtils.intToPrefixCoded(tempInt, 0, bytes);
+					// The value of buff size int is hardcoded in
+					// <a href = "https://lucene.apache.org/core/4_10_0/core/constant-values.html#org.apache.lucene.util.NumericUtils.BUF_SIZE_INT">
+					BytesRef bytes = new BytesRef(6);
+					NumericUtils.intToSortableBytes(tempInt, new byte[6], 0);
 					q = new TermQuery(new Term(FIELD_NAME_OBJECT_LITERAL, bytes.utf8ToString()));
-					bq.add(q, BooleanClause.Occur.MUST);
+					booleanQueryBuilder.add(new BooleanClause(q, BooleanClause.Occur.MUST));
 
 				}
 				else {
-					Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-					QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_OBJECT_LITERAL, analyzer);
+					Analyzer analyzer = new LiteralAnalyzer(LUCENE_941);
+					QueryParser parser = new QueryParser(FIELD_NAME_OBJECT_LITERAL, analyzer);
 					parser.setDefaultOperator(QueryParser.Operator.AND);
 					q = parser.parse(QueryParserBase.escape(object));
-					bq.add(q, BooleanClause.Occur.MUST);
+					booleanQueryBuilder.add(new BooleanClause(q, BooleanClause.Occur.MUST));
 				}
 			}
 
 			// use the cache
-			triples = getFromIndex(maxNumberOfResults, bq);
-			cache.put(bq, triples);
+			triples = getFromIndex(maxNumberOfResults, booleanQueryBuilder.build());
+			cache.put(booleanQueryBuilder.build(), triples);
 
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage() + " -> " + subject);
@@ -135,7 +140,8 @@ public class TripleIndex {
 
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		log.debug("\t start asking index...");
-		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, true);
+		// I don't know about the threshold value, just for time being added totalHitsThreshold as 0
+		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults, 0);
 		isearcher.search(bq, collector);
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

@@ -1,13 +1,7 @@
 package org.aksw.agdistis.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -15,23 +9,23 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.QueryParserBase;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 public class TripleIndexContext {
 
-	private static final Version LUCENE44 = Version.LUCENE_44;
+	private static final Version LUCENE_941 = Version.LUCENE_9_4_1;
 
 	private org.slf4j.Logger log = LoggerFactory.getLogger(TripleIndexContext.class);
 
@@ -56,7 +50,7 @@ public class TripleIndexContext {
 		String index = envIndex != null ? envIndex : prop.getProperty("index_bycontext");
 		log.info("The index will be here: " + index);
 
-		directory = new MMapDirectory(new File(index));
+		directory = new MMapDirectory(Paths.get(index));
 		ireader = DirectoryReader.open(directory);
 		isearcher = new IndexSearcher(ireader);
 		new UrlValidator();
@@ -69,7 +63,7 @@ public class TripleIndexContext {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		BooleanQuery bq = new BooleanQuery();
+		BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
 		List<Triple> triples = new ArrayList<Triple>();
 		try {
 			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
@@ -78,28 +72,28 @@ public class TripleIndexContext {
 			}
 			if (subject != null) {
 				Query q = null;
-				Analyzer analyzer = new LiteralAnalyzer(LUCENE44);
-				QueryParser parser = new QueryParser(LUCENE44, FIELD_NAME_CONTEXT, analyzer);
+				Analyzer analyzer = new LiteralAnalyzer(LUCENE_941);
+				QueryParser parser = new QueryParser(FIELD_NAME_CONTEXT, analyzer);
 				parser.setDefaultOperator(QueryParser.Operator.AND);
 				q = parser.parse(QueryParserBase.escape(subject));
-				bq.add(q, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(new BooleanClause(q, BooleanClause.Occur.MUST));
 			}
 			if (predicate != null) {
 
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_SURFACE_FORM, predicate));
-				bq.add(tq, BooleanClause.Occur.SHOULD);
+				booleanQueryBuilder.add(new BooleanClause(tq, BooleanClause.Occur.MUST));
 			}
 			if (object != null) {
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI_COUNT, object));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(new BooleanClause(tq, BooleanClause.Occur.MUST));
 			}
 			// use the cache
-			if (null == (triples = cache.getIfPresent(bq))) {
-				triples = getFromIndex(maxNumberOfResults, bq);
+			if (null == (triples = cache.getIfPresent(booleanQueryBuilder.build()))) {
+				triples = getFromIndex(maxNumberOfResults, booleanQueryBuilder.build());
 				if (triples == null) {
 					return new ArrayList<Triple>();
 				}
-				cache.put(bq, triples);
+				cache.put(booleanQueryBuilder.build(), triples);
 			}
 
 		} catch (Exception e) {
@@ -111,7 +105,7 @@ public class TripleIndexContext {
 
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		 log.debug("\t start asking index by context...");
-		ScoreDoc[] hits = isearcher.search(bq, null, maxNumberOfResults).scoreDocs;
+		ScoreDoc[] hits = isearcher.search(bq, maxNumberOfResults).scoreDocs;
 
 		if (hits.length == 0) {
 			return new ArrayList<Triple>();

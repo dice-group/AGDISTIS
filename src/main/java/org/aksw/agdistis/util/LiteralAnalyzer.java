@@ -1,12 +1,10 @@
 package org.aksw.agdistis.util;
 
-import java.io.Reader;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.core.LowerCaseTokenizer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.util.Version;
 
 public class LiteralAnalyzer extends Analyzer {
@@ -24,11 +22,10 @@ public class LiteralAnalyzer extends Analyzer {
 		this.matchVersion = matchVersion;
 	}
 
+
 	@Override
-	protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
-		final Tokenizer source = new LowerCaseTokenizer(matchVersion, reader);
+	protected TokenStreamComponents createComponents(String s) {
+		final Tokenizer source = new StandardTokenizer();
 		return new TokenStreamComponents(source, new ASCIIFoldingFilter(source));
-
 	}
-
 }

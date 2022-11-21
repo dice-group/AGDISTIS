@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class TripleIndexCreatorContext {
 
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
-	public static final Version LUCENE_VERSION = Version.LUCENE_44;
+	public static final Version LUCENE_VERSION = Version.LUCENE_9_4_1;
 
 	private static Analyzer urlAnalyzer;
 	private static Analyzer literalAnalyzer;
@@ -134,7 +135,7 @@ public class TripleIndexCreatorContext {
 
 	public void createIndex(List<File> files, String idxDirectory, String baseURI) {
 		try {
-			urlAnalyzer = new SimpleAnalyzer(LUCENE_VERSION);
+			urlAnalyzer = new SimpleAnalyzer();
 			literalAnalyzer = new LiteralAnalyzer(LUCENE_VERSION);
 			Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
 			mapping.put(FIELD_NAME_URI, urlAnalyzer);
@@ -145,8 +146,8 @@ public class TripleIndexCreatorContext {
 
 			File indexDirectory = new File(idxDirectory);
 			indexDirectory.mkdir();
-			directory = new MMapDirectory(indexDirectory);
-			IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, perFieldAnalyzer);
+			directory = new MMapDirectory(Paths.get(indexDirectory.getPath()));
+			IndexWriterConfig config = new IndexWriterConfig();
 			iwriter = new IndexWriter(directory, config);
 			iwriter.commit();
 			for (File file : files) {
@@ -245,7 +246,7 @@ public class TripleIndexCreatorContext {
 	}
 
 	public List<Triple> search(String subject, String predicate, String object, int maxNumberOfResults) {
-		BooleanQuery bq = new BooleanQuery();
+		BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
 		List<Triple> triples = new ArrayList<Triple>();
 		try {
 			if (subject != null && subject.equals("http://aksw.org/notInWiki")) {
@@ -254,9 +255,9 @@ public class TripleIndexCreatorContext {
 			}
 			if (subject != null) {
 				TermQuery tq = new TermQuery(new Term(FIELD_NAME_URI, subject));
-				bq.add(tq, BooleanClause.Occur.MUST);
+				booleanQueryBuilder.add(new BooleanClause(tq, BooleanClause.Occur.MUST));
 			}
-			triples = getFromIndex(maxNumberOfResults, bq);
+			triples = getFromIndex(maxNumberOfResults, booleanQueryBuilder.build());
 			if (triples == null) {
 				return new ArrayList<Triple>();
 			}
@@ -272,7 +273,7 @@ public class TripleIndexCreatorContext {
 		// log.debug("\t start asking index...");
 
 		try {
-			ScoreDoc[] hits = isearcher.search(bq, null, maxNumberOfResults).scoreDocs;
+			ScoreDoc[] hits = isearcher.search(bq,  maxNumberOfResults).scoreDocs;
 			List<Triple> triples = new ArrayList<Triple>();
 			String s, p, o;
 			for (int i = 0; i < hits.length; i++) {

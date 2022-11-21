@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ public class TripleIndexCreator {
 	public static final String N_TRIPLES = "NTriples";
 	public static final String TTL = "ttl";
 	public static final String TSV = "tsv";
-	public static final Version LUCENE_VERSION = Version.LUCENE_44;
+	public static final Version LUCENE_VERSION = Version.LUCENE_9_4_1;
 
 	private Analyzer urlAnalyzer;
 	private Analyzer literalAnalyzer;
@@ -104,7 +106,7 @@ public class TripleIndexCreator {
 
 	public void createIndex(List<File> files, String idxDirectory, String baseURI) {
 		try {
-			urlAnalyzer = new SimpleAnalyzer(LUCENE_VERSION);
+			urlAnalyzer = new SimpleAnalyzer();
 			literalAnalyzer = new LiteralAnalyzer(LUCENE_VERSION);
 			Map<String, Analyzer> mapping = new HashMap<String, Analyzer>();
 			mapping.put(TripleIndex.FIELD_NAME_SUBJECT, urlAnalyzer);
@@ -115,8 +117,9 @@ public class TripleIndexCreator {
 
 			File indexDirectory = new File(idxDirectory);
 			indexDirectory.mkdir();
-			directory = new MMapDirectory(indexDirectory);
-			IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, perFieldAnalyzer);
+			Path path  = Paths.get(indexDirectory.getPath());
+			directory = new MMapDirectory(path);
+			IndexWriterConfig config = new IndexWriterConfig(perFieldAnalyzer);
 			iwriter = new IndexWriter(directory, config);
 			iwriter.commit();
 			for (File file : files) {
