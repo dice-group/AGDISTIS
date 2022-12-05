@@ -146,7 +146,7 @@ public class TripleIndex implements Index {
 
 	private List<Triple> getFromIndex(int maxNumberOfResults, BooleanQuery bq) throws IOException {
 		log.debug("\t start asking index...");
-		TopScoreDocCollector collector = TopScoreDocCollector.create(maxNumberOfResults);
+		TopScoreDocCollector collector = TopScoreDocCollector.create(0,maxNumberOfResults);
 		isearcher.search(bq, collector);
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

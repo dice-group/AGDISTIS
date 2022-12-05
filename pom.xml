@@ -20,12 +20,19 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>3.3.1</version>
                 <configuration>
                     <attachClasses>true</attachClasses>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -81,22 +88,22 @@
         <repository>
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
-            <url>http://maven.restlet.org</url>
+            <url>https://maven.restlet.org</url>
         </repository>
         <repository>
             <id>Apache Repo Central</id>
             <name>Apache Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
         <repository>
             <id>maven.aksw.internal</id>
             <name>University Leipzig, AKSW Maven2 Repository</name>
-            <url>http://maven.aksw.org/archiva/repository/internal</url>
+            <url>https://maven.aksw.org/archiva/repository/internal</url>
         </repository>
         <repository>
             <id>maven.aksw.snapshots</id>
             <name>University Leipzig, AKSW Maven2 Repository</name>
-            <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+            <url>https://maven.aksw.org/archiva/repository/snapshots</url>
         </repository>
     </repositories>
     <dependencies>
@@ -121,14 +128,21 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <version>2.0.5</version>
         </dependency>
         <!-- slf4j: Logging Binding -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.7</version>
+            <version>2.0.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.19.0</version>
+        </dependency>
+
 
         <!-- ~~~~~~~~~~~~~~~~~~~ End Logging ~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- ~~~~~~~~~~~~~~~~~~~ Algorithm Graph ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -255,13 +269,14 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.6.1</version>
+            <version>7.17.7</version>
+
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.7</version>
+            <version>4.5.13</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>

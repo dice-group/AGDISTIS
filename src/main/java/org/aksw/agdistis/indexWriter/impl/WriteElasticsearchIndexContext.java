@@ -18,10 +18,10 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
-import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.core.TimeValue;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
+import org.elasticsearch.xcontent.XContentBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,8 +36,8 @@ import static org.aksw.agdistis.util.Constants.FIELD_NAME_CONTEXT;
 import static org.aksw.agdistis.util.Constants.FIELD_NAME_SURFACE_FORM;
 import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI;
 import static org.aksw.agdistis.util.Constants.FIELD_NAME_URI_COUNT;
+import static org.elasticsearch.xcontent.XContentFactory.jsonBuilder;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 public class WriteElasticsearchIndexContext implements WriteContextIndex {
     RestHighLevelClient client;
