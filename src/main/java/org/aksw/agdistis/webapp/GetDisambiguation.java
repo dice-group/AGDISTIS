@@ -1,8 +1,6 @@
 package org.aksw.agdistis.webapp;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,6 +153,7 @@ public class GetDisambiguation extends ServerResource {
 			textWithMentions = nifParser.createTextWithMentions(document.getText(), document.getMarkings(Span.class));
 			Document d = textToDocument(textWithMentions);
 			agdistis.run(d, null);
+			logResult(d);
 			for (NamedEntityInText namedEntity : d.getNamedEntitiesInText()) {
 				String disambiguatedURL = namedEntity.getNamedEntityUri();
 
@@ -178,6 +177,27 @@ public class GetDisambiguation extends ServerResource {
 		agdistis.close();
 		return nifDocument;
 	}
+
+	public void logResult(Document document) throws IOException {
+		JSONArray arr = new org.json.simple.JSONArray();
+		for (NamedEntityInText namedEntity : document.getNamedEntitiesInText()) {
+			if(!namedEntity.getNamedEntityUri().contains("http")){
+				namedEntity.setNamedEntity("http://aksw.org/notInWiki/" + namedEntity.getSingleWordLabel());
+			}
+			JSONObject obj = new JSONObject();
+			obj.put("namedEntity", namedEntity.getLabel());
+			obj.put("start", namedEntity.getStartPos());
+			obj.put("offset", namedEntity.getLength());
+			obj.put("disambiguatedURL", namedEntity.getNamedEntityUri());
+			arr.add(obj);
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter("output.logs",true));
+		writer.append("----------------\n");
+		writer.append(arr + "\n");
+		writer.append("----------------\n");
+		writer.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public String standardAG(String text, NEDAlgo_HITS agdistis) throws IOException {
 		JSONArray arr = new org.json.simple.JSONArray();
