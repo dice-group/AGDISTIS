@@ -1,8 +1,6 @@
 package org.aksw.agdistis.webapp;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,9 +194,14 @@ public class GetDisambiguation extends ServerResource {
 			obj.put("disambiguatedURL", namedEntity.getNamedEntityUri());
 			arr.add(obj);
 		}
-		log.info("\t" + arr.toString());
+		log.info("\t" + arr);
 		log.info("Finished Request");
 		agdistis.close();
+		BufferedWriter writer = new BufferedWriter(new FileWriter("output.logs",true));
+		writer.append("----------------\n");
+		writer.append(arr + "\n");
+		writer.append("----------------\n");
+		writer.close();
 		return arr.toString();
 
 	}
