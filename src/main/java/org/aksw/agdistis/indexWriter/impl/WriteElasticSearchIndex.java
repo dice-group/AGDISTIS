@@ -33,6 +33,8 @@ public class WriteElasticSearchIndex implements WriteIndex {
     RestHighLevelClient client;
     BulkProcessor bulkProcessor;
     private String index;
+
+    public static int numberOfDocuments = 0;
     public WriteElasticSearchIndex()throws IOException{
         Properties prop = new Properties();
         InputStream input = null;
@@ -174,6 +176,7 @@ public class WriteElasticSearchIndex implements WriteIndex {
                             .endObject()
                     );
         }
+        numberOfDocuments += 1;
         bulkProcessor.add(indexRequest);
     }
 

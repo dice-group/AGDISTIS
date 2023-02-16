@@ -96,6 +96,7 @@ public class TripleIndexCreator {
             else writeIndex = new WriteLuceneIndex(idxDirectory);
             writeIndex.createIndex();
             for (File file : files) {
+                WriteElasticSearchIndex.numberOfDocuments = 0;
                 System.out.print("File " + file.getName());
                 String type = FileUtil.getFileExtension(file.getName());
                 if (type.equals(TTL))
@@ -106,6 +107,7 @@ public class TripleIndexCreator {
                     indexTSVFile(file);
                 writeIndex.commit();
                 System.out.println(" ... done.");
+                System.out.println(file.getName() + " has " + WriteElasticSearchIndex.numberOfDocuments + " triple Requests");
             }
             writeIndex.close();
         } catch (Exception e) {
