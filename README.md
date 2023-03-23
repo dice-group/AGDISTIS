@@ -70,8 +70,69 @@ The deployed webservice does not reflect the optimal parametrization of AGDISTIS
 
 ### Running AGDISTIS
 
+
+### Download and Install ElasticSearch
+If you do not have Elasticsearch installed in your system, download the elastic_search_7.8.1 from <a href = "https://www.elastic.co/downloads/past-releases/elasticsearch-7-8-1">here</a>
+or run the shell script given below.
+
+```
+#!/bin/bash
+
+# Download Elasticsearch 7.8
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-linux-x86_64.tar.gz
+
+# Unzip the downloaded file
+tar -xf elasticsearch-7.8.1-linux-x86_64.tar.gz
+
+# Change into the Elasticsearch directory
+cd elasticsearch-7.8.1/
+
+# Start Elasticsearch
+./bin/elasticsearch
+
+```
+
+After successful installation, the Elasticsearch should be up and running at port 9200. 
+To check, type in the command ```lsof-i:9200``` in terminal/command prompt window, and you should see a process running in that port.
+In some systems, the Elasticsearch runs in port 9300.
+
+You can stop Elasticsearch by pressing Ctrl-C in terminal window, where it is running.
+
+
+### Download and install ElasticDump
+
+To upload the elasticsearch indices to elasticsearch we need ElasticDump. Download it using the command  
+```
+npm install elasticdump -g
+elasticdump
+```
+
+For more information about ElasticDump, look <a href = "https://github.com/elasticsearch-dump/elasticsearch-dump">here</a>
+
+
+### Download ElasticSearch Indices
+```
+wget https://hobbitdata.informatik.uni-leipzig.de/elastic_index/elastic_index_en_2016.zip
+```
+
+If you want to download other indices, replace the term "en". For other available indices take a loot at <a href = "https://hobbitdata.informatik.uni-leipzig.de/elastic_index/">here</a>.
+
+Extract the zip archive and run the following commands to upload the ES index dump to elasticsearch cluster:
+
+```
+elasticdump  --output=http://localhost:9200/trindex/  --input=elastic_search_tr_index_mapping_en.json  --type=mapping --limit=10000 --throttleInterval=0  
+elasticdump  --output=http://localhost:9200/trindex/  --input=elastic_search_tr_index_en.json  --type=data --limit=10000 --throttleInterval=0
+
+elasticdump  --output=http://localhost:9200/contextindex/  --input=elastic_search_context_index_mapping_en.json  --type=mapping --limit=10000 --throttleInterval=0
+elasticdump  --output=http://localhost:9200/contextindex/  --input=elastic_search_context_index_en.json  --type=data --limit=10000 --throttleInterval=0
+```
+
+
 ### How to run
+
+After finishing all the above steps, issue this command to run AGDISTIS.
 ```
 mvn clean package tomcat:run
 ```
+
 For more information, go to our <a href="https://github.com/AKSW/AGDISTIS/wiki/3-Running-the-webservice">Wiki</a>.
