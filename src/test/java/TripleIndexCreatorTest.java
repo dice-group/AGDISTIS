@@ -3,8 +3,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Properties;
 
+import org.aksw.agdistis.algorithm.CandidateUtil;
 import org.aksw.agdistis.algorithm.NEDAlgo_HITS;
 import org.aksw.agdistis.datatypes.Document;
 import org.aksw.agdistis.datatypes.NamedEntitiesInText;
@@ -40,6 +43,7 @@ public class TripleIndexCreatorTest {
 	@After
 	public void close() {
 		try {
+			if(index != null)
 			index.close();
 		} catch (IOException e) {
 			log.error(
@@ -57,23 +61,35 @@ public class TripleIndexCreatorTest {
 	 */
 	public void testMinimalOntologyExample() throws IOException {
 		// load test data into index
-		TripleIndexCreator tic = new TripleIndexCreator();
-		File file = new File("src/test/resources/test_evertec.ttl");
-		File folder = new File("src/test/resources/evertec");
-		if (folder.exists()) {
-			folder.delete();
-		}
-		tic.createIndex(Lists.newArrayList(file), folder.getAbsolutePath(), null,false);
+		Properties prop = new Properties();
+		InputStream input = CandidateUtil.class.getResourceAsStream("/config/agdistis.properties");
+		prop.load(input);
+		String envIndexType = System.getenv("useElasticsearch");
+		String envIndex = System.getenv("AGDISTIS_INDEX");
+		Boolean useElasticsearch = Boolean.valueOf(envIndexType != null ? envIndex : prop.getProperty("useElasticsearch"));
 
-		// set the properties correctly
 
 		NEDAlgo_HITS agdistis = new NEDAlgo_HITS();
-		agdistis.setNodeType("http://fairhair.ai/kg/resource/");
-		agdistis.setEdgeType("http://dbpedia.org/ontology/");
 
-		// load index
-		index.setIndex(folder.getAbsolutePath());
-		agdistis.setIndex(index);
+		// This set of code should only execute for lucene index.
+		if(!useElasticsearch) {
+			TripleIndexCreator tic = new TripleIndexCreator();
+			File file = new File("src/test/resources/test_evertec.ttl");
+			File folder = new File("src/test/resources/evertec");
+			if (folder.exists()) {
+				folder.delete();
+			}
+			tic.createIndex(Lists.newArrayList(file), folder.getAbsolutePath(), null, false);
+
+			// set the properties correctly
+
+			agdistis.setNodeType("http://fairhair.ai/kg/resource/");
+			agdistis.setEdgeType("http://dbpedia.org/ontology/");
+
+			// load index
+			index.setIndex(folder.getAbsolutePath());
+			agdistis.setIndex(index);
+		}
 
 		// test index
 		String taisho = "Evertec";
